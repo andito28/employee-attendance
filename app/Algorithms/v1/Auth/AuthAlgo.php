@@ -45,20 +45,26 @@ class AuthAlgo
         }
     }
 
+
     public function login($model, Request $request)
     {
         try {
 
             $user = DB::transaction(function () use ($model, $request) {
 
-                $token = auth()->attempt([
-                    'email' => $request->email,
-                    'password' => $request->password
-                ]);
+                $credentials = $request->only('email', 'password');
 
-                if (!$token) {
-                    return ['error' => 'Tidak Terautentikasi'];
+                if(!$token = auth()->attempt($credentials)) {
+                    return null;
                 }
+
+                $user = [
+                    'userId' => auth()->user()->id,
+                    "userName" => auth()->user()->name,
+                    'accessToken'   => $token
+                ];
+
+                return $user;
 
             });
 

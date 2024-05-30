@@ -6,6 +6,7 @@ use App\Models\v1\User\User;
 use Illuminate\Http\Request;
 use App\Algorithms\v1\Auth\AuthAlgo;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\LoginRequest;
 
 class AuthController extends Controller
 {
@@ -14,7 +15,7 @@ class AuthController extends Controller
         return $algo->register(User::class,$request);
     }
 
-    public function login(Request $request){
+    public function login(LoginRequest $request){
         $algo = new AuthAlgo();
         return $algo->login(User::class,$request);
     }
