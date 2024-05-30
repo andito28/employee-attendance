@@ -1,0 +1,25 @@
+<?php
+
+namespace {{ namespace }};
+
+class {{ class }}
+{
+    /**
+     * @param ...$args
+     */
+    public function __construct(...$args)
+    {
+    }
+
+
+    /**
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            //
+        ];
+    }
+
+}
