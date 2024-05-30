@@ -2,11 +2,11 @@
 
 namespace App\Models\v1\Component\Traits;
 
-use App\Parser\Component\CompanyOfficeParser;
+use App\Parser\Component\DepartmentParser;
 use App\Models\v1\Activity\Traits\HasActivity;
 use App\Services\Constant\Activity\ActivityType;
 
-trait HasActivityCompanyOfficeProperty
+trait HasActivityDepartmentProperty
 {
     use HasActivity;
 
@@ -64,7 +64,7 @@ trait HasActivityCompanyOfficeProperty
     {
         $this->refresh();
 
-        return CompanyOfficeParser::first($this);
+        return DepartmentParser::first($this);
     }
 
 }

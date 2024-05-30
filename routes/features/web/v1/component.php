@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Web\v1\Component\CompanyOfficeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\web\v1\component\DepartmentController;
+use App\Http\Controllers\Web\v1\Component\CompanyOfficeController;
 
 Route::prefix("components")
     ->group(function () {
@@ -15,5 +16,15 @@ Route::prefix("components")
                 Route::put('{id}', [CompanyOfficeController::class, 'update']);
                 Route::delete('{id}', [CompanyOfficeController::class, 'delete']);
             });
+
+        // Departments
+        Route::prefix("departments")
+        ->group(function () {
+
+            Route::get('', [DepartmentController::class, 'get']);
+            Route::post('', [DepartmentController::class, 'create']);
+            Route::put('{id}', [DepartmentController::class, 'update']);
+            Route::delete('{id}', [DepartmentController::class, 'delete']);
+        });
 
     });
