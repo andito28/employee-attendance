@@ -25,12 +25,12 @@ class CompanyOffice extends BaseModel
 
     public function officeDepartments()
     {
-        $this->hasMany(CompanyOfficeDepartment::class, 'companyOfficeId');
+        return $this->hasMany(CompanyOfficeDepartment::class, 'companyOfficeId');
     }
 
     public function departments()
     {
-        $this->belongsToMany(
+        return $this->belongsToMany(
             Department::class,
             'company_office_departments',
             'companyOfficeId',

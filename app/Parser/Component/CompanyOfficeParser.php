@@ -3,6 +3,7 @@
 namespace App\Parser\Component;
 
 use GlobalXtreme\Parser\BaseParser;
+use App\Parser\Component\DepartmentParser;
 
 class CompanyOfficeParser extends BaseParser
 {
@@ -23,6 +24,15 @@ class CompanyOfficeParser extends BaseParser
             'name' => $data->name,
             'createdBy' => $data->createdByName,
             'createdAt' => $data->createdAt?->format('d/m/Y H:i'),
+        ];
+    }
+
+    public static function getDepartments($data){
+
+        return [
+            'nameOffice' => $data->name,
+            'codeOffice' => $data->code,
+            'departments' => DepartmentParser::briefs($data->departments)
         ];
     }
 

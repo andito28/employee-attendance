@@ -22,3 +22,10 @@ if (!function_exists("errComponentDepartmentExists")) {
     }
 }
 
+if (!function_exists("errComponenOfficetDepartmentExists")) {
+    function errComponenOfficetDepartmentExists($internalMsg = "")
+    {
+        error(409, "Company Office Department Already Exists!", $internalMsg);
+    }
+}
+

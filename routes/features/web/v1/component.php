@@ -15,6 +15,8 @@ Route::prefix("components")
                 Route::post('', [CompanyOfficeController::class, 'create']);
                 Route::put('{id}', [CompanyOfficeController::class, 'update']);
                 Route::delete('{id}', [CompanyOfficeController::class, 'delete']);
+                Route::get('{id}/departments', [CompanyOfficeController::class, 'getDepartment']);
+                Route::post('{id}/departments/mapping', [CompanyOfficeController::class, 'mappingOfficeDepartment']);
             });
 
         // Departments
