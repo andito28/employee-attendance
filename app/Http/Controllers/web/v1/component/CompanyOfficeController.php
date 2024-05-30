@@ -24,5 +24,28 @@ class CompanyOfficeController extends Controller
         return $algo->createBy(CompanyOffice::class, $request);
     }
 
+    public function update($id, CompanyOfficeRequest $request)
+    {
+        $companyOffice = CompanyOffice::find($id);
+        if (!$companyOffice) {
+            errComponentCompanyOfficeGet();
+        }
+
+        $algo = new ComponentAlgo();
+        return $algo->update($companyOffice, $request);
+    }
+
+
+    public function delete($id)
+    {
+        $companyOffice = CompanyOffice::find($id);
+        if (!$companyOffice) {
+            errComponentCompanyOfficeGet();
+        }
+
+        $algo = new ComponentAlgo();
+        return $algo->delete($companyOffice);
+    }
+
 
 }

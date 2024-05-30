@@ -10,12 +10,7 @@ use App\Services\Constant\Activity\ActivityAction;
 
 class ComponentAlgo
 {
-    /**
-     * @param $model
-     * @param Request $request
-     *
-     * @return JsonResponse|mixed
-     */
+
     public function createBy($model, Request $request)
     {
         try {
@@ -39,6 +34,53 @@ class ComponentAlgo
             exception($exception);
         }
     }
+
+
+    public function update(Model $model, Request $request)
+    {
+        try {
+
+            DB::transaction(function () use ($model, $request) {
+
+                $model->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
+
+                $model->update($request->all());
+
+                $model->setActivityPropertyAttributes(ActivityAction::UPDATE)
+                    ->saveActivity("Update " . $model->getTable() . ": $model->name [$model->id]");
+
+            });
+
+            return success($model->fresh());
+
+        } catch (\Exception $exception) {
+            exception($exception);
+        }
+    }
+
+
+    public function delete(Model $model)
+    {
+        try {
+
+            DB::transaction(function () use ($model) {
+
+                $model->setOldActivityPropertyAttributes(ActivityAction::DELETE);
+
+                $model->delete();
+
+                $model->setActivityPropertyAttributes(ActivityAction::DELETE)
+                    ->saveActivity("Delete " . $model->getTable() . ": $model->name [$model->id]");
+
+            });
+
+            return success();
+
+        } catch (\Exception $exception) {
+            exception($exception);
+        }
+    }
+
 
 
 }
