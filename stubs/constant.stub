@@ -1,0 +1,16 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Services\Constant\BaseIDName;
+
+class {{ class }} extends BaseIDName
+{
+    const DEFAULT_ID = 1;
+    const DEFAULT = 'default';
+
+    const OPTION = [
+        self::DEFAULT_ID => self::DEFAULT,
+    ];
+
+}
