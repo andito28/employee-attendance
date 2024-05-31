@@ -83,52 +83,63 @@ class ComponentAlgo
     }
 
 
-    public function mappingOfficeDepartment($model, Request $request,$id)
+    public function mappingOfficeDepartment($model, Request $request, $id)
     {
         try {
-
             $components = DB::transaction(function () use ($model, $request, $id) {
-
-                $createdComponents = collect($request->departmentId)->map(function($data) use ($model, $id) {
-
-                    $departmentExist = Department::find($data);
-                    if (!$departmentExist) {
-                        errComponentDepartmentGet();
-                    }
-
-                    $officeDepartmentExists = $model::where('companyOfficeId', $id)
-                        ->where('departmentId', $data)
-                        ->exists();
-
-                    if ($officeDepartmentExists) {
-                        errComponenOfficetDepartmentExists();
-                    }
-
-                    $component = $model::create([
-                        'companyOfficeId' => $id,
-                        'departmentId' => $data
-                    ]);
-
-                    $component->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " . $component->getTable() . ":$component->name [$component->id]");
-
-                    return $component;
-
-                })->filter();
-
-                return $createdComponents;
+                return collect($request->departmentId)
+                    ->map(function ($departmentId) use ($model, $id) {
+                        return $this->createOfficeDepartmentComponent($model, $id, $departmentId);
+                    })
+                    ->filter();
             });
 
             $componentsData = $model::whereIn('id', $components->pluck('id'))->get();
 
             return success($componentsData);
-
         } catch (\Exception $exception) {
-            exception($exception);
+            return exception($exception);
         }
     }
 
 
+    /** --- SUB FUNCTIONS --- */
 
+    private function createOfficeDepartmentComponent($model, $companyOfficeId, $departmentId)
+    {
+        if (!$this->departmentExists($departmentId)) {
+            errComponentDepartmentGet();
+        }
+
+        if ($this->officeDepartmentExists($model, $companyOfficeId, $departmentId)) {
+            errComponenOfficetDepartmentExists();
+        }
+
+        return $this->createOfficeDepartment($model, $companyOfficeId, $departmentId);
+    }
+
+    private function departmentExists($departmentId)
+    {
+        return Department::find($departmentId) !== null;
+    }
+
+    private function officeDepartmentExists($model, $companyOfficeId, $departmentId)
+    {
+        return $model::where('companyOfficeId', $companyOfficeId)
+                    ->where('departmentId', $departmentId)
+                    ->exists();
+    }
+
+    private function createOfficeDepartment($model, $companyOfficeId, $departmentId)
+    {
+        $component = $model::create([
+            'companyOfficeId' => $companyOfficeId,
+            'departmentId' => $departmentId
+        ]);
+
+        $component->setActivityPropertyAttributes(ActivityAction::CREATE)
+                ->saveActivity("Enter new " . $component->getTable() . ": $component->name [$component->id]");
+        return $component;
+    }
 
 }

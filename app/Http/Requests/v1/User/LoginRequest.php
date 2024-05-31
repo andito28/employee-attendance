@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\v1\User;
 
 use GlobalXtreme\Validation\Support\FormRequest;
 
@@ -22,8 +22,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
-            'password' => 'required'
+            "email" => "required|email",
+            "password" => 'rquired'
         ];
     }
 }

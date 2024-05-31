@@ -6,7 +6,7 @@ use App\Models\v1\User\User;
 use Illuminate\Http\Request;
 use App\Algorithms\v1\Auth\AuthAlgo;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\LoginRequest;
+use App\Http\Requests\v1\User\LoginRequest;
 
 class AuthController extends Controller
 {
