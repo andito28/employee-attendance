@@ -74,4 +74,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+
+    /** --- RELATIONSHIPS --- */
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 }

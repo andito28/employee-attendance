@@ -15,11 +15,11 @@ class ComponentAlgo
         try {
 
             $component = DB::transaction(function () use ($model, $request) {
-
-                $createdBy = [
-                    'createdBy' => auth()->user()->id,
-                    'createdByName' => auth()->user()->name
-                ];
+                $createdBy = [];
+                // $createdBy = [
+                //     'createdBy' => auth()->user()->id,
+                //     'createdByName' => auth()->user()->employee->name
+                // ];
 
                 $component = $model::create($request->all() + $createdBy);
 

@@ -10,6 +10,11 @@ use App\Http\Requests\Employee\LoginRequest;
 
 class AuthController extends Controller
 {
+    public function register(LoginRequest $request){
+        $algo = new AuthAlgo();
+        return $algo->register(User::class,$request);
+    }
+
     public function login(LoginRequest $request){
         $algo = new AuthAlgo();
         return $algo->login(User::class,$request);

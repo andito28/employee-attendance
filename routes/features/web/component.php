@@ -5,10 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\web\component\DepartmentController;
 use App\Http\Controllers\Web\Component\CompanyOfficeController;
 
-$administrator = RoleUser::ADMINISTRATOR_ID;
+// $administrator = RoleUser::ADMINISTRATOR_ID;
+// middleware(["auth.api","checkRole:$administrator"])
 
-Route::middleware(["auth.api","checkRole:$administrator"])
-    ->prefix("components")
+Route::prefix("components")
     ->group(function () {
 
         // Company Offices

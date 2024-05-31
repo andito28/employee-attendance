@@ -31,9 +31,6 @@ class AuthAlgo
                     'roleId' => 2
                 ]);
 
-                $user->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " .$user->getTable() . ":$user->name [$user->id]");
-
                 return $user;
 
             });
