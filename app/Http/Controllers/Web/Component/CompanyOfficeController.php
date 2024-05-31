@@ -57,7 +57,7 @@ class CompanyOfficeController extends Controller
         if (!$companyOffice) {
             errComponentCompanyOfficeGet();
         }
-        return success(CompanyOfficeParser::getDepartments($companyOffice));
+        return success($companyOffice->departments);
     }
 
 

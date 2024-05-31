@@ -26,11 +26,4 @@ class CompanyOfficeParser extends BaseParser
         ];
     }
 
-    public static function getDepartments($data){
-
-        return [
-            DepartmentParser::briefs($data->departments)
-        ];
-    }
-
 }
