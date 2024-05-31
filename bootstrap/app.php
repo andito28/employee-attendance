@@ -34,8 +34,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: ['api/*']);
         $middleware->alias(
-            ['auth.api' => EnsureApiTokenIsValid::class],
-            ['checkRole' => CheckRole::class],
+            [
+                'auth.api' => EnsureApiTokenIsValid::class,
+                'checkRole' => CheckRole::class,
+            ],
         );
     })
     ->withExceptions(function (Exceptions $exceptions) {

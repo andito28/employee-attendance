@@ -1,10 +1,13 @@
 <?php
 
+use App\Services\Constant\RoleUser;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\web\component\DepartmentController;
 use App\Http\Controllers\Web\Component\CompanyOfficeController;
 
-Route::middleware(['auth.api'])
+$administrator = RoleUser::ADMINISTRATOR_ID;
+
+Route::middleware(["auth.api","checkRole:$administrator"])
     ->prefix("components")
     ->group(function () {
 

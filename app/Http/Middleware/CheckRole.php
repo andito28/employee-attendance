@@ -18,6 +18,6 @@ class CheckRole
         if(in_array($request->user()->roleId,$role)){
             return $next($request);
         }
-        errAuthentication();
+        errAccessPemission();
     }
 }
