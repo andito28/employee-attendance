@@ -2,11 +2,12 @@
 
 namespace App\Algorithms\Component;
 
-use App\Services\Constant\Activity\ActivityAction;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use App\Services\Constant\Activity\ActivityAction;
 
 class ComponentAlgo
 {
