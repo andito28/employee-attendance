@@ -27,7 +27,7 @@ class Sibling extends BaseModel
 
     public function employee()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class,'employeeId');
     }
 
 

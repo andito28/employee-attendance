@@ -4,10 +4,10 @@ use App\Services\Constant\RoleUser;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Employee\EmployeeController;
 
-// $administrator = RoleUser::ADMINISTRATOR_ID;
-// middleware(["auth.api","role:$administrator"])
+$administrator = RoleUser::ADMINISTRATOR_ID;
 
 Route::prefix("employees")
+    ->middleware(["auth.api","role:$administrator"])
     ->group(function () {
 
         // employee

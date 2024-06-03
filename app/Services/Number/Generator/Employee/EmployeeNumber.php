@@ -10,7 +10,7 @@ class EmployeeNumber extends BaseNumber
     /**
      * @var string
      */
-    protected static string $prefix = "GX";
+    protected static string $prefix = "EMP";
 
     /**
      * @var Model|string|null

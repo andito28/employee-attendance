@@ -3,6 +3,7 @@
 namespace App\Models\User;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\GetOrPaginate;
+use App\Models\Employee\Employee;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,6 +27,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
+        'employeeId',
         'name',
         'email',
         'password',
@@ -80,6 +82,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function employee()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class,'employeeId');
     }
 }

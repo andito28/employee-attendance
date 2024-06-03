@@ -21,13 +21,25 @@ class EmployeeRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
+        $rules = [
+            'name' => 'required|string|max:255',
             'companyOfficeId' => 'required|integer|exists:company_offices,id',
             'departmentId' => 'required|integer|exists:departments,id',
-            'photo' => 'nullable|mimes:png,jpg'
+            'photo' => 'required|mimes:png,jpg|max:2048',
+            'fatherName' => 'required|string|max:255',
+            'motherName' => 'required|string|max:255',
+            'siblings.*.name' => 'required|string|max:255',
         ];
+
+        if ($this->isMethod('post')) {
+            $rules['password'] = 'required|string';
+            $rules['email'] =  'required|string|email|max:255';
+        } elseif ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules['email'] = 'sometimes|string|email|max:255';
+            $rules['password'] = 'sometimes|string|min:8';
+            $rules['photo'] = 'sometimes|mimes:png,jpg|max:2048';
+        }
+
+        return $rules;
     }
 }

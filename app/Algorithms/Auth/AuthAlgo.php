@@ -57,7 +57,7 @@ class AuthAlgo
 
                 $user = [
                     'userId' => auth()->user()->id,
-                    "userName" => auth()->user()->name,
+                    "userName" => auth()->user()->employee->name,
                     'accessToken'   => $token
                 ];
 

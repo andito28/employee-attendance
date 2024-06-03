@@ -16,11 +16,13 @@ class ComponentAlgo
 
             $component = DB::transaction(function () use ($model, $request) {
                 $createdBy = [];
-                // $createdBy = [
-                //     'createdBy' => auth()->user()->id,
-                //     'createdByName' => auth()->user()->employee->name
-                // ];
 
+                if(Auth::check()){
+                    $createdBy = [
+                        'createdBy' => auth()->user()->employee->id,
+                        'createdByName' => auth()->user()->employee->name
+                    ];
+                }
                 $component = $model::create($request->all() + $createdBy);
 
                 $component->setActivityPropertyAttributes(ActivityAction::CREATE)
