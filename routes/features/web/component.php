@@ -6,7 +6,7 @@ use App\Http\Controllers\web\component\DepartmentController;
 use App\Http\Controllers\Web\Component\CompanyOfficeController;
 
 // $administrator = RoleUser::ADMINISTRATOR_ID;
-// middleware(["auth.api","checkRole:$administrator"])
+// middleware(["auth.api","role:$administrator"])
 
 Route::prefix("components")
     ->group(function () {

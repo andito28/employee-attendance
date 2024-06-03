@@ -15,16 +15,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employees', function (Blueprint $table) {
+        Schema::create('siblings', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('number');
-            $table->foreignId('companyOfficeId');
-            $table->foreignId('departmentId');
+            $table->foreignId('employeeId');
+            $table->string('name');
             $table->string('phone')->nullable();
-            $table->text('address')->nullable();
-            $table->string('photo');
-            $table->integer('statusId');
+            $table->string('email')->nullable();
             $this->getDefaultCreatedBy($table);
             $this->getDefaultTimestamps($table);
         });
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employees');
+        Schema::dropIfExists('siblings');
     }
 };

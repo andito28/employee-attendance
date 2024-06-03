@@ -36,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias(
             [
                 'auth.api' => EnsureApiTokenIsValid::class,
-                'checkRole' => CheckRole::class,
+                'role' => CheckRole::class,
             ],
         );
     })

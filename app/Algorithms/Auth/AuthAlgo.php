@@ -18,29 +18,29 @@ class AuthAlgo
      *
      * @return JsonResponse|mixed
      */
-    public function register($model, Request $request)
-    {
-        try {
+    // public function register($model, Request $request)
+    // {
+    //     try {
 
-            $user = DB::transaction(function () use ($model, $request) {
+    //         $user = DB::transaction(function () use ($model, $request) {
 
-                $user = $model::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'roleId' => 2
-                ]);
+    //             $user = $model::create([
+    //                 'name' => $request->name,
+    //                 'email' => $request->email,
+    //                 'password' => Hash::make($request->password),
+    //                 'roleId' => 2
+    //             ]);
 
-                return $user;
+    //             return $user;
 
-            });
+    //         });
 
-            return success($user);
+    //         return success($user);
 
-        } catch (\Exception $exception) {
-            exception($exception);
-        }
-    }
+    //     } catch (\Exception $exception) {
+    //         exception($exception);
+    //     }
+    // }
 
 
     public function login($model, Request $request)
