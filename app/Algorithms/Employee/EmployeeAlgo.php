@@ -14,6 +14,7 @@ use App\Models\Employee\Resignation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use App\Services\Constant\StatusEmployee;
 use App\Services\Constant\Activity\ActivityAction;
 use App\Services\Number\Generator\Employee\EmployeeNumber;
@@ -36,7 +37,7 @@ class EmployeeAlgo
 
                 $this->checkExistingEmployeeAndResignation($model,$request);
 
-                $employee = $this->saveEmployee($model,$request,$createdBy);
+                $employee = $this->createEmployee($model,$request,$createdBy);
 
                 $employee->setActivityPropertyAttributes(ActivityAction::CREATE)
                     ->saveActivity("Enter new " .$employee->getTable() . ":$employee->name [$employee->id]");
@@ -61,7 +62,7 @@ class EmployeeAlgo
 
                 $model->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
 
-                $model->update($request->all());
+                $this->updateEmployee($model,$request);
 
                 $model->setActivityPropertyAttributes(ActivityAction::UPDATE)
                     ->saveActivity("Update " . $model->getTable() . ": $model->name [$model->id]");
@@ -107,7 +108,7 @@ class EmployeeAlgo
     }
 
 
-    private function saveEmployee($model,$request,$createdBy){
+    private function createEmployee($model,$request,$createdBy){
 
         $phone = isset($request->phone)? $request->phone: null;
         $address = isset($request->address)? $request->address: null;
@@ -127,9 +128,9 @@ class EmployeeAlgo
 
         $employee = $model::create($dataInput + $createdBy);
 
-        $this->saveUser($request,$employee->id);
-        $this->saveParentEmployee($request,$employee->id);
-        $this->saveSiblingsEmployee($request,$employee->id,$createdBy);
+        $this->createUser($request,$employee->id);
+        $this->createParentEmployee($request,$employee->id);
+        $this->createSiblingsEmployee($request,$employee->id,$createdBy);
 
         return $employee;
     }
@@ -143,7 +144,7 @@ class EmployeeAlgo
     }
 
 
-    private function saveUser($request,$employeeId){
+    private function createUser($request,$employeeId){
         User::create([
             'employeeId' => $employeeId,
             'email' => $request->email,
@@ -153,7 +154,7 @@ class EmployeeAlgo
     }
 
 
-    private function saveParentEmployee($request,$employeeId){
+    private function createParentEmployee($request,$employeeId){
         Parental::create([
             'employeeId' => $employeeId,
             'fatherName' => $request->fatherName,
@@ -166,7 +167,7 @@ class EmployeeAlgo
     }
 
 
-    private function saveSiblingsEmployee($request,$employeeId,$createdBy){
+    private function createSiblingsEmployee($request,$employeeId,$createdBy){
 
         foreach($request->siblings as $value){
 
@@ -180,9 +181,88 @@ class EmployeeAlgo
                 'phone' => $phone
             ];
 
-
             Sibling::create($dataInput + $createdBy);
         }
+    }
+
+
+    private function updateEmployee($model,$request){
+
+        if($request->file('photo')){
+            Storage::delete($model->photo);
+            $filePath = $this->savePhoto($request);
+        }else{
+            $filePath = $model->photo;
+        }
+
+        $phone = isset($request->phone)? $request->phone: null;
+        $address = isset($request->address)? $request->address: null;
+
+        $dataInput = [
+            "name" => $request ->name,
+            "companyOfficeId" => $request->companyOfficeId,
+            "departmentId" => $request->departmentId,
+            "photo" => $filePath,
+            "phone" => $phone,
+            "address" => $address,
+        ];
+
+        $model->update($dataInput);
+
+        if($request->email){
+            $this->updateUser($model->id,$request);
+        }
+
+        $this->updateParentEmployee($model->id,$request);
+        $this->updateSiblingsEmployee($model->id,$request);
+    }
+
+
+    private function updateUser($employeeId,$request){
+        User::where('employeeId', $employeeId)->update([
+            'email' => $request->email
+        ]);
+    }
+
+
+    private function updateParentEmployee($employeeId,$request){
+
+        Parental::where('employeeId', $employeeId)->update([
+            'fatherName' => $request->fatherName,
+            'fatherPhone' => $request->fatherPhone,
+            'fatherEmail' => $request->fatherEmail,
+            'motherName' => $request->motherName,
+            'motherPhone' => $request->motherPhone,
+            'motherEmail' => $request->motherEmail,
+        ]);
+
+    }
+
+
+    private function updateSiblingsEmployee($employeeId,$request){
+        $processedSiblings = [];
+
+        foreach ($request->siblings as $siblingData) {
+            $siblingId = $siblingData['id'] ?? null;
+
+            if ($siblingId) {
+                $sibling = Sibling::find($siblingId);
+            } else {
+                $sibling = new Sibling();
+            }
+
+            $sibling->employeeId = $employeeId;
+            $sibling->name = $siblingData['name'];
+            $sibling->email = $siblingData['email'] ?? null;
+            $sibling->phone = $siblingData['phone'] ?? null;
+            $sibling->save();
+
+            $processedSiblings[] = $sibling->id;
+        }
+
+        Sibling::where('employeeId', $employeeId)
+            ->whereNotIn('id', $processedSiblings)
+            ->delete();
     }
 
 }

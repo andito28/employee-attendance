@@ -26,6 +26,6 @@ class EmployeeController extends Controller
         }
 
         $algo = new EmployeeAlgo();
-        return $algo->create(Employee::class,$request);
+        return $algo->update($employee,$request);
     }
 }

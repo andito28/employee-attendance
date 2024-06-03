@@ -13,7 +13,7 @@ Route::prefix("employees")
         // employee
         Route::get('', [EmployeeController::class, 'get']);
         Route::post('', [EmployeeController::class, 'create']);
-        Route::put('{id}', [EmployeeController::class, 'update']);
+        Route::patch('{id}', [EmployeeController::class, 'update']);
         Route::delete('{id}', [EmployeeController::class, 'delete']);
 
 });
