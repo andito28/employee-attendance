@@ -27,6 +27,7 @@ class CompanyOfficeController extends Controller
         return $algo->createBy(CompanyOffice::class, $request);
     }
 
+
     public function update($id, CompanyOfficeRequest $request)
     {
         $companyOffice = CompanyOffice::find($id);
@@ -51,7 +52,8 @@ class CompanyOfficeController extends Controller
     }
 
 
-    public function getDepartment($id){
+    public function getDepartment($id)
+    {
 
         $companyOffice = CompanyOffice::with('departments')->find($id);
         if (!$companyOffice) {
@@ -61,7 +63,8 @@ class CompanyOfficeController extends Controller
     }
 
 
-    public function saveOfficeDepartmentMapping($id,OfficeDepartmentRequest $request){
+    public function saveOfficeDepartmentMapping($id,OfficeDepartmentRequest $request)
+    {
 
         $companyOffice = CompanyOffice::find($id);
         if (!$companyOffice) {
@@ -70,6 +73,5 @@ class CompanyOfficeController extends Controller
 
         $algo = new CompanyOfficeAlgo();
         return $algo->mappingOfficeDepartment(CompanyOfficeDepartment::class,$request,$id);
-
     }
 }

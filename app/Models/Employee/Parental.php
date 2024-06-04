@@ -8,8 +8,6 @@ use App\Models\Employee\Traits\HasActivityParentalProperty;
 
 class Parental extends BaseModel
 {
-    use HasActivityParentalProperty;
-
     // protected $table = '';
     protected $guarded = ['id'];
 

@@ -5,6 +5,7 @@ namespace App\Algorithms\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Services\Constant\RoleUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
@@ -56,9 +57,10 @@ class AuthAlgo
                 }
 
                 $user = [
-                    'userId' => auth()->user()->id,
-                    "userName" => auth()->user()->employee->name,
-                    'accessToken'   => $token
+                    'id' => auth()->user()->employee->id,
+                    "name" => auth()->user()->employee->name,
+                    "role" => RoleUser::display(auth()->user()->roleId),
+                    "accessToken"  => $token
                 ];
 
                 return $user;

@@ -21,4 +21,11 @@ if (!function_exists("errEmployeeAlreadyExists")) {
     }
 }
 
+if (!function_exists("errEmployeeSiblingsGet")) {
+    function errEmployeeSiblingsGet($internalMsg = "", $status = null)
+    {
+        error(404, "Siblings not found!", $internalMsg, $status);
+    }
+}
+
 

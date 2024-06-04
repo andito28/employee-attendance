@@ -77,6 +77,31 @@ class EmployeeAlgo
     }
 
 
+    public function delete(Model $model)
+    {
+        try {
+
+            DB::transaction(function () use ($model) {
+
+                $model->setOldActivityPropertyAttributes(ActivityAction::DELETE);
+
+                Storage::delete($model->photo);
+
+                $model->delete();
+
+                $model->setActivityPropertyAttributes(ActivityAction::DELETE)
+                    ->saveActivity("Delete " . $model->getTable() . ": $model->name [$model->id]");
+
+            });
+
+            return success();
+
+        } catch (\Exception $exception) {
+            exception($exception);
+        }
+    }
+
+
     /** --- SUB FUNCTIONS --- */
 
     private function  checkExistingEmployeeAndResignation($model, $request){
@@ -247,6 +272,9 @@ class EmployeeAlgo
 
             if ($siblingId) {
                 $sibling = Sibling::find($siblingId);
+                    if (!$sibling) {
+                        errEmployeeSiblingsGet('sibling ID : '.$siblingData['id']);
+                    }
             } else {
                 $sibling = new Sibling();
             }

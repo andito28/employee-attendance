@@ -9,8 +9,6 @@ use App\Models\Employee\Traits\HasActivitySiblingProperty;
 
 class Sibling extends BaseModel
 {
-    use HasActivitySiblingProperty;
-
     // protected $table = '';
     protected $guarded = ['id'];
 

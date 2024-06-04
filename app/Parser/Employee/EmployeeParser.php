@@ -3,6 +3,11 @@
 namespace App\Parser\Employee;
 
 use GlobalXtreme\Parser\BaseParser;
+use App\Parser\Employee\SiblingParser;
+use App\Parser\Employee\ParentalParser;
+use Illuminate\Support\Facades\Storage;
+use App\Parser\Component\DepartmentParser;
+use App\Parser\Component\CompanyOfficeParser;
 
 class EmployeeParser extends BaseParser
 {
@@ -17,7 +22,19 @@ class EmployeeParser extends BaseParser
             return null;
         }
 
-        return parent::first($data);
+        return [
+            'id' => $data->id,
+            'name' => $data->name,
+            'number' => $data->number,
+            'email' => $data->user->email,
+            'photo' => Storage::url($data->photo),
+            'phone' => $data->phone,
+            'address' => $data->address,
+            'companyOffice' => CompanyOfficeParser::brief($data->companyOffice),
+            'department' => DepartmentParser::brief($data->department),
+            'parent' => ParentalParser::brief($data->parental),
+            'siblings' => SiblingParser::briefs($data->siblings)
+        ];
     }
 
 }

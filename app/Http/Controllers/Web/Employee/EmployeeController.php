@@ -10,16 +10,22 @@ use App\Http\Requests\Employee\EmployeeRequest;
 
 class EmployeeController extends Controller
 {
-    public function get(Request $request){
-
+    public function get(Request $request)
+    {
+        $employee = Employee::filter($request)->getOrPaginate($request, true);
+        return success($employee);
     }
 
-    public function create(EmployeeRequest $request){
+
+    public function create(EmployeeRequest $request)
+    {
         $algo = new EmployeeAlgo();
         return $algo->create(Employee::class,$request);
     }
 
-    public function update($id,EmployeeRequest $request){
+
+    public function update($id,EmployeeRequest $request)
+    {
         $employee = Employee::find($id);
         if(!$employee){
             errEmployeeGet();
@@ -27,5 +33,17 @@ class EmployeeController extends Controller
 
         $algo = new EmployeeAlgo();
         return $algo->update($employee,$request);
+    }
+
+
+    public function delete($id)
+    {
+        $employee = Employee::find($id);
+        if (!$employee) {
+            errEmployeeGet();
+        }
+
+        $algo = new EmployeeAlgo();
+        return $algo->delete($employee);
     }
 }
