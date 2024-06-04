@@ -22,7 +22,9 @@ class ResignationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'date' => 'required|date',
+            'reason' => 'required',
+            'file' => 'required|mimes:pdf|max:2048'
         ];
     }
 }

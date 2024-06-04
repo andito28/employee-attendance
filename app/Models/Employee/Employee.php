@@ -60,6 +60,11 @@ class Employee extends BaseModel
         return $this->hasMany(Resignation::class, 'employeeId');
     }
 
+    public function attendances()
+    {
+        // return $this->hasMany(Attendance::class, 'employeeId');
+    }
+
 
     /** --- SCOPES --- */
 

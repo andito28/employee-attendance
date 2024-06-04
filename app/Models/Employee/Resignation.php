@@ -7,6 +7,7 @@ use App\Models\Employee\Employee;
 use App\Parser\Employee\ResignationParser;
 use App\Models\Employee\Traits\HasActivityResignationProperty;
 
+
 class Resignation extends BaseModel
 {
     use HasActivityResignationProperty;

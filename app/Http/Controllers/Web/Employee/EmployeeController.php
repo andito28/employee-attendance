@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Web\Employee;
 
 use Illuminate\Http\Request;
+use App\Jobs\DeleteAttendances;
 use App\Models\Employee\Employee;
 use App\Http\Controllers\Controller;
+use App\Models\Employee\Resignation;
 use App\Algorithms\Employee\EmployeeAlgo;
+use App\Algorithms\Employee\ResignationAlgo;
 use App\Http\Requests\Employee\EmployeeRequest;
+use App\Http\Requests\Employee\ResignationRequest;
 
 class EmployeeController extends Controller
 {
@@ -58,4 +62,38 @@ class EmployeeController extends Controller
         $algo = new EmployeeAlgo();
         return $algo->promoteToAdministrator($employee);
     }
+
+
+    public function deleteAttendances($id)
+    {
+        $employee = Employee::find($id);
+        if (!$employee) {
+            errEmployeeGet();
+        }
+
+        DeleteAttendances::dispatch($employee);
+    }
+
+
+    public function resignation(ResignationRequest $request,$id)
+    {
+        $employee = Employee::find($id);
+        if (!$employee) {
+            errEmployeeGet();
+        }
+
+        $algo = new ResignationAlgo();
+        return $algo->create(Resignation::class,$request,$id);
+    }
+
+
+    // public function reverseResignationStatus($id){
+    //     $employee = Employee::find($id);
+    //     if (!$employee) {
+    //         errEmployeeGet();
+    //     }
+
+    //     $algo = new ResignationAlgo();
+    //     return $algo->reverseResignationStatus(Resignation::class,$id);
+    // }
 }

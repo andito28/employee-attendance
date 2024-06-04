@@ -103,6 +103,7 @@ class EmployeeAlgo
         }
     }
 
+
     public function promoteToAdministrator(Model $model)
     {
         try {
@@ -245,6 +246,7 @@ class EmployeeAlgo
         }
     }
 
+
     private function updateEmployee($model,$request){
 
         if($request->file('photo')){
@@ -329,6 +331,7 @@ class EmployeeAlgo
             ->whereNotIn('id', $processedSiblings)
             ->delete();
     }
+
 
     private function savePromoteAdmin($employeeId){
 

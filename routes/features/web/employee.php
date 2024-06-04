@@ -10,11 +10,12 @@ Route::prefix("employees")
     ->middleware(["auth.api","role:$administrator"])
     ->group(function () {
 
-        // employee
         Route::get('', [EmployeeController::class, 'get']);
         Route::post('', [EmployeeController::class, 'create']);
         Route::patch('{id}', [EmployeeController::class, 'update']);
         Route::delete('{id}', [EmployeeController::class, 'delete']);
         Route::patch('{id}/promote-admin', [EmployeeController::class, 'promoteToAdministrator']);
+        Route::delete('{id}/attendances}', [EmployeeController::class, 'deleteAttendances']);
+        Route::post('{id}/resignation', [EmployeeController::class, 'resignation']);
 
 });
