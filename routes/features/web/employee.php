@@ -15,5 +15,6 @@ Route::prefix("employees")
         Route::post('', [EmployeeController::class, 'create']);
         Route::patch('{id}', [EmployeeController::class, 'update']);
         Route::delete('{id}', [EmployeeController::class, 'delete']);
+        Route::patch('{id}/promote-admin', [EmployeeController::class, 'promoteToAdministrator']);
 
 });

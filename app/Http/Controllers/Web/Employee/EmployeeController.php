@@ -46,4 +46,16 @@ class EmployeeController extends Controller
         $algo = new EmployeeAlgo();
         return $algo->delete($employee);
     }
+
+
+    public function promoteToAdministrator($id)
+    {
+        $employee = Employee::find($id);
+        if (!$employee) {
+            errEmployeeGet();
+        }
+
+        $algo = new EmployeeAlgo();
+        return $algo->promoteToAdministrator($employee);
+    }
 }

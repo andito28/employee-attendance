@@ -21,6 +21,8 @@ class EmployeeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $employeeId = $this->route('employee');
+
         $rules = [
             'name' => 'required|string|max:255',
             'companyOfficeId' => 'required|integer|exists:company_offices,id',

@@ -2,6 +2,7 @@
 
 namespace App\Parser\Employee;
 
+use App\Services\Constant\RoleUser;
 use GlobalXtreme\Parser\BaseParser;
 use App\Parser\Employee\SiblingParser;
 use App\Parser\Employee\ParentalParser;
@@ -24,6 +25,7 @@ class EmployeeParser extends BaseParser
 
         return [
             'id' => $data->id,
+            'role' => RoleUser::display($data->user->roleId),
             'name' => $data->name,
             'number' => $data->number,
             'email' => $data->user->email,

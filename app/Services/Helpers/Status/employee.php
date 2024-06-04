@@ -14,10 +14,10 @@ if (!function_exists("errEmployeeResignExists")) {
     }
 }
 
-if (!function_exists("errEmployeeAlreadyExists")) {
-    function errEmployeeAlreadyExists($internalMsg = "", $status = null)
+if (!function_exists("errEmployeeEmailAlreadyExists")) {
+    function errEmployeeEmailAlreadyExists($internalMsg = "", $status = null)
     {
-        error(400, "Employee Already exists!", $internalMsg, $status);
+        error(400, "Employee email Already exists!", $internalMsg, $status);
     }
 }
 

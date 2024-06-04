@@ -62,6 +62,8 @@ class EmployeeAlgo
 
                 $model->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
 
+                $this->validateUniqueEmail($model,$request);
+
                 $this->updateEmployee($model,$request);
 
                 $model->setActivityPropertyAttributes(ActivityAction::UPDATE)
@@ -101,6 +103,28 @@ class EmployeeAlgo
         }
     }
 
+    public function promoteToAdministrator(Model $model)
+    {
+        try {
+
+            DB::transaction(function () use ($model) {
+
+                $model->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
+
+                $this->savePromoteAdmin($model->id);
+
+                $model->setActivityPropertyAttributes(ActivityAction::UPDATE)
+                    ->saveActivity("Update " . $model->getTable() . ": $model->name [$model->id]");
+
+            });
+
+            return success($model->fresh());
+
+        } catch (\Exception $exception) {
+            exception($exception);
+        }
+    }
+
 
     /** --- SUB FUNCTIONS --- */
 
@@ -112,11 +136,10 @@ class EmployeeAlgo
         })->first();
 
         if($existingEmployee){
-            errEmployeeAlreadyExists();
+            errEmployeeEmailAlreadyExists();
         }
 
-        $existingEmployeeResigned = $model::withTrashed()
-        ->where('statusId',StatusEmployee::RESIGNED_ID)
+        $existingEmployeeResigned = $model::where('statusId',StatusEmployee::RESIGNED_ID)
         ->whereHas('user', function($query) use ($request) {
             $query->where('email', $request->email);
         })->first();
@@ -211,6 +234,17 @@ class EmployeeAlgo
     }
 
 
+    private function validateUniqueEmail($model,$request)
+    {
+        $existingUser = User::where('email', $request->email)
+        ->where('employeeId', '!=', $model->user->employeeId)
+        ->first();
+
+        if($existingUser){
+            errEmployeeEmailAlreadyExists();
+        }
+    }
+
     private function updateEmployee($model,$request){
 
         if($request->file('photo')){
@@ -271,9 +305,12 @@ class EmployeeAlgo
             $siblingId = $siblingData['id'] ?? null;
 
             if ($siblingId) {
-                $sibling = Sibling::find($siblingId);
+                $sibling = Sibling::where('id',$siblingId)
+                ->where('employeeId',$employeeId)->first();
                     if (!$sibling) {
-                        errEmployeeSiblingsGet('sibling ID : '.$siblingData['id']);
+                        errEmployeeSiblingsGet(
+                            "employee ID:".$employeeId." & "."sibling ID:". $siblingData['id']
+                        );
                     }
             } else {
                 $sibling = new Sibling();
@@ -291,6 +328,13 @@ class EmployeeAlgo
         Sibling::where('employeeId', $employeeId)
             ->whereNotIn('id', $processedSiblings)
             ->delete();
+    }
+
+    private function savePromoteAdmin($employeeId){
+
+        User::where('employeeId', $employeeId)->update([
+            'roleId' => RoleUser::ADMINISTRATOR_ID
+        ]);
     }
 
 }
