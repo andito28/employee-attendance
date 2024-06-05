@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Component;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Component\Department;
 use App\Models\Component\CompanyOffice;
 use App\Algorithms\Component\ComponentAlgo;
 use App\Parser\Component\CompanyOfficeParser;
@@ -74,8 +75,14 @@ class CompanyOfficeController extends Controller
     }
 
 
-    public function getOfficeDepartmentMapping()
+    public function getOfficeDepartmentMapping($id)
     {
+        $companyOffice = CompanyOffice::find($id);
+        if (!$companyOffice) {
+            errComponentCompanyOfficeGet();
+        }
 
+        $mappings = $companyOffice->getDepartmentMappings();
+        return success($mappings);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models\Component;
 
 use App\Models\BaseModel;
+use App\Models\Component\Department;
 use App\Parser\Component\CompanyOfficeParser;
 use App\Models\Component\Traits\HasActivityCompanyOfficeProperty;
 
@@ -55,11 +56,30 @@ class CompanyOffice extends BaseModel
 
      /** --- FUNCTIONS --- */
 
-    public function delete(){
-
+    public function delete()
+    {
         $this->officeDepartments()->delete();
         return parent::delete();
+    }
 
+
+    public function getDepartmentMappings()
+    {
+        $departments = Department::all();
+        $mappings = [];
+
+        foreach ($departments as $department) {
+            $assigned = $this->officeDepartments()
+            ->where('departmentId', $department->id)
+            ->exists();
+
+            $mappings[] = [
+                'assigned' => $assigned,
+                'name' => $department->name,
+            ];
+        }
+
+        return $mappings;
     }
 
 }
