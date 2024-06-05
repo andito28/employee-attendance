@@ -5,6 +5,7 @@ namespace App\Algorithms\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Employee\User;
+use App\Jobs\DeleteAttendances;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Employee;
 use Illuminate\Http\JsonResponse;
@@ -87,6 +88,8 @@ class EmployeeAlgo
             DB::transaction(function (){
 
                 $this->employee->setOldActivityPropertyAttributes(ActivityAction::DELETE);
+
+                // DeleteAttendances::dispatch($this->employee);
 
                 $this->employee->delete();
 
