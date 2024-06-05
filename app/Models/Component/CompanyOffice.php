@@ -74,6 +74,7 @@ class CompanyOffice extends BaseModel
             ->exists();
 
             $mappings[] = [
+                'id' => $department->id,
                 'assigned' => $assigned,
                 'name' => $department->name,
             ];
