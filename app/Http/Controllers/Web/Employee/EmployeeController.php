@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Employee\Employee;
 use App\Http\Controllers\Controller;
 use App\Models\Employee\Resignation;
+use App\Parser\Employee\EmployeeParser;
 use App\Algorithms\Employee\EmployeeAlgo;
 use App\Algorithms\Employee\ResignationAlgo;
 use App\Http\Requests\Employee\EmployeeRequest;
@@ -17,8 +18,8 @@ class EmployeeController extends Controller
 {
     public function get(Request $request)
     {
-        $employee = Employee::filter($request)->getOrPaginate($request, true);
-        return success($employee);
+        $employee = Employee::with('user','parental','siblings')->get();
+        return success(EmployeeParser::getEmployee($employee));
     }
 
 

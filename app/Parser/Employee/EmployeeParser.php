@@ -34,20 +34,25 @@ class EmployeeParser extends BaseParser
             return null;
         }
 
-        return [
-            'id' => $data->id,
-            'role' => RoleUser::display($data->user->roleId),
-            'name' => $data->name,
-            'number' => $data->number,
-            'email' => $data->user->email,
-            'photo' => Storage::url($data->photo),
-            'phone' => $data->phone,
-            'address' => $data->address,
-            'companyOffice' => CompanyOfficeParser::brief($data->companyOffice),
-            'department' => DepartmentParser::brief($data->department),
-            'parent' => ParentalParser::brief($data->parental),
-            'siblings' => SiblingParser::briefs($data->siblings)
-        ];
+        $datas = [];
+        foreach($data as $value){
+            $datas[] = [
+            'id' => $value->id,
+            'role' => RoleUser::display($value->user->roleId),
+            'name' => $value->name,
+            'number' => $value->number,
+            'email' => $value->user->email,
+            'photo' => Storage::url($value->photo),
+            'phone' => $value->phone,
+            'address' => $value->address,
+            'companyOffice' => CompanyOfficeParser::brief($value->companyOffice),
+            'department' => DepartmentParser::brief($value->department),
+            'parent' => ParentalParser::brief($value->parental),
+            'siblings' => SiblingParser::briefs($value->siblings)
+            ];
+        }
+
+        return $datas;
     }
 
 }
