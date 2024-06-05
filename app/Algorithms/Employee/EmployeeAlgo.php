@@ -15,15 +15,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Constant\StatusEmployee;
+use App\Services\Number\Generator\EmployeeNumber;
 use App\Services\Constant\Activity\ActivityAction;
 use App\Http\Requests\Employee\CreateEmployeeRequest;
-use App\Services\Number\Generator\Employee\EmployeeNumber;
 
 class EmployeeAlgo
 {
     public function __construct(public ? Employee $employee = null)
     {
     }
+
 
     public function create(CreateEmployeeRequest $request)
     {
@@ -180,7 +181,8 @@ class EmployeeAlgo
     }
 
 
-    private function savePhoto($request){
+    private function savePhoto($request)
+    {
         $file = $request->file('photo');
         $fileName = time() . '_' . $file->getClientOriginalName();
         $filePath = $file->storeAs('public/employee', $fileName);

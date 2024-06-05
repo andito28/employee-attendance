@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Number\Generator\Employee;
+namespace App\Services\Number\Generator;
 
 use App\Services\Number\BaseNumber;
 use Illuminate\Database\Eloquent\Model;

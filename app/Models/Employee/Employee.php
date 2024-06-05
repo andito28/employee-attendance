@@ -110,7 +110,6 @@ class Employee extends BaseModel
         }
     }
 
-
     public function saveParent($data)
     {
         $parental = $this->parental;
@@ -131,7 +130,6 @@ class Employee extends BaseModel
             Parental::create($dataInput + $employeeId);
         }
     }
-
 
     public function saveSiblings($data,$createdBy = null)
     {
