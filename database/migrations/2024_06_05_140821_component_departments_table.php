@@ -15,10 +15,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('company_office_departments', function (Blueprint $table) {
+        Schema::create('component_departments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('companyOfficeId');
-            $table->foreignId('departmentId');
+            $table->string('name', 150);
 
             $this->getDefaultCreatedBy($table);
             $this->getDefaultTimestamps($table);
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('company_office_departments');
+        Schema::dropIfExists('component_departments');
     }
 };

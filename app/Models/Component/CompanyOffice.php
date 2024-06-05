@@ -32,10 +32,10 @@ class CompanyOffice extends BaseModel
     {
         return $this->belongsToMany(
             Department::class,
-            'company_office_departments',
+            'component_company_office_departments',
             'companyOfficeId',
             'departmentId'
-        )->whereNull('company_office_departments.deletedAt');
+        )->whereNull('component_company_office_departments.deletedAt');
     }
 
 

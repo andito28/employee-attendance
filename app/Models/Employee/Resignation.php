@@ -12,7 +12,7 @@ class Resignation extends BaseModel
 {
     use HasActivityResignationProperty;
 
-    // protected $table = '';
+    protected $table = 'employee_resignations';
     protected $guarded = ['id'];
 
     protected $casts = [

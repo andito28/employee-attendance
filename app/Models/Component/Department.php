@@ -11,7 +11,7 @@ class Department extends BaseModel
 {
     use HasActivityDepartmentProperty;
 
-    // protected $table = '';
+    protected $table = 'component_departments';
     protected $guarded = ['id'];
 
     protected $casts = [

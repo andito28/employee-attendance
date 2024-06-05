@@ -18,7 +18,7 @@ class Employee extends BaseModel
 {
     use HasActivityEmployeeProperty;
 
-    // protected $table = '';
+    protected $table = 'employees';
     protected $guarded = ['id'];
 
     protected $casts = [

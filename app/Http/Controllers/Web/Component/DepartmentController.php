@@ -24,6 +24,7 @@ class DepartmentController extends Controller
         return $algo->createBy(Department::class, $request);
     }
 
+
     public function update($id, ComponentRequest $request)
     {
         $department = Department::find($id);

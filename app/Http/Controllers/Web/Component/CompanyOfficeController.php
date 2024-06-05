@@ -54,7 +54,6 @@ class CompanyOfficeController extends Controller
 
     public function getDepartment($id)
     {
-
         $companyOffice = CompanyOffice::with('departments')->find($id);
         if (!$companyOffice) {
             errComponentCompanyOfficeGet();
@@ -65,7 +64,6 @@ class CompanyOfficeController extends Controller
 
     public function saveOfficeDepartmentMapping($id,OfficeDepartmentRequest $request)
     {
-
         $companyOffice = CompanyOffice::find($id);
         if (!$companyOffice) {
             errComponentCompanyOfficeGet();
@@ -73,5 +71,11 @@ class CompanyOfficeController extends Controller
 
         $algo = new CompanyOfficeAlgo();
         return $algo->mappingOfficeDepartment(CompanyOfficeDepartment::class,$request,$id);
+    }
+
+
+    public function getOfficeDepartmentMapping()
+    {
+
     }
 }

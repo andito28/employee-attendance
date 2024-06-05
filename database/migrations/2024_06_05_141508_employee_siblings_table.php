@@ -15,15 +15,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('parentals', function (Blueprint $table) {
+        Schema::create('employee_siblings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employeeId');
-            $table->string('fatherName');
-            $table->string('fatherPhone')->nullable();
-            $table->string('fatherEmail')->nullable();
-            $table->string('motherName');
-            $table->string('motherPhone')->nullable();
-            $table->string('motherEmail')->nullable();
+            $table->string('name');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $this->getDefaultCreatedBy($table);
             $this->getDefaultTimestamps($table);
         });
     }
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('parentals');
+        Schema::dropIfExists('employee_siblings');
     }
 };

@@ -15,13 +15,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('resignations', function (Blueprint $table) {
+        Schema::create('employee_users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employeeId');
-            $table->date('date');
-            $table->text('reason');
-            $table->string('file');
-            $this->getDefaultCreatedBy($table);
+            $table->string('email');
+            $table->string('password');
+            $table->integer('roleId');
             $this->getDefaultTimestamps($table);
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('resignations');
+        Schema::dropIfExists('employee_users');
     }
 };
