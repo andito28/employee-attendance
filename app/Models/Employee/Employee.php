@@ -3,7 +3,7 @@
 namespace App\Models\Employee;
 
 use App\Models\BaseModel;
-use App\Models\User\User;
+use App\Models\Employee\User;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Parental;
 use App\Models\Component\Department;
@@ -90,6 +90,10 @@ class Employee extends BaseModel
         $this->siblings()->delete();
 
         return parent::delete();
+    }
+
+    public function saveUser($data)
+    {
 
     }
 

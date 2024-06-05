@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\User;
+namespace App\Models\Employee;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\GetOrPaginate;
 use App\Models\Employee\Employee;
@@ -85,3 +85,4 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Employee::class,'employeeId');
     }
 }
+

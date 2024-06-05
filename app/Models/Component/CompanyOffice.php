@@ -10,7 +10,7 @@ class CompanyOffice extends BaseModel
 {
     use HasActivityCompanyOfficeProperty;
 
-    // protected $table = '';
+    protected $table = 'component_company_offices';
     protected $guarded = ['id'];
 
     protected $casts = [

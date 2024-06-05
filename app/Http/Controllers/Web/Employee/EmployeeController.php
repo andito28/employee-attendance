@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web\Employee;
 
 use Illuminate\Http\Request;
-use App\Jobs\DeleteAttendances;
 use App\Models\Employee\Employee;
 use App\Http\Controllers\Controller;
 use App\Models\Employee\Resignation;
@@ -11,6 +10,8 @@ use App\Algorithms\Employee\EmployeeAlgo;
 use App\Algorithms\Employee\ResignationAlgo;
 use App\Http\Requests\Employee\EmployeeRequest;
 use App\Http\Requests\Employee\ResignationRequest;
+use App\Http\Requests\Employee\CreateEmployeeRequest;
+use App\Http\Requests\Employee\UpdateEmployeeRequest;
 
 class EmployeeController extends Controller
 {
@@ -21,22 +22,22 @@ class EmployeeController extends Controller
     }
 
 
-    public function create(EmployeeRequest $request)
+    public function create(CreateEmployeeRequest $request)
     {
         $algo = new EmployeeAlgo();
-        return $algo->create(Employee::class,$request);
+        return $algo->create($request);
     }
 
 
-    public function update($id,EmployeeRequest $request)
+    public function update($id,UpdateEmployeeRequest $request)
     {
         $employee = Employee::find($id);
         if(!$employee){
             errEmployeeGet();
         }
 
-        $algo = new EmployeeAlgo();
-        return $algo->update($employee,$request);
+        $algo = new EmployeeAlgo($employee);
+        return $algo->update($request);
     }
 
 
@@ -47,8 +48,8 @@ class EmployeeController extends Controller
             errEmployeeGet();
         }
 
-        $algo = new EmployeeAlgo();
-        return $algo->delete($employee);
+        $algo = new EmployeeAlgo($employee);
+        return $algo->delete();
     }
 
 
@@ -56,22 +57,11 @@ class EmployeeController extends Controller
     {
         $employee = Employee::find($id);
         if (!$employee) {
-            errEmployeeGet();
+            errEmployeeGet($employee);
         }
 
-        $algo = new EmployeeAlgo();
-        return $algo->promoteToAdministrator($employee);
-    }
-
-
-    public function deleteAttendances($id)
-    {
-        $employee = Employee::find($id);
-        if (!$employee) {
-            errEmployeeGet();
-        }
-
-        DeleteAttendances::dispatch($employee);
+        $algo = new EmployeeAlgo($employee);
+        return $algo->promoteToAdministrator();
     }
 
 

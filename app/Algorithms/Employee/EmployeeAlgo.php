@@ -3,9 +3,10 @@
 namespace App\Algorithms\Employee;
 
 use Carbon\Carbon;
-use App\Models\User\User;
 use Illuminate\Http\Request;
+use App\Models\Employee\User;
 use App\Models\Employee\Sibling;
+use App\Models\Employee\Employee;
 use App\Models\Employee\Parental;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -17,36 +18,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Constant\StatusEmployee;
 use App\Services\Constant\Activity\ActivityAction;
+use App\Http\Requests\Employee\CreateEmployeeRequest;
 use App\Services\Number\Generator\Employee\EmployeeNumber;
 
 class EmployeeAlgo
 {
-    public function create($model, Request $request)
+    public function __construct(public ? Employee $employee = null)
+    {
+    }
+
+    public function create(CreateEmployeeRequest $request)
     {
         try {
 
-            $employee = DB::transaction(function () use ($model, $request) {
-                $createdBy = [];
+            DB::transaction(function () use ($request) {
 
-                if(Auth::check()){
-                    $createdBy = [
-                    'createdBy' => auth()->user()->employee->id,
-                    'createdByName' => auth()->user()->employee->name
-                    ];
-                }
+                $user = auth()->user();
 
-                $this->checkExistingEmployeeAndResignation($model,$request);
+                $createdBy = [
+                    'createdBy' =>  $user->employee->id,
+                    'createdByName' =>  $user->employee->name
+                ];
 
-                $employee = $this->createEmployee($model,$request,$createdBy);
+                $this->checkExistingEmployeeAndResignation($request);
 
-                $employee->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " .$employee->getTable() . ":$employee->name [$employee->id]");
+                $this->employee = $this->createEmployee($request,$createdBy);
 
-                return $employee;
+                $this->employee->setActivityPropertyAttributes(ActivityAction::CREATE)
+                    ->saveActivity("Enter new " .$this->employee->getTable() . ":$this->employee->name [$this->employee->id]");
 
             });
 
-            return success($employee);
+            return success($this->employee);
 
         } catch (\Exception $exception) {
             exception($exception);
@@ -54,24 +57,23 @@ class EmployeeAlgo
     }
 
 
-    public function update(Model $model, Request $request)
+    public function update(Request $request)
     {
         try {
 
-            DB::transaction(function () use ($model, $request) {
+            DB::transaction(function () use ($request) {
 
-                $model->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
+                $this->employee->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
 
-                $this->validateUniqueEmail($model,$request);
+                $this->validateUniqueEmail($request);
 
-                $this->updateEmployee($model,$request);
+                $this->updateEmployee($request);
 
-                $model->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                    ->saveActivity("Update " . $model->getTable() . ": $model->name [$model->id]");
-
+                $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
+                ->saveActivity("Update employee : {$this->employee->name} [{$this->employee->id}]");
             });
 
-            return success($model->fresh());
+            return success($this->employee->fresh());
 
         } catch (\Exception $exception) {
             exception($exception);
@@ -79,20 +81,18 @@ class EmployeeAlgo
     }
 
 
-    public function delete(Model $model)
+    public function delete()
     {
         try {
 
-            DB::transaction(function () use ($model) {
+            DB::transaction(function (){
 
-                $model->setOldActivityPropertyAttributes(ActivityAction::DELETE);
+                $this->employee->setOldActivityPropertyAttributes(ActivityAction::DELETE);
 
-                Storage::delete($model->photo);
+                $this->employee->delete();
 
-                $model->delete();
-
-                $model->setActivityPropertyAttributes(ActivityAction::DELETE)
-                    ->saveActivity("Delete " . $model->getTable() . ": $model->name [$model->id]");
+                $this->employee->setActivityPropertyAttributes(ActivityAction::DELETE)
+                ->saveActivity("Delete employee : {$this->employee->name} [{$this->employee->id}]");
 
             });
 
@@ -104,22 +104,22 @@ class EmployeeAlgo
     }
 
 
-    public function promoteToAdministrator(Model $model)
+    public function promoteToAdministrator()
     {
         try {
 
-            DB::transaction(function () use ($model) {
+            DB::transaction(function (){
 
-                $model->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
+                $this->employee->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
 
-                $this->savePromoteAdmin($model->id);
+                $this->savePromoteAdmin($this->employee->id);
 
-                $model->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                    ->saveActivity("Update " . $model->getTable() . ": $model->name [$model->id]");
+                $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
+                ->saveActivity("Update employee : {$this->employee->name} [{$this->employee->id}]");
 
             });
 
-            return success($model->fresh());
+            return success($this->employee->fresh());
 
         } catch (\Exception $exception) {
             exception($exception);
@@ -129,9 +129,9 @@ class EmployeeAlgo
 
     /** --- SUB FUNCTIONS --- */
 
-    private function  checkExistingEmployeeAndResignation($model, $request){
+    private function  checkExistingEmployeeAndResignation($request){
 
-        $existingEmployee = $model::where('statusId',StatusEmployee::ACTIVE_ID)
+        $existingEmployee = Employee::where('statusId',StatusEmployee::ACTIVE_ID)
         ->whereHas('user', function($query) use ($request) {
             $query->where('email', $request->email);
         })->first();
@@ -140,7 +140,7 @@ class EmployeeAlgo
             errEmployeeEmailAlreadyExists();
         }
 
-        $existingEmployeeResigned = $model::where('statusId',StatusEmployee::RESIGNED_ID)
+        $existingEmployeeResigned = Employee::where('statusId',StatusEmployee::RESIGNED_ID)
         ->whereHas('user', function($query) use ($request) {
             $query->where('email', $request->email);
         })->first();
@@ -157,10 +157,7 @@ class EmployeeAlgo
     }
 
 
-    private function createEmployee($model,$request,$createdBy){
-
-        $phone = isset($request->phone)? $request->phone: null;
-        $address = isset($request->address)? $request->address: null;
+    private function createEmployee($request,$createdBy){
 
         $filePath = $this->savePhoto($request);
 
@@ -170,12 +167,12 @@ class EmployeeAlgo
             "companyOfficeId" => $request->companyOfficeId,
             "departmentId" => $request->departmentId,
             "photo" => $filePath,
-            "phone" => $phone,
-            "address" => $address,
+            "phone" => $request->phone,
+            "address" => $request->address,
             "statusId" => StatusEmployee::ACTIVE_ID
         ];
 
-        $employee = $model::create($dataInput + $createdBy);
+        $employee = Employee::create($dataInput + $createdBy);
 
         $this->createUser($request,$employee->id);
         $this->createParentEmployee($request,$employee->id);
@@ -220,14 +217,11 @@ class EmployeeAlgo
 
         foreach($request->siblings as $value){
 
-            $email = isset($value['email'])? $value['email']: null;
-            $phone = isset($value['phone'])? $value['phone']: null;
-
             $dataInput = [
                 'employeeId' => $employeeId,
                 'name' => $value['name'],
-                'email' => $email,
-                'phone' => $phone
+                'email' => $value['email'] ?? null,
+                'phone' => $value['phone'] ?? null
             ];
 
             Sibling::create($dataInput + $createdBy);
@@ -235,10 +229,10 @@ class EmployeeAlgo
     }
 
 
-    private function validateUniqueEmail($model,$request)
+    private function validateUniqueEmail($request)
     {
         $existingUser = User::where('email', $request->email)
-        ->where('employeeId', '!=', $model->user->employeeId)
+        ->where('employeeId', '!=', $this->employee->user->employeeId)
         ->first();
 
         if($existingUser){
@@ -247,35 +241,32 @@ class EmployeeAlgo
     }
 
 
-    private function updateEmployee($model,$request){
+    private function updateEmployee($request){
 
         if($request->file('photo')){
-            Storage::delete($model->photo);
+            Storage::delete($this->employee->photo);
             $filePath = $this->savePhoto($request);
         }else{
-            $filePath = $model->photo;
+            $filePath = $this->employee->photo;
         }
-
-        $phone = isset($request->phone)? $request->phone: null;
-        $address = isset($request->address)? $request->address: null;
 
         $dataInput = [
             "name" => $request ->name,
             "companyOfficeId" => $request->companyOfficeId,
             "departmentId" => $request->departmentId,
             "photo" => $filePath,
-            "phone" => $phone,
-            "address" => $address,
+            "phone" => $request->phone,
+            "address" => $request->address,
         ];
 
-        $model->update($dataInput);
+        $this->employee->update($dataInput);
 
         if($request->email){
-            $this->updateUser($model->id,$request);
+            $this->updateUser($this->employee->id,$request);
         }
 
-        $this->updateParentEmployee($model->id,$request);
-        $this->updateSiblingsEmployee($model->id,$request);
+        $this->updateParentEmployee($this->employee->id,$request);
+        $this->updateSiblingsEmployee($this->employee->id,$request);
     }
 
 

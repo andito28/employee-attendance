@@ -56,13 +56,12 @@ class CompanyOfficeAlgo
             'departmentId' => $departmentId
         ];
 
-        $createdBy = [];
-        if(Auth::check()){
-            $createdBy = [
-                'createdBy' => auth()->user()->employee->id,
-                'createdByName' => auth()->user()->employee->name
-            ];
-        }
+        $user = auth()->user();
+
+        $createdBy = [
+            'createdBy' =>  $user->employee->id,
+            'createdByName' =>  $user->employee->name
+        ];
 
         $component = $model::updateOrCreate($attributes, $createdBy);
 

@@ -23,6 +23,17 @@ class EmployeeParser extends BaseParser
             return null;
         }
 
+        return parent::first($data);
+
+    }
+
+
+    public static function getEmployee($data)
+    {
+        if (!$data) {
+            return null;
+        }
+
         return [
             'id' => $data->id,
             'role' => RoleUser::display($data->user->roleId),
