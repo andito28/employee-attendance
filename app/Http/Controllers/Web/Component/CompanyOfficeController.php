@@ -21,13 +21,11 @@ class CompanyOfficeController extends Controller
         return success($companyOffices);
     }
 
-
     public function create(CompanyOfficeRequest $request)
     {
         $algo = new ComponentAlgo();
         return $algo->createBy(CompanyOffice::class, $request);
     }
-
 
     public function update($id, CompanyOfficeRequest $request)
     {
@@ -40,7 +38,6 @@ class CompanyOfficeController extends Controller
         return $algo->update($companyOffice, $request);
     }
 
-
     public function delete($id)
     {
         $companyOffice = CompanyOffice::find($id);
@@ -52,7 +49,6 @@ class CompanyOfficeController extends Controller
         return $algo->delete($companyOffice);
     }
 
-
     public function getDepartment($id)
     {
         $companyOffice = CompanyOffice::with('departments')->find($id);
@@ -61,7 +57,6 @@ class CompanyOfficeController extends Controller
         }
         return success($companyOffice->departments);
     }
-
 
     public function saveOfficeDepartmentMapping($id,OfficeDepartmentRequest $request)
     {
@@ -73,7 +68,6 @@ class CompanyOfficeController extends Controller
         $algo = new CompanyOfficeAlgo();
         return $algo->mappingOfficeDepartment(CompanyOfficeDepartment::class,$request,$id);
     }
-
 
     public function getOfficeDepartmentMapping($id)
     {

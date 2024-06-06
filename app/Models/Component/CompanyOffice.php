@@ -39,7 +39,6 @@ class CompanyOffice extends BaseModel
         )->whereNull('component_company_office_departments.deletedAt');
     }
 
-
     /** --- SCOPES --- */
 
     public function scopeFilter($query, $request)
@@ -61,7 +60,6 @@ class CompanyOffice extends BaseModel
         $this->officeDepartments()->delete();
         return parent::delete();
     }
-
 
     public function getDepartmentMappings()
     {

@@ -17,13 +17,11 @@ class DepartmentController extends Controller
         return success($departments);
     }
 
-
     public function create(ComponentRequest $request)
     {
         $algo = new ComponentAlgo();
         return $algo->createBy(Department::class, $request);
     }
-
 
     public function update($id, ComponentRequest $request)
     {
@@ -35,7 +33,6 @@ class DepartmentController extends Controller
         $algo = new ComponentAlgo();
         return $algo->update($department, $request);
     }
-
 
     public function delete($id)
     {

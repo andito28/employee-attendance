@@ -21,13 +21,11 @@ class EmployeeController extends Controller
         return success(EmployeeParser::getEmployee($employee));
     }
 
-
     public function create(CreateEmployeeRequest $request)
     {
         $algo = new EmployeeAlgo();
         return $algo->create($request);
     }
-
 
     public function update($id,UpdateEmployeeRequest $request)
     {
@@ -40,7 +38,6 @@ class EmployeeController extends Controller
         return $algo->update($request);
     }
 
-
     public function delete($id)
     {
         $employee = Employee::find($id);
@@ -51,7 +48,6 @@ class EmployeeController extends Controller
         $algo = new EmployeeAlgo($employee);
         return $algo->delete();
     }
-
 
     public function promoteToAdministrator($id)
     {
@@ -64,7 +60,6 @@ class EmployeeController extends Controller
         return $algo->promoteToAdministrator();
     }
 
-
     public function resignation(ResignationRequest $request,$id)
     {
         $employee = Employee::find($id);
@@ -76,8 +71,8 @@ class EmployeeController extends Controller
         return $algo->create($request);
     }
 
-
-    public function reverseResignationStatus($id){
+    public function reverseResignationStatus($id)
+    {
         $employee = Employee::find($id);
         if (!$employee) {
             errEmployeeGet();
