@@ -26,7 +26,6 @@ class EmployeeAlgo
     {
     }
 
-
     public function create(CreateEmployeeRequest $request)
     {
         try {
@@ -56,7 +55,6 @@ class EmployeeAlgo
         }
     }
 
-
     public function update(Request $request)
     {
         try {
@@ -79,7 +77,6 @@ class EmployeeAlgo
             exception($exception);
         }
     }
-
 
     public function delete()
     {
@@ -104,7 +101,6 @@ class EmployeeAlgo
             exception($exception);
         }
     }
-
 
     public function promoteToAdministrator()
     {
@@ -158,7 +154,6 @@ class EmployeeAlgo
         }
     }
 
-
     private function createEmployee($request,$createdBy)
     {
         $filePath = $this->savePhoto($request);
@@ -183,7 +178,6 @@ class EmployeeAlgo
         return $employee;
     }
 
-
     private function savePhoto($request)
     {
         $file = $request->file('photo');
@@ -191,7 +185,6 @@ class EmployeeAlgo
         $filePath = $file->storeAs('public/employee', $fileName);
         return $filePath;
     }
-
 
     private function validateUniqueEmail($request)
     {
@@ -203,7 +196,6 @@ class EmployeeAlgo
             errEmployeeEmailAlreadyExists();
         }
     }
-
 
     private function updateEmployee($request)
     {
@@ -228,7 +220,6 @@ class EmployeeAlgo
         $this->employee->saveParent($request);
         $this->employee->saveSiblings($request);
     }
-
 
     private function savePromoteAdmin($employeeId)
     {

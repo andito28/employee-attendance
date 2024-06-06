@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web\Employee;
 use Illuminate\Http\Request;
 use App\Models\Employee\Employee;
 use App\Http\Controllers\Controller;
-use App\Models\Employee\Resignation;
 use App\Parser\Employee\EmployeeParser;
 use App\Algorithms\Employee\EmployeeAlgo;
 use App\Algorithms\Employee\ResignationAlgo;
@@ -73,18 +72,18 @@ class EmployeeController extends Controller
             errEmployeeGet();
         }
 
-        $algo = new ResignationAlgo();
-        return $algo->create(Resignation::class,$request,$id);
+        $algo = new ResignationAlgo($employee);
+        return $algo->create($request);
     }
 
 
-    // public function reverseResignationStatus($id){
-    //     $employee = Employee::find($id);
-    //     if (!$employee) {
-    //         errEmployeeGet();
-    //     }
+    public function reverseResignationStatus($id){
+        $employee = Employee::find($id);
+        if (!$employee) {
+            errEmployeeGet();
+        }
 
-    //     $algo = new ResignationAlgo();
-    //     return $algo->reverseResignationStatus(Resignation::class,$id);
-    // }
+        $algo = new ResignationAlgo($employee);
+        return $algo->reverseResignationStatus();
+    }
 }

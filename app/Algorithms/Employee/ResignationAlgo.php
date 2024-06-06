@@ -3,29 +3,34 @@
 namespace App\Algorithms\Employee;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Models\Employee\Employee;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\Employee\Resignation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\Constant\StatusEmployee;
 use App\Services\Constant\Activity\ActivityAction;
 
 class ResignationAlgo
 {
+    public function __construct(public ?Employee $employee = null)
+    {
+    }
 
-    public function create($model, Request $request,$id)
+    public function create($request)
     {
         try {
-            $resignation = DB::transaction(function () use ($model, $request,$id) {
-                $createdBy = [];
+            $resignation = DB::transaction(function () use ($request) {
 
-                if(Auth::check()){
-                    $createdBy = [
-                    'createdBy' => auth()->user()->employee->id,
-                    'createdByName' => auth()->user()->employee->name
-                    ];
-                }
+                $user = auth()->user();
+                $createdBy = [
+                'createdBy' =>   $user->employee->id,
+                'createdByName' =>   $user->employee->name
+                ];
 
-                $resignation = $this->createResignation($model,$request,$createdBy,$id);
+                $resignation = $this->createResignation($request,$createdBy);
 
                 $resignation->setActivityPropertyAttributes(ActivityAction::CREATE)
                     ->saveActivity("Enter new " . $resignation->getTable() . ": [ $resignation->id]");
@@ -40,29 +45,29 @@ class ResignationAlgo
         }
     }
 
-
-    public function reverseResignationStatus($model,$id)
+    public function reverseResignationStatus()
     {
         try {
 
-            DB::transaction(function () use ($model,$id) {
+            DB::transaction(function (){
 
-                $model->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
+                $this->employee->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
 
-                // $this->updateResignation($model);
+                $this->checkDateStatusResignation();
 
-                $model->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                    ->saveActivity("Update " . $model->getTable() . ": $model->name [$model->id]");
+                $this->updateResignation();
+
+                $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
+                ->saveActivity("Update employee : {$this->employee->name} [{$this->employee->id}]");
 
             });
 
-            return success($model->fresh());
+            return success($this->employee->fresh());
 
         } catch (\Exception $exception) {
             exception($exception);
         }
     }
-
 
     /** --- SUB FUNCTIONS --- */
 
@@ -74,20 +79,42 @@ class ResignationAlgo
         return $filePath;
     }
 
-
-    private function createResignation($model,$request,$createdBy,$id)
+    private function createResignation($request,$createdBy)
     {
         $filePath = $this->saveFile($request);
 
         $dataInput = [
-            'employeeId' => $id,
+            'employeeId' => $this->employee->id,
             'date' => $request->date,
             'reason' => $request->reason,
             'file' => $filePath
         ];
 
-        $resignation = $model::create($dataInput+$createdBy);
+        $resignation = Resignation::create($dataInput+$createdBy);
         return $resignation;
     }
+
+    private function checkDateStatusResignation()
+    {
+        $oneYearAgo = Carbon::now()->subYear();
+        $resignationWithinOneYear = Resignation::where('employeeId', $this->employee->id)
+            ->where('date', '>', $oneYearAgo)
+            ->exists();
+
+        if ($resignationWithinOneYear) {
+            errEmployeeResignExists();
+        }
+
+    }
+
+    private function updateResignation()
+    {
+        Employee::where('id', $this->employee->id)->update([
+            'statusId' => StatusEmployee::ACTIVE_ID
+        ]);
+    }
+
+
+
 
 }
