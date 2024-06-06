@@ -9,7 +9,7 @@ class StatusEmployee extends BaseIDName
     const ACTIVE_ID = 1;
     const ACTIVE = 'Active';
 
-    const RESIGNED_ID = 1;
+    const RESIGNED_ID = 2;
     const RESIGNED = 'Resigned';
 
     const OPTION = [

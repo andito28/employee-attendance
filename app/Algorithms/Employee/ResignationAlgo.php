@@ -96,15 +96,20 @@ class ResignationAlgo
 
     private function checkDateStatusResignation()
     {
-        $resignation = Resignation::where('employeeId', $this->employee->id)
-        ->latest()->first();
+        if($this->employee->statusId == StatusEmployee::RESIGNED_ID)
+        {
+            $resignation = Resignation::where('employeeId', $this->employee->id)
+            ->latest()->first();
 
-        $resignationDate = Carbon::create($resignation->date);
-        $today = Carbon::now();
+            $resignationDate = Carbon::create($resignation->date);
+            $today = Carbon::now();
 
-        $diffInYears = $resignationDate->diffInYears($today);
-        if($diffInYears >= 1){
-            errEmployeeResignExists();
+            $diffInYears = $resignationDate->diffInYears($today);
+            if($diffInYears >= 1){
+                errEmployeeResignExists();
+            }
+        }else{
+            errEmployeeNotResign();
         }
     }
 
