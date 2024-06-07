@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Services\Constant\RoleUser;
 use App\Models\Employee\Resignation;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Constant\StatusEmployee;
@@ -29,6 +30,8 @@ class EmployeeAlgo
     public function create(CreateEmployeeRequest $request)
     {
         try {
+
+            // return  $this->checkExistingEmployeeAndResignation($request);
 
             DB::transaction(function () use ($request) {
 
@@ -124,6 +127,29 @@ class EmployeeAlgo
         }
     }
 
+    public function resetPassword(Request $request)
+    {
+        try {
+
+            DB::transaction(function () use ($request) {
+                $user = auth()->user();
+
+                if($request->has('employeeId')){
+                    $this->employee = $this->saveResetPasswordAdministrator($user,$request);
+                }else{
+                    $this->employee = $this->saveResetPassword($user,$request);
+                }
+
+            });
+
+            return success($this->employee->fresh());
+
+        } catch (\Exception $exception) {
+            exception($exception);
+        }
+
+    }
+
 
     /** --- SUB FUNCTIONS --- */
 
@@ -145,11 +171,10 @@ class EmployeeAlgo
 
         if ($existingEmployeeResigned) {
             $resignation = Resignation::where('employeeId', $existingEmployeeResigned->id)
-                ->where('date', '>', Carbon::now()->subYear())
+                ->where('date', '>=', Carbon::now()->subYear())
                 ->first();
-
-            if(!$resignation){
-                errEmployeeResignExists();
+            if($resignation){
+                errEmployeeResignExists("Resign belum mencapai satu tahun");
             }
         }
     }
@@ -227,5 +252,67 @@ class EmployeeAlgo
             'roleId' => RoleUser::ADMINISTRATOR_ID
         ]);
     }
+
+    private function saveResetPasswordAdministrator($user,$request)
+    {
+        $employee = User::where('employeeId',$request->employeeId)->first();
+        if(!$employee){
+            errEmployeeGet();
+        }
+
+        $roleUser = $user->roleId == RoleUser::ADMINISTRATOR_ID;
+        $roleEmployee = $employee->roleId != RoleUser::ADMINISTRATOR_ID;
+
+        if($roleUser && $roleEmployee){
+
+            $currentPassword = $employee->password;
+            if (!$this->checkExistingPassword($currentPassword, $request)) {
+                errEmployeeExistingPassword();
+            }
+
+            $this->employee = Employee::find($employee->employeeId);
+
+            $this->employee->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
+
+            $employee->password = Hash::make($request->newPassword);
+            $employee->save();
+
+            $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
+            ->saveActivity("Reset Password employee : {$this->employee->name} [{$this->employee->id}]");
+
+            return $this->employee;
+        }
+
+        errEmployeeResetPasswordUnauthorized();
+    }
+
+    private function saveResetPassword($user,$request)
+    {
+        $currentPassword = $user->password;
+            if (!$this->checkExistingPassword($currentPassword, $request)) {
+                errEmployeeExistingPassword();
+            }
+
+        $this->employee = Employee::find($user->employeeId);
+
+        $this->employee->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
+
+        $user->password = Hash::make($request->newPassword);
+        $user->save();
+
+        $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
+        ->saveActivity("Reset Password employee : {$this->employee->name} [{$this->employee->id}]");
+
+        return $this->employee;
+    }
+
+    private function checkExistingPassword($currentPassword,$request)
+    {
+        if (!Hash::check($request->existingPassword, $currentPassword)) {
+            return false;
+        }
+        return true;
+    }
+
 
 }

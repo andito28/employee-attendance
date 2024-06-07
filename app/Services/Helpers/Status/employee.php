@@ -32,9 +32,31 @@ if (!function_exists("errEmployeeResignExists")) {
 if (!function_exists("errEmployeeNotResign")) {
     function errEmployeeNotResign($internalMsg = "", $status = null)
     {
-        error(400, "Employees are still active!!", $internalMsg, $status);
+        error(400, "Employees are still active!", $internalMsg, $status);
     }
 }
+
+if (!function_exists("errEmployeeDateResign")) {
+    function errEmployeeDateResign($internalMsg = "", $status = null)
+    {
+        error(400, "Date Resignation invalid!", $internalMsg, $status);
+    }
+}
+
+if (!function_exists("errEmployeeResetPasswordUnauthorized")) {
+    function errEmployeeResetPasswordUnauthorized($internalMsg = "", $status = null)
+    {
+        error(403, "Unauthorized access!", $internalMsg, $status);
+    }
+}
+
+if (!function_exists("errEmployeeExistingPassword")) {
+    function errEmployeeExistingPassword($internalMsg = "", $status = null)
+    {
+        error(400, "Existing password does not match!", $internalMsg, $status);
+    }
+}
+
 
 
 

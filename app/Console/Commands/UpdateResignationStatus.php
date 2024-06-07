@@ -3,8 +3,10 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
+use App\Models\Employee\User;
 use Illuminate\Console\Command;
 use App\Models\Employee\Employee;
+use Illuminate\Support\Facades\DB;
 use App\Models\Employee\Resignation;
 use App\Services\Constant\StatusEmployee;
 
@@ -29,15 +31,21 @@ class UpdateResignationStatus extends Command
      */
     public function handle()
     {
-        $today = Carbon::today();
-        $resignations = Resignation::whereDate('date', $today)->get();
-        foreach($resignations as $resign){
-            $employee = Employee::find($resign->employeeId);
-            if ($employee) {
-                $employee->statusId = StatusEmployee::RESIGNED_ID;
-                $employee->save();
+        DB::transaction(function (){
+            $today = Carbon::today();
+            $resignations = Resignation::whereDate('date', $today)->get();
+
+            foreach($resignations as $resign){
+                $employee = Employee::find($resign->employeeId);
+                if ($employee) {
+                    $employee->statusId = StatusEmployee::RESIGNED_ID;
+                    $employee->save();
+
+                    $user = User::where('employeeId', $employee->id)->first();
+                    $user->delete();
+                }
             }
-        }
+        });
 
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Employee\EmployeeController;
 
 $administrator = RoleUser::ADMINISTRATOR_ID;
+$employee = RoleUser::EMPLOYEE_ID;
 
 Route::prefix("employees")
     ->middleware(["auth.api","role:$administrator"])
@@ -17,5 +18,7 @@ Route::prefix("employees")
         Route::patch('{id}/promote-admin', [EmployeeController::class, 'promoteToAdministrator']);
         Route::post('{id}/resignation', [EmployeeController::class, 'resignation']);
         Route::patch('{id}/resignation-status', [EmployeeController::class, 'reverseResignationStatus']);
-
 });
+
+Route::patch('employees/reset-password', [EmployeeController::class, 'resetPassword'])
+->middleware(['auth.api', "role:$administrator,$employee"]);

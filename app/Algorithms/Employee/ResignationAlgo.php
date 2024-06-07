@@ -3,6 +3,7 @@
 namespace App\Algorithms\Employee;
 
 use Illuminate\Http\Request;
+use App\Models\Employee\User;
 use Illuminate\Support\Carbon;
 use App\Models\Employee\Employee;
 use Illuminate\Http\JsonResponse;
@@ -79,10 +80,22 @@ class ResignationAlgo
         return $filePath;
     }
 
+    private function checkRequestDateResign($request)
+    {
+        $today = Carbon::now();
+        $requestedDate = Carbon::parse($request->date);
+        $oneMonthFromNow = $today->copy()->addMonth();
+
+        if ($requestedDate->lt($today) || $requestedDate->lt($oneMonthFromNow)){
+            errEmployeeDateResign();
+        }
+    }
+
     private function createResignation($request,$createdBy)
     {
-        $filePath = $this->saveFile($request);
+        $this->checkRequestDateResign($request);
 
+        $filePath = $this->saveFile($request);
         $dataInput = [
             'employeeId' => $this->employee->id,
             'date' => $request->date,
@@ -98,15 +111,12 @@ class ResignationAlgo
     {
         if($this->employee->statusId == StatusEmployee::RESIGNED_ID)
         {
-            $resignation = Resignation::where('employeeId', $this->employee->id)
-            ->latest()->first();
+            $resignation = Resignation::where('employeeId',  $this->employee->id)
+                ->where('date', '>=', Carbon::now()->subYear())
+                ->first();
 
-            $resignationDate = Carbon::create($resignation->date);
-            $today = Carbon::now();
-
-            $diffInYears = $resignationDate->diffInYears($today);
-            if($diffInYears >= 1){
-                errEmployeeResignExists();
+            if(!$resignation){
+                errEmployeeResignExists("Resign sudah lebih dari satu tahun");
             }
         }else{
             errEmployeeNotResign();
@@ -118,6 +128,9 @@ class ResignationAlgo
         Employee::where('id', $this->employee->id)->update([
             'statusId' => StatusEmployee::ACTIVE_ID
         ]);
+
+        $user = User::where('employeeId', $this->employee->id)->onlyTrashed()->first();
+        $user->restore();
     }
 
 

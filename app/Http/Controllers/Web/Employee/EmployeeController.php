@@ -10,6 +10,7 @@ use App\Algorithms\Employee\EmployeeAlgo;
 use App\Algorithms\Employee\ResignationAlgo;
 use App\Http\Requests\Employee\EmployeeRequest;
 use App\Http\Requests\Employee\ResignationRequest;
+use App\Http\Requests\Employee\ResetPasswordRequest;
 use App\Http\Requests\Employee\CreateEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 
@@ -80,5 +81,11 @@ class EmployeeController extends Controller
 
         $algo = new ResignationAlgo($employee);
         return $algo->reverseResignationStatus();
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $algo = new EmployeeAlgo();
+        return $algo->resetPassword($request);
     }
 }
