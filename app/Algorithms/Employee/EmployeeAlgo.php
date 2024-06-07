@@ -31,8 +31,6 @@ class EmployeeAlgo
     {
         try {
 
-            // return  $this->checkExistingEmployeeAndResignation($request);
-
             DB::transaction(function () use ($request) {
 
                 $user = auth()->user();
@@ -166,7 +164,7 @@ class EmployeeAlgo
 
         $existingEmployeeResigned = Employee::where('statusId',StatusEmployee::RESIGNED_ID)
         ->whereHas('user', function($query) use ($request) {
-            $query->where('email', $request->email);
+            $query->where('email', $request->email)->withTrashed();;
         })->first();
 
         if ($existingEmployeeResigned) {
