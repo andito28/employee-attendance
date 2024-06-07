@@ -7,7 +7,7 @@ use App\Http\Controllers\web\auth\AuthController;
 Route::prefix("login")
     ->group(function () {
 
-        Route::get("", [AuthController::class, "login"]);
+        Route::post("", [AuthController::class, "login"]);
 
     });
 
