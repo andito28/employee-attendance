@@ -22,7 +22,7 @@ class EmployeeFactory extends Factory
             'number' => EmployeeNumber::generate(),
             'companyOfficeId' => $this->faker->randomElement([1, 2]),
             'departmentId' => $this->faker->randomElement([1, 2]),
-            'photo' => 'p.jpg',
+            'photo' => 'public/employee/1717815623_ActivityDiagram.png',
             'statusId' => 1
         ];
     }
