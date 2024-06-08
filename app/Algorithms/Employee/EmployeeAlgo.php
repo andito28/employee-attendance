@@ -249,6 +249,10 @@ class EmployeeAlgo
 
     private function savePromoteAdmin($employeeId)
     {
+        $employee = Employee::find($employeeId);
+        if($employee->statusId != StatusEmployee::ACTIVE_ID){
+            errEmployeeNotActive();
+        }
         User::where('employeeId', $employeeId)->update([
             'roleId' => RoleUser::ADMINISTRATOR_ID
         ]);
