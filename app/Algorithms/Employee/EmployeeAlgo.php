@@ -262,7 +262,7 @@ class EmployeeAlgo
     {
         $employee = User::where('employeeId',$request->employeeId)->first();
         if(!$employee){
-            errEmployeeGet();
+            errEmployeeNotActive();
         }
 
         $roleUser = $user->roleId == RoleUser::ADMINISTRATOR_ID;
