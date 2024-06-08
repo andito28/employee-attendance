@@ -17,7 +17,7 @@ class EnsureApiTokenIsValid
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::guard('api')->guest()) {
-            errAuthentication();
+            errAuthentication("token expired");
         }
         return $next($request);
     }
