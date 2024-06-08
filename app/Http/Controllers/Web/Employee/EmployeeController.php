@@ -18,8 +18,8 @@ class EmployeeController extends Controller
 {
     public function get(Request $request)
     {
-        $employee = Employee::with('user','parental','siblings')->get();
-        return success(EmployeeParser::getEmployee($employee));
+        $employee = Employee::with('user','parental','siblings')->getOrPaginate($request);
+        return success(EmployeeParser::getEmployee($employee),pagination:pagination($employee));
     }
 
     public function create(CreateEmployeeRequest $request)

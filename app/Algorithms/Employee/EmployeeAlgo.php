@@ -211,13 +211,17 @@ class EmployeeAlgo
 
     private function validateUniqueEmail($request)
     {
-        $existingUser = User::where('email', $request->email)
-        ->where('employeeId', '!=', $this->employee->user->employeeId)
-        ->first();
+        if($this->employee->statusId == StatusEmployee::ACTIVE_ID)
+        {
+            $existingUser = User::where('email', $request->email)
+            ->where('employeeId', '!=', $this->employee->user->employeeId)
+            ->first();
 
-        if($existingUser){
-            errEmployeeEmailAlreadyExists();
+            if($existingUser){
+                errEmployeeEmailAlreadyExists();
+            }
         }
+        errEmployeeNotActive();
     }
 
     private function updateEmployee($request)

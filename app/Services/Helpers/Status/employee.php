@@ -36,6 +36,13 @@ if (!function_exists("errEmployeeNotResign")) {
     }
 }
 
+if (!function_exists("errEmployeeNotActive")) {
+    function errEmployeeNotActive($internalMsg = "", $status = null)
+    {
+        error(400, "employee has resigned!", $internalMsg, $status);
+    }
+}
+
 if (!function_exists("errEmployeeDateResign")) {
     function errEmployeeDateResign($internalMsg = "", $status = null)
     {

@@ -90,6 +90,7 @@ class Employee extends BaseModel
         $this->user()->delete();
         $this->parental()->delete();
         $this->siblings()->delete();
+        $this->resignations()->delete();
 
         return parent::delete();
     }
