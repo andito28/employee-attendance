@@ -7,26 +7,31 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\Component\Department;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Component\CompanyOffice;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Component\CompanyOfficeDepartment;
 use App\Services\Constant\Activity\ActivityAction;
 
 class CompanyOfficeAlgo
 {
+    public function __construct(public ? CompanyOffice $companyOffice = null)
+    {
+    }
 
-    public function mappingOfficeDepartment($model, Request $request, $id)
+    public function mappingOfficeDepartment(Request $request)
     {
         try {
-            $components = DB::transaction(function () use ($model, $request, $id) {
+            $mapping = DB::transaction(function () use ($request) {
                 return collect($request->departmentIds)
-                    ->map(function ($departmentId) use ($model, $id) {
-                        return $this->saveOfficeDepartmentComponent($model, $id, $departmentId);
+                    ->map(function ($departmentId){
+                        return $this->saveOfficeDepartmentComponent($departmentId);
                     })
                     ->filter();
             });
 
-            $componentsData = $model::whereIn('id', $components->pluck('id'))->get();
+            $mappingData = CompanyOfficeDepartment::whereIn('id', $mapping->pluck('id'))->get();
 
-            return success($componentsData);
+            return success($mappingData);
         } catch (\Exception $exception) {
             return exception($exception);
         }
@@ -34,13 +39,13 @@ class CompanyOfficeAlgo
 
     /** --- SUB FUNCTIONS --- */
 
-    private function saveOfficeDepartmentComponent($model, $companyOfficeId, $departmentId)
+    private function saveOfficeDepartmentComponent($departmentId)
     {
         if (!$this->departmentExists($departmentId)) {
             errComponentDepartmentGet();
         }
 
-        return $this->createOfficeDepartment($model, $companyOfficeId, $departmentId);
+        return $this->createOfficeDepartment($departmentId);
     }
 
     private function departmentExists($departmentId)
@@ -48,10 +53,10 @@ class CompanyOfficeAlgo
         return Department::find($departmentId) !== null;
     }
 
-    private function createOfficeDepartment($model, $companyOfficeId, $departmentId)
+    private function createOfficeDepartment($departmentId)
     {
         $attributes = [
-            'companyOfficeId' => $companyOfficeId,
+            'companyOfficeId' => $this->companyOffice->id,
             'departmentId' => $departmentId
         ];
 
@@ -62,10 +67,11 @@ class CompanyOfficeAlgo
             'createdByName' =>  $user->employee->name
         ];
 
-        $component = $model::updateOrCreate($attributes, $createdBy);
+        $mapping = CompanyOfficeDepartment::updateOrCreate($attributes, $createdBy);
 
-        $component->setActivityPropertyAttributes(ActivityAction::CREATE)
-                ->saveActivity("Enter new " . $component->getTable() . ": $component->name [$component->id]");
-        return $component;
+        $mapping->setActivityPropertyAttributes(ActivityAction::CREATE)
+                ->saveActivity("Enter new mapping company office department" . ": [$mapping->id]");
+
+        return $mapping;
     }
 }

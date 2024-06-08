@@ -65,8 +65,8 @@ class CompanyOfficeController extends Controller
             errComponentCompanyOfficeGet();
         }
 
-        $algo = new CompanyOfficeAlgo();
-        return $algo->mappingOfficeDepartment(CompanyOfficeDepartment::class,$request,$id);
+        $algo = new CompanyOfficeAlgo($companyOffice);
+        return $algo->mappingOfficeDepartment($request);
     }
 
     public function getOfficeDepartmentMapping($id)
