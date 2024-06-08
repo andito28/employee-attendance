@@ -15,6 +15,7 @@ class ShiftAlgo
     {
     }
 
+
     public function createBy($model, Request $request)
     {
         try {

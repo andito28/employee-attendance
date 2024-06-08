@@ -15,11 +15,13 @@ class ShiftController extends Controller
         return success($shift);
     }
 
+
     public function create(ShiftRequest $request)
     {
         $algo = new ShiftAlgo();
         return $algo->create($request);
     }
+
 
     public function update($id,ShiftRequest $request)
     {
@@ -32,6 +34,7 @@ class ShiftController extends Controller
         return $algo->update($request);
     }
 
+
     public function delete($id)
     {
         $shift = Shift::find($id);
@@ -42,4 +45,5 @@ class ShiftController extends Controller
         $algo = new ShiftAlgo($shift);
         return $algo->delete();
     }
+
 }

@@ -44,10 +44,12 @@ class CompanyOfficeAlgo
         return $this->createOfficeDepartment($model, $companyOfficeId, $departmentId);
     }
 
+
     private function departmentExists($departmentId)
     {
         return Department::find($departmentId) !== null;
     }
+
 
     private function createOfficeDepartment($model, $companyOfficeId, $departmentId)
     {

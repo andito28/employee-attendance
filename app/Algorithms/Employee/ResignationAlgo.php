@@ -20,6 +20,7 @@ class ResignationAlgo
     {
     }
 
+
     public function create($request)
     {
         try {
@@ -45,6 +46,7 @@ class ResignationAlgo
             return exception($exception);
         }
     }
+
 
     public function reverseResignationStatus()
     {
@@ -80,6 +82,7 @@ class ResignationAlgo
         return $filePath;
     }
 
+
     private function checkRequestDateResign($request)
     {
         $today = Carbon::now();
@@ -99,6 +102,7 @@ class ResignationAlgo
         }
     }
 
+
     private function createResignation($request,$createdBy)
     {
         $this->checkRequestDateResign($request);
@@ -115,6 +119,7 @@ class ResignationAlgo
         return $resignation;
     }
 
+
     private function checkDateStatusResignation()
     {
         if($this->employee->statusId == StatusEmployee::RESIGNED_ID)
@@ -130,6 +135,7 @@ class ResignationAlgo
             errEmployeeNotResign();
         }
     }
+
 
     private function updateResignation()
     {
