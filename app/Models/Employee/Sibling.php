@@ -5,10 +5,13 @@ namespace App\Models\Employee;
 use App\Models\BaseModel;
 use App\Models\Employee\Employee;
 use App\Parser\Employee\SiblingParser;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Employee\Traits\HasActivitySiblingProperty;
 
 class Sibling extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'employee_siblings';
     protected $guarded = ['id'];
 

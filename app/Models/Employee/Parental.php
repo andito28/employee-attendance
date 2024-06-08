@@ -4,10 +4,13 @@ namespace App\Models\Employee;
 
 use App\Models\BaseModel;
 use App\Models\Employee\Employee;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Employee\Traits\HasActivityParentalProperty;
 
 class Parental extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'employee_parents';
     protected $guarded = ['id'];
 

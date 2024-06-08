@@ -12,10 +12,12 @@ use App\Models\Employee\Resignation;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Component\CompanyOffice;
 use App\Parser\Employee\EmployeeParser;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Employee\Traits\HasActivityEmployeeProperty;
 
 class Employee extends BaseModel
 {
+    use HasFactory;
     use HasActivityEmployeeProperty;
 
     protected $table = 'employees';
