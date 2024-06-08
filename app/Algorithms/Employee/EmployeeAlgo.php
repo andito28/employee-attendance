@@ -27,7 +27,6 @@ class EmployeeAlgo
     {
     }
 
-
     public function create(CreateEmployeeRequest $request)
     {
         try {
@@ -57,7 +56,6 @@ class EmployeeAlgo
         }
     }
 
-
     public function update(Request $request)
     {
         try {
@@ -80,7 +78,6 @@ class EmployeeAlgo
             exception($exception);
         }
     }
-
 
     public function delete()
     {
@@ -106,7 +103,6 @@ class EmployeeAlgo
         }
     }
 
-
     public function promoteToAdministrator()
     {
         try {
@@ -128,7 +124,6 @@ class EmployeeAlgo
             exception($exception);
         }
     }
-
 
     public function resetPassword(Request $request)
     {
@@ -152,7 +147,6 @@ class EmployeeAlgo
         }
 
     }
-
 
     /** --- SUB FUNCTIONS --- */
 
@@ -182,7 +176,6 @@ class EmployeeAlgo
         }
     }
 
-
     private function createEmployee($request,$createdBy)
     {
         $filePath = $this->savePhoto($request);
@@ -207,7 +200,6 @@ class EmployeeAlgo
         return $employee;
     }
 
-
     private function savePhoto($request)
     {
         $file = $request->file('photo');
@@ -215,7 +207,6 @@ class EmployeeAlgo
         $filePath = $file->storeAs('public/employee', $fileName);
         return $filePath;
     }
-
 
     private function validateUniqueEmail($request)
     {
@@ -231,7 +222,6 @@ class EmployeeAlgo
         }
         errEmployeeNotActive();
     }
-
 
     private function updateEmployee($request)
     {
@@ -257,14 +247,12 @@ class EmployeeAlgo
         $this->employee->saveSiblings($request);
     }
 
-
     private function savePromoteAdmin($employeeId)
     {
         User::where('employeeId', $employeeId)->update([
             'roleId' => RoleUser::ADMINISTRATOR_ID
         ]);
     }
-
 
     private function saveResetPasswordAdministrator($user,$request)
     {
@@ -299,7 +287,6 @@ class EmployeeAlgo
         errEmployeeResetPasswordUnauthorized();
     }
 
-
     private function saveResetPassword($user,$request)
     {
         $currentPassword = $user->password;
@@ -320,7 +307,6 @@ class EmployeeAlgo
         return $this->employee;
     }
 
-
     private function checkExistingPassword($currentPassword,$request)
     {
         if (!Hash::check($request->existingPassword, $currentPassword)) {
@@ -328,6 +314,5 @@ class EmployeeAlgo
         }
         return true;
     }
-
 
 }

@@ -40,7 +40,6 @@ class ComponentAlgo
         }
     }
 
-
     public function update(Model $model, Request $request)
     {
         try {
@@ -62,7 +61,6 @@ class ComponentAlgo
             exception($exception);
         }
     }
-
 
     public function delete(Model $model)
     {

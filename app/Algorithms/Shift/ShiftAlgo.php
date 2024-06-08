@@ -15,7 +15,6 @@ class ShiftAlgo
     {
     }
 
-
     public function createBy($model, Request $request)
     {
         try {
@@ -43,7 +42,6 @@ class ShiftAlgo
         }
     }
 
-
     public function update(Request $request)
     {
         try {
@@ -65,7 +63,6 @@ class ShiftAlgo
             exception($exception);
         }
     }
-
 
     public function delete()
     {
