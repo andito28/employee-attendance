@@ -77,7 +77,7 @@ class Employee extends BaseModel
         return $query->where(function ($query) use ($request) {
 
             if ($this->hasSearch($request)) {
-                $query->where('code', 'LIKE', "%$request->search%")
+                $query->where('number', 'LIKE', "%$request->search%")
                     ->orWhere('name', 'LIKE', "%$request->search%");
             }
 

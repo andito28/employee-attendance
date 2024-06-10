@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\Shift;
 
+use App\Models\Shift\Shift;
 use Illuminate\Http\Request;
 use App\Algorithms\Shift\ShiftAlgo;
 use App\Http\Controllers\Controller;
@@ -9,7 +10,7 @@ use App\Http\Requests\Shift\ShiftRequest;
 
 class ShiftController extends Controller
 {
-    public function get()
+    public function get(Request $request)
     {
         $shift = Shift::filter($request)->getOrPaginate($request, true);
         return success($shift);

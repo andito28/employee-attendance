@@ -23,7 +23,8 @@ class ShiftRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'hours' => 'required|array',
+            'startTime' => 'required',
+            'endTime' => 'required'
         ];
     }
 }

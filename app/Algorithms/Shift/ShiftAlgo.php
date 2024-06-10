@@ -15,7 +15,7 @@ class ShiftAlgo
     {
     }
 
-    public function createBy($model, Request $request)
+    public function create(Request $request)
     {
         try {
 
@@ -75,7 +75,7 @@ class ShiftAlgo
                 $this->shift->delete();
 
                 $this->shift->setActivityPropertyAttributes(ActivityAction::DELETE)
-                    ->saveActivity("Delete " . $this->shift->getTable() . ": $this->shift->name [$model->id]");
+                    ->saveActivity("Delete " . $this->shift->getTable() . ": $this->shift->name [$this->shift->id]");
 
             });
 
