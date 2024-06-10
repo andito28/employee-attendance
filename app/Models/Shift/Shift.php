@@ -3,7 +3,10 @@
 namespace App\Models\Shift;
 
 use App\Models\BaseModel;
+use App\Models\Employee\Employee;
+use App\Models\Schedule\Schedule;
 use App\Parser\Shift\ShiftParser;
+use App\Models\Attendance\Attendance;
 use App\Models\Shift\Traits\HasActivityShiftProperty;
 
 class Shift extends BaseModel
@@ -21,18 +24,18 @@ class Shift extends BaseModel
 
     public $parserClass = ShiftParser::class;
 
-     /** --- SCOPES --- */
+    /** --- RELATIONSHIPS --- */
+    public function employees(){
+        return $this->belongsToMany(Employee::class);
+    }
 
-    public function scopeFilter($query, $request)
+    public function attendance(){
+        return $this->belongsTo(Attendance::class,'shiftId');
+    }
+
+    public function schedules()
     {
-        return $query->where(function ($query) use ($request) {
-
-            if ($this->hasSearch($request)) {
-                $query->where('code', 'LIKE', "%$request->search%")
-                    ->orWhere('name', 'LIKE', "%$request->search%");
-            }
-
-        });
+        return $this->morphMany(Schedule::class, 'scheduleable', 'scheduleableType', 'scheduleableId', 'id');
     }
 
 }

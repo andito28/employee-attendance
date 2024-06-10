@@ -12,7 +12,7 @@ class ShiftController extends Controller
 {
     public function get(Request $request)
     {
-        $shift = Shift::filter($request)->getOrPaginate($request, true);
+        $shift = Shift::get();
         return success($shift);
     }
 
