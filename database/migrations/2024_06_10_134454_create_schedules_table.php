@@ -22,7 +22,6 @@ return new class extends Migration
             $table->integer('typeId');
             $table->foreignId('scheduleableId');
             $table->string('scheduleableType');
-            $table->integer('typeId');
             $this->getDefaultCreatedBy($table);
             $this->getDefaultTimestamps($table);
         });

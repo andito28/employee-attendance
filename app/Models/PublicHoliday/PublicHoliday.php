@@ -3,6 +3,8 @@
 namespace App\Models\PublicHoliday;
 
 use App\Models\BaseModel;
+use App\Parser\PublicHoliday\PublicHolidayParser;
+use App\Models\PublicHoliday\Traits\HasActivityPublicHolidayActivityProperty;
 
 class PublicHoliday extends BaseModel
 {
@@ -17,5 +19,19 @@ class PublicHoliday extends BaseModel
     ];
 
     public $parserClass = PublicHolidayParser::class;
+
+
+    /** --- SCOPES --- */
+
+    public function scopeFilter($query, $request)
+    {
+        return $query->where(function ($query) use ($request) {
+
+            if ($this->hasSearch($request)) {
+                $query->where('name', 'LIKE', "%$request->search%");
+            }
+
+        });
+    }
 
 }

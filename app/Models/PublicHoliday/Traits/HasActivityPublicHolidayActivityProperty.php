@@ -16,7 +16,7 @@ trait HasActivityPublicHolidayActivityProperty
      */
     public function getActivityType(): string
     {
-        return ActivityType::GENERAL;
+        return ActivityType::PUBLIC_HOLIDAY;
     }
 
     /**

@@ -16,7 +16,7 @@ trait HasActivityOfficeDepartmentProperty
      */
     public function getActivityType(): string
     {
-        return ActivityType::GENERAL;
+        return ActivityType::OFFICE_DEPARTMENT;
     }
 
     /**
