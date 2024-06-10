@@ -64,13 +64,11 @@ class CompanyOffice extends BaseModel
     public function getDepartmentMappings()
     {
         $departments = Department::all();
+        $officeDepartmentIds = $this->officeDepartments()->pluck('departmentId')->toArray();
         $mappings = [];
 
         foreach ($departments as $department) {
-            $assigned = $this->officeDepartments()
-            ->where('departmentId', $department->id)
-            ->exists();
-
+            $assigned = in_array($department->id, $officeDepartmentIds);
             $mappings[] = [
                 'id' => $department->id,
                 'assigned' => $assigned,

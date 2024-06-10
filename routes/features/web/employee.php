@@ -17,7 +17,7 @@ Route::prefix("employees")
         Route::delete('{id}', [EmployeeController::class, 'delete']);
         Route::patch('{id}/promote-admin', [EmployeeController::class, 'promoteToAdministrator']);
         Route::post('{id}/resignation', [EmployeeController::class, 'resignation']);
-        Route::patch('{id}/resignation-status', [EmployeeController::class, 'reverseResignationStatus']);
+        Route::patch('{id}/resignation/reverse-status', [EmployeeController::class, 'reverseResignationStatus']);
 });
 
 Route::patch('employees/reset-password', [EmployeeController::class, 'resetPassword'])

@@ -24,41 +24,25 @@ class EmployeeParser extends BaseParser
             return null;
         }
 
-        return parent::first($data);
+        $roleTrash = $data->user()->withTrashed()->first()->roleId;
+        $emailTrash =  $data->user()->withTrashed()->first()->email;
 
-    }
+        return  [
+            'id' => $data->id,
+            'role' => $data->user ? RoleUser::display($data->user->roleId) : RoleUser::display($roleTrash),
+            'name' => $data->name,
+            'number' => $data->number,
+            'email' => $data->user ? $data->user->email: $emailTrash,
+            'status' => StatusEmployee::display($data->statusId),
+            'photo' => Storage::url($data->photo),
+            'phone' => $data->phone,
+            'address' => $data->address,
+            'companyOffice' => CompanyOfficeParser::brief($data->companyOffice),
+            'department' => DepartmentParser::brief($data->department),
+            'parent' => ParentalParser::brief($data->parental),
+            'siblings' => SiblingParser::briefs($data->siblings)
+        ];
 
-
-    public static function getEmployee($data)
-    {
-        if (!$data) {
-            return null;
-        }
-
-        $datas = [];
-        foreach($data as $value){
-
-            $roleTrash = $value->user()->withTrashed()->first()->roleId;
-            $emailTrash =  $value->user()->withTrashed()->first()->email;
-
-            $datas[] = [
-            'id' => $value->id,
-            'role' => $value->user ? RoleUser::display($value->user->roleId) : RoleUser::display($roleTrash),
-            'name' => $value->name,
-            'number' => $value->number,
-            'email' => $value->user ? $value->user->email: $emailTrash,
-            'status' => StatusEmployee::display($value->statusId),
-            'photo' => Storage::url($value->photo),
-            'phone' => $value->phone,
-            'address' => $value->address,
-            'companyOffice' => CompanyOfficeParser::brief($value->companyOffice),
-            'department' => DepartmentParser::brief($value->department),
-            'parent' => ParentalParser::brief($value->parental),
-            'siblings' => SiblingParser::briefs($value->siblings)
-            ];
-        }
-
-        return $datas;
     }
 
 }

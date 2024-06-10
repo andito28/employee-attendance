@@ -20,7 +20,7 @@ class EmployeeController extends Controller
     {
         $employee = Employee::with('user','parental','siblings')
         ->filter($request)->getOrPaginate($request);
-        return success(EmployeeParser::getEmployee($employee),pagination:pagination($employee));
+        return success($employee);
     }
 
     public function create(CreateEmployeeRequest $request)
