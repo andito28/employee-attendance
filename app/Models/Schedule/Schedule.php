@@ -15,4 +15,11 @@ class Schedule extends BaseModel
         self::DELETED_AT => 'datetime'
     ];
 
+
+    /** --- RELATIONSHIPS --- */
+    public function scheduleable()
+    {
+        return $this->morphTo();
+    }
+
 }

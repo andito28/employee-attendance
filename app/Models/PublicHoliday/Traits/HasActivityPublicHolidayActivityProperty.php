@@ -3,8 +3,8 @@
 namespace App\Models\PublicHoliday\Traits;
 
 use App\Models\Activity\Traits\HasActivity;
-use App\Models\PublicHoliday\PublicHoliday;
 use App\Services\Constant\Activity\ActivityType;
+use App\Parser\PublicHoliday\PublicHolidayParser;
 
 trait HasActivityPublicHolidayActivityProperty
 {
@@ -64,7 +64,7 @@ trait HasActivityPublicHolidayActivityProperty
     {
         $this->refresh();
 
-        return PublicHoliday::first($this);
+        return PublicHolidayParser::first($this);
     }
 
 }

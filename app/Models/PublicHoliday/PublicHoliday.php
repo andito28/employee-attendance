@@ -3,13 +3,16 @@
 namespace App\Models\PublicHoliday;
 
 use App\Models\BaseModel;
+use App\Models\Schedule\Schedule;
+use App\Services\Constant\ScheduleType;
 use App\Parser\PublicHoliday\PublicHolidayParser;
 use App\Models\PublicHoliday\Traits\HasActivityPublicHolidayActivityProperty;
 
 class PublicHoliday extends BaseModel
 {
     use HasActivityPublicHolidayActivityProperty;
-    // protected $table = '';
+
+    protected $table = 'public_holidays';
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -19,6 +22,14 @@ class PublicHoliday extends BaseModel
     ];
 
     public $parserClass = PublicHolidayParser::class;
+
+
+    /** --- RELATIONSHIPS --- */
+
+    public function schedules()
+    {
+        return $this->morphMany(Schedule::class, 'scheduleable', 'scheduleableType', 'scheduleableId', 'id');
+    }
 
 
     /** --- SCOPES --- */
@@ -32,6 +43,17 @@ class PublicHoliday extends BaseModel
             }
 
         });
+    }
+
+    /** --- FUNCTIONS --- */
+
+    public function delete()
+    {
+        Schedule::where('scheduleableId',$this->id)
+        ->where('typeId',ScheduleType::PUBLIC_HOLIDAY_ID)
+        ->delete();
+
+        return parent::delete();
     }
 
 }

@@ -13,7 +13,7 @@ class Shift extends BaseModel
 {
     use HasActivityShiftProperty;
 
-    // protected $table = '';
+    protected $table = 'shifts';
     protected $guarded = ['id'];
 
     protected $casts = [
