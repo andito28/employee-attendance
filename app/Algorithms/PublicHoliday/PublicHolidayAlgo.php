@@ -119,6 +119,10 @@ class PublicHolidayAlgo
 
     private function createSchedule($createdBy)
     {
+        if ($this->publicHoliday->assigned == true) {
+            errPublicHolidayIsAssign();
+        }
+
         $employees = Employee::all();
         foreach ($employees as $employee) {
 
@@ -131,7 +135,8 @@ class PublicHolidayAlgo
                     'typeId' => ScheduleType::PUBLIC_HOLIDAY_ID,
                     'date' => $this->publicHoliday->date,
                 ];
-                Schedule::create($data+ $createdBy);
+                Schedule::create($data + $createdBy);
+                $this->publicHoliday->update(['assigned' => true]);
             }
         }
     }
