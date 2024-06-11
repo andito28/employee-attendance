@@ -145,6 +145,7 @@ class PublicHolidayAlgo
     {
         $existingSchedule = Schedule::where('employeeId', $employeeId)
         ->where('date', $this->publicHoliday->date)
+        ->where('typeId', ScheduleType::PUBLIC_HOLIDAY_ID)
         ->exists();
         return $existingSchedule;
     }

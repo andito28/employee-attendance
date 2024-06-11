@@ -17,7 +17,7 @@ class UpdateResignationStatus extends Command
      *
      * @var string
      */
-    protected $signature = 'test:cron';
+    protected $signature = 'app:update-resignation-status';
 
     /**
      * The console command description.

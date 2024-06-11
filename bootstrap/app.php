@@ -43,5 +43,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->withSchedule(function () {
-        Schedule::command('test:cron');
+        Schedule::command('app:update-resignation-status');
+        Schedule::command('app:set-weekly-day-off');
     })->create();
