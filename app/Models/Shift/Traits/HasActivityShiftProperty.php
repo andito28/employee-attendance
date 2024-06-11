@@ -16,7 +16,7 @@ trait HasActivityShiftProperty
      */
     public function getActivityType(): string
     {
-        return ActivityType::GENERAL;
+        return ActivityType::SHIFT;
     }
 
     /**

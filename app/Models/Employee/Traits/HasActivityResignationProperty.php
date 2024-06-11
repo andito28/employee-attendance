@@ -15,7 +15,7 @@ trait HasActivityResignationProperty
      */
     public function getActivityType(): string
     {
-        return ActivityType::GENERAL;
+        return ActivityType::RESIGNATION;
     }
 
     /**

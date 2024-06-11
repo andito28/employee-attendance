@@ -16,7 +16,7 @@ trait HasActivityCompanyOfficeProperty
      */
     public function getActivityType(): string
     {
-        return ActivityType::GENERAL;
+        return ActivityType::COMPANY_OFFICE;
     }
 
     /**

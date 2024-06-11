@@ -16,7 +16,7 @@ trait HasActivityEmployeeProperty
      */
     public function getActivityType(): string
     {
-        return ActivityType::GENERAL;
+        return ActivityType::EMPLOYEE;
     }
 
     /**

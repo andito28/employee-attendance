@@ -16,7 +16,7 @@ trait HasActivityDepartmentProperty
      */
     public function getActivityType(): string
     {
-        return ActivityType::GENERAL;
+        return ActivityType::DEPARTMENT;
     }
 
     /**
