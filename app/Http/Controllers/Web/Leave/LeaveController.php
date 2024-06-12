@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Web\Leave;
 
-use App\Http\Controllers\Controller;
+use App\Models\Leave\Leave;
 use Illuminate\Http\Request;
+use App\Algorithms\Leave\LeaveAlgo;
+use App\Http\Controllers\Controller;
 
 class LeaveController extends Controller
 {
@@ -12,4 +14,11 @@ class LeaveController extends Controller
         $leave = Leave::with('employee')->filter($request)->getOrPaginate($request);
         return success($leave);
     }
+
+    public function create(Request $request)
+    {
+        $algo = new LeaveAlgo();
+        return $algo->create($request);
+    }
+
 }

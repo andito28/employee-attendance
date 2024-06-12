@@ -133,9 +133,9 @@ class EmployeeAlgo
                 $user = auth()->user();
 
                 if($request->has('employeeId')){
-                    $this->employee = $this->saveResetPasswordAdministrator($user,$request);
+                    $this->employee = $this->saveResetPasswordByAdmin($user,$request);
                 }else{
-                    $this->employee = $this->saveResetPassword($user,$request);
+                    $this->employee = $this->saveResetPasswordByEmployee($user,$request);
                 }
 
             });
@@ -258,13 +258,12 @@ class EmployeeAlgo
         ]);
     }
 
-    private function saveResetPasswordAdministrator($user,$request)
+    private function saveResetPasswordByAdmin($user,$request)
     {
         $employee = User::where('employeeId',$request->employeeId)->first();
         if(!$employee){
             errEmployeeNotActive();
         }
-
 
         if($$user->roleId == RoleUser::ADMINISTRATOR_ID &&
             $employee->roleId != RoleUser::ADMINISTRATOR_ID){
@@ -290,7 +289,7 @@ class EmployeeAlgo
         errEmployeeResetPasswordUnauthorized();
     }
 
-    private function saveResetPassword($user,$request)
+    private function saveResetPasswordByEmployee($user,$request)
     {
         $currentPassword = $user->password;
             if (!$this->checkExistingPassword($currentPassword, $request)) {
