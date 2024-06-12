@@ -8,4 +8,5 @@ require($base . "component.php");
 require($base . "employee.php");
 require($base . "shift.php");
 require($base . "publicHoliday.php");
+require($base . "leave.php");
 

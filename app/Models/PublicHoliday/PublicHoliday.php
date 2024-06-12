@@ -28,7 +28,7 @@ class PublicHoliday extends BaseModel
 
     public function schedules()
     {
-        return $this->morphMany(Schedule::class, 'scheduleable', 'scheduleableType', 'scheduleableId', 'id');
+        return $this->morphMany(Schedule::class,'scheduleable','scheduleableType', 'scheduleableId', 'id');
     }
 
 
@@ -49,10 +49,13 @@ class PublicHoliday extends BaseModel
 
     public function delete()
     {
-        Schedule::where('scheduleableId',$this->id)
-        ->where('typeId',ScheduleType::PUBLIC_HOLIDAY_ID)
-        ->delete();
+        $publicHolidaySchedule = Schedule::where('scheduleableId',$this->id)
+                                ->where('typeId',ScheduleType::PUBLIC_HOLIDAY_ID)
+                                ->exists();
 
+        if($publicHolidaySchedule){
+            errPublicHolidayIsAssign('Cannot delete public holiday');
+        }
         return parent::delete();
     }
 

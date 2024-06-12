@@ -6,7 +6,7 @@ use App\Models\BaseModel;
 
 class Leave extends BaseModel
 {
-    // protected $table = '';
+    protected $table = 'leaves';
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -14,5 +14,12 @@ class Leave extends BaseModel
         self::UPDATED_AT => 'datetime',
         self::DELETED_AT => 'datetime'
     ];
+
+    /** --- RELATIONSHIPS --- */
+
+    public function schedules()
+    {
+        return $this->morphMany(Schedule::class,'scheduleable','scheduleableType', 'scheduleableId', 'id');
+    }
 
 }
