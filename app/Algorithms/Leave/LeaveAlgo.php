@@ -78,8 +78,7 @@ class LeaveAlgo
 
     private function createLeaveByEmployee($request,$createdBy)
     {
-
-
+        //
     }
 
     private function validateLeaveDates($request,$employeeId)
@@ -106,22 +105,27 @@ class LeaveAlgo
             errLeaveValidateDate("telah mengajukan cuti $request->fromDate - $request->toDate");
         }
 
-        $currentYear = $today->year;
+        $this->validateYearlyLeaveLimit($employeeId,$daysDifference);
+    }
+
+    private function validateYearlyLeaveLimit($employeeId,$daysDifference)
+    {
+        $currentYear = Carbon::now()->year;
         $leaves = Leave::where('employeeId', $employeeId)
-                    ->where('statusId', LeaveStatus::APPROVE_ID)
-                    ->where(function ($query) use ($currentYear) {
-                        $query->whereYear('fromDate', $currentYear)
-                        ->orWhereYear('toDate', $currentYear);
-                    })->get();
+        ->where('statusId', LeaveStatus::APPROVE_ID)
+        ->where(function ($query) use ($currentYear) {
+            $query->whereYear('fromDate', $currentYear)
+            ->orWhereYear('toDate', $currentYear);
+        })->get();
 
         $totalDayLeaves = $leaves->sum(function ($leave) {
-                            $fromDate = Carbon::parse($leave->fromDate);
-                            $toDate = Carbon::parse($leave->toDate);
-                            return $fromDate->diffInDays($toDate) + 1;
-                        });
+                        $fromDate = Carbon::parse($leave->fromDate);
+                        $toDate = Carbon::parse($leave->toDate);
+                        return $fromDate->diffInDays($toDate) + 1;
+                    });
 
         if (($totalDayLeaves + $daysDifference) > 12) {
-            errLeaveDurationMax("maksimal 12 kali dalam setahun");
+        errLeaveDurationMax("cuti maksimal 12 kali dalam setahun");
         }
     }
 
