@@ -15,6 +15,7 @@ class ActivityType extends BaseCodeName
     const RESIGNATION = 'resignation';
     const SHIFT = 'shift';
     const PUBLIC_HOLIDAY = 'public holiday';
+    const LEAVE = 'leave';
 
     const OPTION = [
         self::GENERAL,
@@ -26,6 +27,7 @@ class ActivityType extends BaseCodeName
         self::RESIGNATION,
         self::SHIFT,
         self::PUBLIC_HOLIDAY,
+        self::LEAVE,
     ];
 
 }

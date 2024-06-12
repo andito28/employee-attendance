@@ -6,8 +6,11 @@ use Carbon\Carbon;
 use App\Models\Leave\Leave;
 use Illuminate\Http\Request;
 use App\Models\Employee\Employee;
+use App\Models\Schedule\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Services\Constant\LeaveStatus;
+use App\Services\Constant\ScheduleType;
 use App\Services\Constant\Activity\ActivityAction;
 
 class LeaveAlgo
@@ -59,10 +62,19 @@ class LeaveAlgo
 
         $this->validateLeaveDates($request);
 
+        $dataLeave = [
+            'employeeId' => $request->employeeId,
+            'fromDate' => $request->fromDate,
+            'toDate' => $request->toDate,
+            'notes' => $request->notes,
+            'statusId' => LeaveStatus::APPROVE_ID
+        ];
 
+        $leave = Leave::create($dataLeave + $createdBy);
+        $this->assignSchedule($leave,$createdBy);
 
+        return $leave;
 
-        $this->assignSchedule($request,$createdBy);
     }
 
     private function createLeaveByEmployee($request,$createdBy)
@@ -81,15 +93,64 @@ class LeaveAlgo
             errLeaveValidateDate();
         }
 
-        $daysDifference = $fromDate->diffInDays($toDate);
+        $daysDifference = $fromDate->diffInDays($toDate) + 1;
         if ($daysDifference > 7) {
-            errLeaveDurationMax("maximal 7 hari");
+            errLeaveDurationMax("maksimal 7 hari");
         }
 
+        $isleave = Leave::where('employeeId',$request->employeeId)
+                    ->whereDate('fromDate', '<=', $request->fromDate)
+                    ->whereDate('toDate', '>=', $request->fromDate)
+                    ->first();
+
+        if($isleave){
+            errLeaveValidateDate("telah mengajukan cuti $request->fromDate - $request->toDate");
+        }
+
+        $currentYear = $today->year;
+        $leaves = Leave::where('employeeId', $request->employeeId)
+                    ->where('statusId', LeaveStatus::APPROVE_ID)
+                    ->where(function ($query) use ($currentYear) {
+                        $query->whereYear('fromDate', $currentYear)
+                        ->orWhereYear('toDate', $currentYear);
+                    })->get();
+
+        $totalDayLeaves = $leaves->sum(function ($leave) {
+                $fromDate = Carbon::parse($leave->fromDate);
+                $toDate = Carbon::parse($leave->toDate);
+                return $fromDate->diffInDays($toDate) + 1;
+            });
+
+        if (($totalDayLeaves + $daysDifference) > 12) {
+            errLeaveDurationMax("maksimal 12 kali dalam setahun");
+        }
     }
 
-    private function assignSchedule($request,$createdBy)
+    private function assignSchedule($leave,$createdBy)
     {
+        $today = Carbon::today();
+        $fromDate = Carbon::parse($leave->fromDate);
+        $toDate = Carbon::parse($leave->toDate);
+
+        $datesInRange = [];
+        for ($date = $fromDate; $date->lte($toDate); $date->addDay()) {
+            $datesInRange[] = $date->format('Y-m-d');
+        }
+
+        foreach($datesInRange as $date){
+            $dataSchedule = [
+                'employeeId' => $leave->employeeId,
+                'scheduleableId' => $leave->id,
+                'scheduleableType' => Leave::class,
+                'typeId' => ScheduleType::LEAVE_ID,
+                'date' => $date
+            ];
+
+            Schedule::updateOrCreate(
+                ['employeeId' => $leave->employeeId, 'date' => $date],
+                $dataSchedule + $createdBy
+            );
+        }
 
     }
 }
