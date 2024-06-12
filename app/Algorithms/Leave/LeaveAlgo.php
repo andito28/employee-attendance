@@ -119,10 +119,10 @@ class LeaveAlgo
         })->get();
 
         $totalDayLeaves = $leaves->sum(function ($leave) {
-                        $fromDate = Carbon::parse($leave->fromDate);
-                        $toDate = Carbon::parse($leave->toDate);
-                        return $fromDate->diffInDays($toDate) + 1;
-                    });
+        $fromDate = Carbon::parse($leave->fromDate);
+        $toDate = Carbon::parse($leave->toDate);
+        return $fromDate->diffInDays($toDate) + 1;
+        });
 
         if (($totalDayLeaves + $daysDifference) > 12) {
         errLeaveDurationMax("cuti maksimal 12 kali dalam setahun");
