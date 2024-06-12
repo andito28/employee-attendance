@@ -74,7 +74,6 @@ class LeaveAlgo
         $this->assignSchedule($leave,$createdBy);
 
         return $leave;
-
     }
 
     private function createLeaveByEmployee($request,$createdBy)
@@ -116,10 +115,10 @@ class LeaveAlgo
                     })->get();
 
         $totalDayLeaves = $leaves->sum(function ($leave) {
-                $fromDate = Carbon::parse($leave->fromDate);
-                $toDate = Carbon::parse($leave->toDate);
-                return $fromDate->diffInDays($toDate) + 1;
-            });
+                            $fromDate = Carbon::parse($leave->fromDate);
+                            $toDate = Carbon::parse($leave->toDate);
+                            return $fromDate->diffInDays($toDate) + 1;
+                        });
 
         if (($totalDayLeaves + $daysDifference) > 12) {
             errLeaveDurationMax("maksimal 12 kali dalam setahun");
