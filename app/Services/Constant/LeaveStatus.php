@@ -8,7 +8,7 @@ class LeaveStatus extends BaseIDName
 {
     const PENDING_ID = 1;
     const PENDING = 'Pending';
-    const APPROVE_ID = 1;
+    const APPROVE_ID = 2;
     const APPROVE = 'Approve';
 
     const OPTION = [

@@ -78,7 +78,20 @@ class LeaveAlgo
 
     private function createLeaveByEmployee($request,$createdBy)
     {
-        //
+        $user = auth()->user();
+        $this->validateLeaveDates($request,$user->employeeId);
+
+        $dataLeave = [
+            'employeeId' => $user->employeeId,
+            'fromDate' => $request->fromDate,
+            'toDate' => $request->toDate,
+            'notes' => $request->notes,
+            'statusId' => LeaveStatus::PENDING_ID
+        ];
+
+        $leave = Leave::create($dataLeave + $createdBy);
+
+        return $leave;
     }
 
     private function validateLeaveDates($request,$employeeId)
@@ -91,18 +104,18 @@ class LeaveAlgo
             errLeaveValidateDate();
         }
 
+        $isleave = Leave::where('employeeId',$employeeId)
+        ->whereDate('fromDate', '<=', $request->fromDate)
+        ->whereDate('toDate', '>=', $request->fromDate)
+        ->first();
+
+        if($isleave){
+            errLeaveValidateDate("telah mengajukan cuti $isleave->fromDate - $isleave->toDate");
+        }
+
         $daysDifference = $fromDate->diffInDays($toDate) + 1;
         if ($daysDifference > 7) {
             errLeaveDurationMax("maksimal 7 hari");
-        }
-
-        $isleave = Leave::where('employeeId',$employeeId)
-                    ->whereDate('fromDate', '<=', $request->fromDate)
-                    ->whereDate('toDate', '>=', $request->fromDate)
-                    ->first();
-
-        if($isleave){
-            errLeaveValidateDate("telah mengajukan cuti $request->fromDate - $request->toDate");
         }
 
         $this->validateYearlyLeaveLimit($employeeId,$daysDifference);
@@ -119,9 +132,9 @@ class LeaveAlgo
         })->get();
 
         $totalDayLeaves = $leaves->sum(function ($leave) {
-        $fromDate = Carbon::parse($leave->fromDate);
-        $toDate = Carbon::parse($leave->toDate);
-        return $fromDate->diffInDays($toDate) + 1;
+            $fromDate = Carbon::parse($leave->fromDate);
+            $toDate = Carbon::parse($leave->toDate);
+            return $fromDate->diffInDays($toDate) + 1;
         });
 
         if (($totalDayLeaves + $daysDifference) > 12) {
