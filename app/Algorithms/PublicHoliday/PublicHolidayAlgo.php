@@ -131,7 +131,7 @@ class PublicHolidayAlgo
                 $data = [
                     'employeeId' => $employee->id,
                     'scheduleableId' => $this->publicHoliday->id,
-                    'scheduleableType' => Schedule::class,
+                    'scheduleableType' => PublicHoliday::class,
                     'typeId' => ScheduleType::PUBLIC_HOLIDAY_ID,
                     'date' => $this->publicHoliday->date,
                 ];

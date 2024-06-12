@@ -7,5 +7,9 @@ use Illuminate\Http\Request;
 
 class LeaveController extends Controller
 {
-    //
+    public function get(Request $request)
+    {
+        $leave = Leave::with('employee')->filter($request)->getOrPaginate($request);
+        return success($leave);
+    }
 }

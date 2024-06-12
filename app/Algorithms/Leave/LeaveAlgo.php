@@ -27,7 +27,11 @@ class LeaveAlgo
                     'createdByName' =>  $user->employee->name
                 ];
 
-                $this->leave = Leave::create($request->all() + $createdBy);
+                if($equest->has('employeeId')){
+                    $this->leave = $this->createLeaveAdministrator($request,$createdBy);
+                }else{
+                    $this->leave = $this->createLeaveEmployee($request,$createdBy);
+                }
 
                 $this->leave->setActivityPropertyAttributes(ActivityAction::CREATE)
                     ->saveActivity("Enter new " .$this->leave->getTable() . ":[$this->leave->id]");
@@ -41,4 +45,22 @@ class LeaveAlgo
         }
     }
 
+
+    /** --- SUB FUNCTIONS --- */
+
+    private function createLeaveAdministrator($request,$createdBy)
+    {
+
+    }
+
+    private function createLeaveEmployee($request,$createdBy)
+    {
+
+        $this->assignSchedule($request,$createdBy);
+    }
+
+    private function assignSchedule($request,$createdBy)
+    {
+
+    }
 }

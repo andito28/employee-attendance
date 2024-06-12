@@ -20,9 +20,6 @@ class Parental extends BaseModel
         self::DELETED_AT => 'datetime'
     ];
 
-    public $parserClass = ParentalParser::class;
-
-
      /** --- RELATIONSHIPS --- */
 
     public function employee()

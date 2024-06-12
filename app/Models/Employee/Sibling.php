@@ -21,9 +21,6 @@ class Sibling extends BaseModel
         self::DELETED_AT => 'datetime'
     ];
 
-    public $parserClass = SiblingParser::class;
-
-
      /** --- RELATIONSHIPS --- */
 
     public function employee()

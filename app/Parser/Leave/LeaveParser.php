@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Parser\Employee;
+namespace App\Parser\Leave;
 
 use GlobalXtreme\Parser\BaseParser;
 
-class ParentalParser extends BaseParser
+class LeaveParser extends BaseParser
 {
     /**
      * @param $data
