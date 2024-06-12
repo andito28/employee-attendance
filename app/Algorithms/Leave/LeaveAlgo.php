@@ -60,7 +60,7 @@ class LeaveAlgo
             errEmployeeGet();
         }
 
-        $this->validateLeaveDates($request);
+        $this->validateLeaveDates($request,$request->employeeId);
 
         $dataLeave = [
             'employeeId' => $request->employeeId,
@@ -82,7 +82,7 @@ class LeaveAlgo
 
     }
 
-    private function validateLeaveDates($request)
+    private function validateLeaveDates($request,$employeeId)
     {
         $today = Carbon::today();
         $fromDate = Carbon::parse($request->fromDate);
@@ -97,7 +97,7 @@ class LeaveAlgo
             errLeaveDurationMax("maksimal 7 hari");
         }
 
-        $isleave = Leave::where('employeeId',$request->employeeId)
+        $isleave = Leave::where('employeeId',$employeeId)
                     ->whereDate('fromDate', '<=', $request->fromDate)
                     ->whereDate('toDate', '>=', $request->fromDate)
                     ->first();
@@ -107,7 +107,7 @@ class LeaveAlgo
         }
 
         $currentYear = $today->year;
-        $leaves = Leave::where('employeeId', $request->employeeId)
+        $leaves = Leave::where('employeeId', $employeeId)
                     ->where('statusId', LeaveStatus::APPROVE_ID)
                     ->where(function ($query) use ($currentYear) {
                         $query->whereYear('fromDate', $currentYear)
