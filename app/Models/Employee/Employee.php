@@ -3,6 +3,7 @@
 namespace App\Models\Employee;
 
 use App\Models\BaseModel;
+use App\Models\Leave\Leave;
 use App\Models\Employee\User;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Parental;
@@ -62,6 +63,11 @@ class Employee extends BaseModel
     public function resignations()
     {
         return $this->hasMany(Resignation::class, 'employeeId');
+    }
+
+    public function leave()
+    {
+        return $this->hasMany(Leave::class, 'employeeId');
     }
 
     public function attendances()

@@ -3,6 +3,7 @@
 namespace App\Models\Leave;
 
 use App\Models\BaseModel;
+use App\Models\Employee\Employee;
 use App\Parser\Leave\LeaveParser;
 use App\Models\Leave\Traits\HasActivityLeaveProperty;
 
@@ -22,6 +23,11 @@ class Leave extends BaseModel
     public $parserClass = LeaveParser::class;
 
     /** --- RELATIONSHIPS --- */
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class,'employeeId');
+    }
 
     public function schedules()
     {
