@@ -131,14 +131,13 @@ class LeaveAlgo
 
     private function assignSchedule($leave,$createdBy)
     {
-        $today = Carbon::today();
         $fromDate = Carbon::parse($leave->fromDate);
         $toDate = Carbon::parse($leave->toDate);
 
-        $datesInRange = [];
-        for ($date = $fromDate; $date->lte($toDate); $date->addDay()) {
-            $datesInRange[] = $date->format('Y-m-d');
-        }
+        $datesInRange = collect(Carbon::parse($fromDate)->toPeriod($toDate))
+        ->map(function ($date) {
+            return $date->format('Y-m-d');
+        });
 
         foreach($datesInRange as $date){
             $dataSchedule = [
