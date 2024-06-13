@@ -16,5 +16,5 @@ Route::group([
 });
 
 
-Route::patch('leaves', [LeaveController::class, 'update'])
+Route::patch('leaves/{id}/approve', [LeaveController::class, 'approveLeave'])
 ->middleware(['auth.api', "role:$administrator"]);

@@ -21,4 +21,15 @@ class LeaveController extends Controller
         return $algo->create($request);
     }
 
+    public function approveLeave($id)
+    {
+        $leave = Leave::find($id);
+        if(!$leave){
+            errLeaveGet();
+        }
+
+        $algo = new LeaveAlgo($leave);
+        return $algo->approveLeave();
+    }
+
 }

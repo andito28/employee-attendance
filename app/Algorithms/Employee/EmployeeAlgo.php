@@ -265,7 +265,7 @@ class EmployeeAlgo
             errEmployeeNotActive();
         }
 
-        if($$user->roleId == RoleUser::ADMINISTRATOR_ID &&
+        if($user->roleId == RoleUser::ADMINISTRATOR_ID &&
             $employee->roleId != RoleUser::ADMINISTRATOR_ID){
 
             $currentPassword = $employee->password;

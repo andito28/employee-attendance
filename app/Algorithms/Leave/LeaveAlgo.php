@@ -50,6 +50,39 @@ class LeaveAlgo
         }
     }
 
+    public function approveLeave()
+    {
+        try {
+
+            DB::transaction(function () {
+
+                $user = auth()->user();
+
+                $createdBy = [
+                    'createdBy' =>  $user->employee->id,
+                    'createdByName' =>  $user->employee->name
+                ];
+
+                $this->leave->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
+
+                $this->validateApprovedLeave($user->employee->id);
+
+                $this->leave->update(['statusId' => LeaveStatus::APPROVE_ID]);
+
+                $this->assignSchedule($this->leave,$createdBy);
+
+                $this->leave->setActivityPropertyAttributes(ActivityAction::UPDATE)
+                ->saveActivity("Approve Leave :  [{$this->leave->id}]");
+
+            });
+
+            return success($this->leave);
+
+        } catch (\Exception $exception) {
+            exception($exception);
+        }
+    }
+
 
     /** --- SUB FUNCTIONS --- */
 
@@ -166,6 +199,23 @@ class LeaveAlgo
                 $dataSchedule + $createdBy
             );
         }
-
     }
+
+    private function validateApprovedLeave($employeeId)
+    {
+        if($employeeId == $this->leave->employeeId){
+            errLeaveApprove();
+        }
+
+        if($this->leave->statusId == LeaveStatus::APPROVE_ID){
+            errLeaveAlreadyApprove();
+        }
+
+        $fromDate = Carbon::parse($this->leave->fromDate);
+        $toDate = Carbon::parse($this->leave->toDate);
+        $daysDifference = $fromDate->diffInDays($toDate) + 1;
+
+        $this->validateYearlyLeaveLimit($this->leave->id,$daysDifference);
+    }
+
 }
