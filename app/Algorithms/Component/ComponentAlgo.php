@@ -18,7 +18,6 @@ class ComponentAlgo
             $component = DB::transaction(function () use ($model, $request) {
 
                 $user = auth()->user();
-
                 $createdBy = [
                     'createdBy' =>  $user->employee->id,
                     'createdByName' =>  $user->employee->name

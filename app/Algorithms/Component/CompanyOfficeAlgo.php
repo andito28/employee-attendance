@@ -61,7 +61,6 @@ class CompanyOfficeAlgo
         ];
 
         $user = auth()->user();
-
         $createdBy = [
             'createdBy' =>  $user->employee->id,
             'createdByName' =>  $user->employee->name

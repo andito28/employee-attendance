@@ -34,7 +34,6 @@ class EmployeeAlgo
             DB::transaction(function () use ($request) {
 
                 $user = auth()->user();
-
                 $createdBy = [
                     'createdBy' =>  $user->employee->id,
                     'createdByName' =>  $user->employee->name
@@ -130,8 +129,8 @@ class EmployeeAlgo
         try {
 
             DB::transaction(function () use ($request) {
-                $user = auth()->user();
 
+                $user = auth()->user();
                 if($request->has('employeeId')){
                     if($user->roleId != RoleUser::ADMINISTRATOR_ID){
                         errAccessPemission();

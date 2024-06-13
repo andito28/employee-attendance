@@ -27,7 +27,6 @@ class LeaveAlgo
             DB::transaction(function () use ($request) {
 
                 $user = auth()->user();
-
                 $createdBy = [
                     'createdBy' =>  $user->employee->id,
                     'createdByName' =>  $user->employee->name
