@@ -61,24 +61,26 @@ class LeaveAlgo
 
             DB::transaction(function (){
 
-                $user = auth()->user();
-
                 $this->leave->setOldActivityPropertyAttributes(ActivityAction::DELETE);
 
-                // $now = Carbon::now();
-                // $diffInMonths = $now->diffInMonths($this->fromDate);
-                // if($diffInMonths > 1){
-                //     errLeaveDelete();
-                // }
+                $now = Carbon::now();
+                $date = Carbon::parse($this->leave->fromDate);
+                $diffInMonths = abs($now->diffInMonths($date));
 
-                if($request->has('employeeId')){
-                    if($user->roleId == RoleUser::ADMINISTRATOR_ID){
-                        $this->leave = $this->deleteLeave($request->employeeId);
-                    }
-                    errAccessPemission();
-                }else{
-                    $this->leave = $this->deleteLeave($user->employee->id);
+                if($diffInMonths > 1){
+                    errLeaveDelete();
                 }
+
+                $user = auth()->user();
+                if($user->roleId == RoleUser::EMPLOYEE_ID){
+                    $leaveEmployee = Leave::where('id',$this->leave->id)
+                    ->where('employeeId',$user->employee->id)->exists();
+                    if(!$leaveEmployee){
+                        errLeaveDelete();
+                    }
+                }
+
+                $this->leave->delete();
 
                 $this->leave->setActivityPropertyAttributes(ActivityAction::DELETE)
                 ->saveActivity("Delete Leave : [{$this->leave->id}]");
@@ -99,7 +101,6 @@ class LeaveAlgo
             DB::transaction(function () {
 
                 $user = auth()->user();
-
                 $createdBy = [
                     'createdBy' =>  $user->employee->id,
                     'createdByName' =>  $user->employee->name
@@ -151,11 +152,6 @@ class LeaveAlgo
         }
 
         return $leave;
-    }
-
-    private function deleteLeave($employeeId)
-    {
-
     }
 
     private function validateLeaveDates($request,$employeeId)
