@@ -133,6 +133,9 @@ class EmployeeAlgo
                 $user = auth()->user();
 
                 if($request->has('employeeId')){
+                    if($user->roleId != RoleUser::ADMINISTRATOR_ID){
+                        errAccessPemission();
+                    }
                     $this->employee = $this->saveResetPasswordByAdmin($user,$request);
                 }else{
                     $this->employee = $this->saveResetPasswordByEmployee($user,$request);

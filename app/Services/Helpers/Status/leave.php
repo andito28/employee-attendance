@@ -22,8 +22,8 @@ if (!function_exists("errLeaveDurationMax")) {
     }
 }
 
-if (!function_exists("errLeaveApprove")) {
-    function errLeaveApprove($internalMsg = "", $status = null)
+if (!function_exists("errLeaveApproveUnauthorized")) {
+    function errLeaveApproveUnauthorized($internalMsg = "", $status = null)
     {
         error(403, "Unauthorized access!", $internalMsg, $status);
     }
@@ -33,5 +33,12 @@ if (!function_exists("errLeaveAlreadyApprove")) {
     function errLeaveAlreadyApprove($internalMsg = "", $status = null)
     {
         error(400, "Leave Already Approved!", $internalMsg, $status);
+    }
+}
+
+if (!function_exists("errLeaveDelete")) {
+    function errLeaveDelete($internalMsg = "")
+    {
+        error(403, "Cannot Delete Leave!", $internalMsg);
     }
 }

@@ -9,6 +9,7 @@ use App\Models\Employee\Employee;
 use App\Models\Schedule\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Services\Constant\RoleUser;
 use App\Services\Constant\LeaveStatus;
 use App\Services\Constant\ScheduleType;
 use App\Services\Constant\Activity\ActivityAction;
@@ -33,9 +34,14 @@ class LeaveAlgo
                 ];
 
                 if($request->has('employeeId')){
-                    $this->leave = $this->createLeaveByAdmin($request,$createdBy);
+                    if($user->roleId != RoleUser::ADMINISTRATOR_ID){
+                        errAccessPemission();
+                    }
+                    $this->leave = $this->createLeave($request,$createdBy,
+                    LeaveStatus::APPROVE_ID,$request->employeeId);
                 }else{
-                    $this->leave = $this->createLeaveByEmployee($request,$createdBy);
+                    $this->leave = $this->createLeave($request,$createdBy,
+                    LeaveStatus::PENDING_ID,$user->employee->id);
                 }
 
                 $this->leave->setActivityPropertyAttributes(ActivityAction::CREATE)
@@ -44,6 +50,43 @@ class LeaveAlgo
             });
 
             return success($this->leave);
+
+        } catch (\Exception $exception) {
+            exception($exception);
+        }
+    }
+
+    public function delete()
+    {
+        try {
+
+            DB::transaction(function (){
+
+                $user = auth()->user();
+
+                $this->leave->setOldActivityPropertyAttributes(ActivityAction::DELETE);
+
+                // $now = Carbon::now();
+                // $diffInMonths = $now->diffInMonths($this->fromDate);
+                // if($diffInMonths > 1){
+                //     errLeaveDelete();
+                // }
+
+                if($request->has('employeeId')){
+                    if($user->roleId == RoleUser::ADMINISTRATOR_ID){
+                        $this->leave = $this->deleteLeave($request->employeeId);
+                    }
+                    errAccessPemission();
+                }else{
+                    $this->leave = $this->deleteLeave($user->employee->id);
+                }
+
+                $this->leave->setActivityPropertyAttributes(ActivityAction::DELETE)
+                ->saveActivity("Delete Leave : [{$this->leave->id}]");
+
+            });
+
+            return success();
 
         } catch (\Exception $exception) {
             exception($exception);
@@ -86,45 +129,34 @@ class LeaveAlgo
 
     /** --- SUB FUNCTIONS --- */
 
-    private function createLeaveByAdmin($request,$createdBy)
+    private function createLeave($request,$createdBy,$statusId,$employeeId)
     {
-        $employee = Employee::find($request->employeeId);
+        $employee = Employee::find($employeeId);
         if(!$employee){
             errEmployeeGet();
         }
 
-        $this->validateLeaveDates($request,$request->employeeId);
+        $this->validateLeaveDates($request,$employeeId);
 
         $dataLeave = [
-            'employeeId' => $request->employeeId,
+            'employeeId' => $employeeId,
             'fromDate' => $request->fromDate,
             'toDate' => $request->toDate,
             'notes' => $request->notes,
-            'statusId' => LeaveStatus::APPROVE_ID
+            'statusId' => $statusId
         ];
 
         $leave = Leave::create($dataLeave + $createdBy);
-        $this->assignSchedule($leave,$createdBy);
+        if($statusId == LeaveStatus::APPROVE_ID){
+            $this->assignSchedule($leave,$createdBy);
+        }
 
         return $leave;
     }
 
-    private function createLeaveByEmployee($request,$createdBy)
+    private function deleteLeave($employeeId)
     {
-        $user = auth()->user();
-        $this->validateLeaveDates($request,$user->employeeId);
 
-        $dataLeave = [
-            'employeeId' => $user->employeeId,
-            'fromDate' => $request->fromDate,
-            'toDate' => $request->toDate,
-            'notes' => $request->notes,
-            'statusId' => LeaveStatus::PENDING_ID
-        ];
-
-        $leave = Leave::create($dataLeave + $createdBy);
-
-        return $leave;
     }
 
     private function validateLeaveDates($request,$employeeId)
@@ -204,7 +236,7 @@ class LeaveAlgo
     private function validateApprovedLeave($employeeId)
     {
         if($employeeId == $this->leave->employeeId){
-            errLeaveApprove();
+            errLeaveApproveUnauthorized();
         }
 
         if($this->leave->statusId == LeaveStatus::APPROVE_ID){

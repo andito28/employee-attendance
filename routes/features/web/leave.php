@@ -13,6 +13,7 @@ Route::group([
 ], function () {
     Route::get('', [LeaveController::class, 'get']);
     Route::post('', [LeaveController::class, 'create']);
+    Route::delete('', [LeaveController::class, 'delete']);
 });
 
 
