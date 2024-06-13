@@ -33,7 +33,7 @@ class SetWeeklyDayOff extends Command
         DB::transaction(function (){
             $employees = Employee::all();
             $startDate = Carbon::today();
-            $weeklyDayOffDate = Carbon::create(null, 1, 1);
+            $weeklyDayOffDate = Carbon::create(null, 6, 17);
             $endDate = $startDate->copy()->addYear();
 
             if ($startDate->isSameDay($weeklyDayOffDate )) {
