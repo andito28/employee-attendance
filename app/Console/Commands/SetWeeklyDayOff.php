@@ -33,29 +33,32 @@ class SetWeeklyDayOff extends Command
         DB::transaction(function (){
             $employees = Employee::all();
             $startDate = Carbon::today();
+            $weeklyDayOffDate = Carbon::create(null, 1, 1);
             $endDate = $startDate->copy()->addYear();
 
-            while ($startDate->lessThanOrEqualTo($endDate)) {
+            if ($startDate->isSameDay($weeklyDayOffDate )) {
 
-                $weeklyDayOff = $startDate->copy()->next(Carbon::SUNDAY);
+                while ($startDate->lessThanOrEqualTo($endDate)) {
 
-                if ($weeklyDayOff->greaterThan($endDate)) {
-                    break;
+                    $weeklyDayOff = $startDate->copy()->next(Carbon::SUNDAY);
+
+                    if ($weeklyDayOff->greaterThan($endDate)) {
+                        break;
+                    }
+
+                    foreach ($employees as $employee) {
+                        Schedule::create([
+                            'employeeId' => $employee->id,
+                            'date' => $weeklyDayOff,
+                            'typeId' => ScheduleType::WEEKLY_DAY_OFF_ID,
+                            'createdBy' => 'system',
+                            'createdByName' => 'system'
+                        ]);
+                    }
+                    $startDate->addWeek();
                 }
-
-                foreach ($employees as $employee) {
-                    Schedule::create([
-                        'employeeId' => $employee->id,
-                        'date' => $weeklyDayOff,
-                        'typeId' => ScheduleType::WEEKLY_DAY_OFF_ID,
-                        'createdBy' => 'system',
-                        'createdByName' => 'system'
-                    ]);
-                }
-
-                $startDate->addWeek();
+                return 0;
             }
-            return 0;
         });
     }
 }
