@@ -33,11 +33,9 @@ class ScheduleAlgo
                     ->saveActivity("Enter new " .$this->schedule->getTable() .
                     ":[$this->schedule->id]");
 
-                return $component;
-
             });
 
-            return success($component);
+            return success($this->schedule);
 
         } catch (\Exception $exception) {
             exception($exception);
