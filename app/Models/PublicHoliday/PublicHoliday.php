@@ -50,8 +50,8 @@ class PublicHoliday extends BaseModel
     public function delete()
     {
         $publicHolidaySchedule = Schedule::where('scheduleableId',$this->id)
-                                ->where('typeId',ScheduleType::PUBLIC_HOLIDAY_ID)
-                                ->exists();
+        ->where('typeId',ScheduleType::PUBLIC_HOLIDAY_ID)
+        ->exists();
 
         if($publicHolidaySchedule){
             errPublicHolidayIsAssign('Cannot delete public holiday');
