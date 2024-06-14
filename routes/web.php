@@ -9,4 +9,5 @@ require($base . "employee.php");
 require($base . "shift.php");
 require($base . "publicHoliday.php");
 require($base . "leave.php");
+require($base . "schedule.php");
 
