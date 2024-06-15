@@ -93,17 +93,16 @@ class AttendanceAlgo
             errScheduleAlreadyExist(ScheduleType::display($schedule->typeId));
         }
 
-        $isAttendance = Attendance::where('employeeId',$employeeId)
-        ->whereDate('clockIn',$currentTime)->exists();
-        if($isAttendance){
-            errAttendanceAlreadyExist();
-        }
+        $isAttendanceExist = Attendance::where('employeeId', $employeeId)
+        ->where(function ($query) use ($currentTime) {
+        $query->whereDate('clockIn', $currentTime)
+        ->orWhere(function ($query) use ($currentTime) {
+        $query->whereNull('clockIn')
+        ->whereDate('clockOut', $currentTime);
+        });
+        })->exists();
 
-        $isClockOut = Attendance::where('employeeId',$employeeId)
-        ->whereNull('clockIn')
-        ->whereDate('clockOut',$currentTime)
-        ->exists();
-        if($isClockOut){
+        if ($isAttendanceExist) {
             errAttendanceAlreadyExist();
         }
 
@@ -113,7 +112,6 @@ class AttendanceAlgo
 
     private function getScheduleShift($employeeId, $currentTime)
     {
-
         $scheduleShift = Schedule::where('typeId',ScheduleType::SHIFT_ID)
         ->where('employeeId',$employeeId)
         ->whereDate('date',$currentTime)
@@ -129,9 +127,9 @@ class AttendanceAlgo
         $now = Carbon::now();
         $yesterday = $now->subDay();
         $attendance = Attendance::where('employeeId', $employeeId)
-                    ->where('clockIn', '>=', $yesterday)
-                    ->latest('clockIn')
-                    ->first();
+        ->where('clockIn', '>=', $yesterday)
+        ->latest('clockIn')
+        ->first();
 
         if (!$attendance) {
             return $this->createNoClockInAttendance($employeeId,$currentTime,$shift);
