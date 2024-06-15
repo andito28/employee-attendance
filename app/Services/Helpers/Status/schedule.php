@@ -13,3 +13,17 @@ if (!function_exists("errScheduleLeave")) {
         error(403, "Schedule leave cannot be updated!", $internalMsg);
     }
 }
+
+if (!function_exists("errScheduleLeave")) {
+    function errScheduleLeave($internalMsg = "")
+    {
+        error(403, "Schedule leave cannot be updated!", $internalMsg);
+    }
+}
+
+if (!function_exists("errScheduleAlreadyExist")) {
+    function errScheduleAlreadyExist($internalMsg = "")
+    {
+        error(409, "Schedule Already Exists!", $internalMsg);
+    }
+}
