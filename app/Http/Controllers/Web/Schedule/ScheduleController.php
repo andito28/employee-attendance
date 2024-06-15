@@ -13,7 +13,7 @@ class ScheduleController extends Controller
     public function get(Request $request)
     {
         $schedule = Schedule::getOrPaginate($request,true);
-        return success(ScheduleParser::getMapping($schedule));
+        return success(ScheduleParser::getMapping($schedule),pagination:pagination($schedule));
     }
 
     public function create(Request $request)
