@@ -7,10 +7,5 @@ if (!function_exists("errAttendanceAlreadyExist")) {
     }
 }
 
-if (!function_exists("errAttendanceTimeRange")) {
-    function errAttendanceTimeRange($internalMsg = "")
-    {
-        error(400, "unable to take attendance", $internalMsg);
-    }
-}
+
 

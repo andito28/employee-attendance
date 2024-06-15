@@ -60,6 +60,13 @@ class AttendanceAlgo
                 $user = auth()->user();
                 $currentTime = Carbon::now();
 
+                $isAttendance = Attendance::where('employeeId',$user->employee->id)
+                ->whereDate('clockOut',$currentTime)->exists();
+
+                if($isAttendance){
+                    errAttendanceAlreadyExist();
+                }
+
                 $shift = $this->getScheduleShift($user->employee->id, $currentTime);
 
                 $this->attendance = $this->saveAttendanceClockOut($user->employee->id,
@@ -82,15 +89,21 @@ class AttendanceAlgo
     {
         $schedule = Schedule::where('employeeId',$employeeId)
         ->whereDate('date',$currentTime)->first();
-
         if($schedule){
             errScheduleAlreadyExist(ScheduleType::display($schedule->typeId));
         }
 
         $isAttendance = Attendance::where('employeeId',$employeeId)
         ->whereDate('clockIn',$currentTime)->exists();
-
         if($isAttendance){
+            errAttendanceAlreadyExist();
+        }
+
+        $isClockOut = Attendance::where('employeeId',$employeeId)
+        ->whereNull('clockIn')
+        ->whereDate('clockOut',$currentTime)
+        ->exists();
+        if($isClockOut){
             errAttendanceAlreadyExist();
         }
 
