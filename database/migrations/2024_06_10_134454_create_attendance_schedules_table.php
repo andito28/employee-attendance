@@ -15,13 +15,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendance_corrections', function (Blueprint $table) {
+        Schema::create('attendance_schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employeeId');
             $table->date('date');
-            $table->time('clockIn');
-            $table->time('clockOut');
-            $table->integer('statusId');
+            $table->integer('typeId');
+            $table->foreignId('scheduleableId')->nullable();
+            $table->string('scheduleableType')->nullable();
+            $this->getDefaultCreatedBy($table);
             $this->getDefaultTimestamps($table);
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attendance_corrections');
+        Schema::dropIfExists('attendance_schedules');
     }
 };

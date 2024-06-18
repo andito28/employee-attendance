@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Algorithms\Schedule;
+namespace App\Algorithms\Attendance;
 
 use App\Models\Leave\Leave;
 use App\Models\Shift\Shift;

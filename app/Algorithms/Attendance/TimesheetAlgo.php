@@ -13,7 +13,7 @@ use App\Services\Constant\ScheduleType;
 use App\Services\Constant\AttendanceStatus;
 use App\Services\Constant\Activity\ActivityAction;
 
-class AttendanceAlgo
+class TimesheetAlgo
 {
     public function __construct(public ? Attendance $attendance = null )
     {

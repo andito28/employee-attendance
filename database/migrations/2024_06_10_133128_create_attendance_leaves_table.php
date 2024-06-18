@@ -15,13 +15,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedules', function (Blueprint $table) {
+        Schema::create('attendance_leaves', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employeeId');
-            $table->date('date');
-            $table->integer('typeId');
-            $table->foreignId('scheduleableId')->nullable();
-            $table->string('scheduleableType')->nullable();
+            $table->date('fromDate');
+            $table->date('toDate');
+            $table->text('notes');
+            $table->integer('statusId');
             $this->getDefaultCreatedBy($table);
             $this->getDefaultTimestamps($table);
         });
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedules');
+        Schema::dropIfExists('attendance_leaves');
     }
 };

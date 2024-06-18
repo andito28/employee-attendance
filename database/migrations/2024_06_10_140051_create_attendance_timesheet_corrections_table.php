@@ -15,12 +15,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('public_holidays', function (Blueprint $table) {
+        Schema::create('attendance_timesheet_corrections', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('employeeId');
             $table->date('date');
-            $table->boolean('assigned')->default(false);
-            $this->getDefaultCreatedBy($table);
+            $table->time('clockIn');
+            $table->time('clockOut');
+            $table->integer('statusId');
             $this->getDefaultTimestamps($table);
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('public_holidays');
+        Schema::dropIfExists('attendance_timesheet_corrections');
     }
 };

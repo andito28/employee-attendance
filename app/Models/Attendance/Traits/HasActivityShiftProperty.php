@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models\Shift\Traits;
+namespace App\Models\Attendance\Traits;
 
-use App\Parser\Shift\ShiftParser;
+use App\Parser\Attendance\ShiftParser;
 use App\Models\Activity\Traits\HasActivity;
 use App\Services\Constant\Activity\ActivityType;
 

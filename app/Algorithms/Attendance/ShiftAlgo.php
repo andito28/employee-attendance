@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Algorithms\Shift;
+namespace App\Algorithms\Attendance;
 
-use App\Models\Shift\Shift;
+use App\Models\Attendance\Shift;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;

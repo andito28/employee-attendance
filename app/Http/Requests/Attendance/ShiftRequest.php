@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Shift;
+namespace App\Http\Requests\Attendance;
 
 use GlobalXtreme\Validation\Support\FormRequest;
 

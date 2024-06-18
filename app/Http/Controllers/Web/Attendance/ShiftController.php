@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Web\Shift;
+namespace App\Http\Controllers\Web\Attendance;
 
-use App\Models\Shift\Shift;
 use Illuminate\Http\Request;
-use App\Algorithms\Shift\ShiftAlgo;
+use App\Models\Attendance\Shift;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Shift\ShiftRequest;
+use App\Algorithms\Attendance\ShiftAlgo;
+use App\Http\Requests\Attendance\ShiftRequest;
 
 class ShiftController extends Controller
 {

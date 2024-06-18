@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Algorithms\Leave;
+namespace App\Algorithms\Attendance;
 
 use Carbon\Carbon;
 use App\Models\Leave\Leave;
 use Illuminate\Http\Request;
 use App\Models\Employee\Employee;
-use App\Models\Schedule\Schedule;
+use App\Models\Attendance\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\RoleUser;

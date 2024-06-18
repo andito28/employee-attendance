@@ -2,7 +2,7 @@
 
 use App\Services\Constant\RoleUser;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\Shift\ShiftController;
+use App\Http\Controllers\Web\Attendance\ShiftController;
 
 $administrator = RoleUser::ADMINISTRATOR_ID;
 

@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Models\Shift;
+namespace App\Models\Attendance;
 
 use App\Models\BaseModel;
 use App\Models\Employee\Employee;
-use App\Models\Schedule\Schedule;
-use App\Parser\Shift\ShiftParser;
+use App\Models\Attendance\Schedule;
 use App\Models\Attendance\Attendance;
-use App\Models\Shift\Traits\HasActivityShiftProperty;
+use App\Parser\Attendance\ShiftParser;
+use App\Models\Attendance\Traits\HasActivityShiftProperty;
 
 class Shift extends BaseModel
 {
     use HasActivityShiftProperty;
 
-    protected $table = 'shifts';
+    protected $table = 'attendance_shifts';
     protected $guarded = ['id'];
 
     protected $casts = [

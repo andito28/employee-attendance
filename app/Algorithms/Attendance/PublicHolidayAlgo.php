@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Algorithms\PublicHoliday;
+namespace App\Algorithms\Attendance;
 
 use Illuminate\Http\Request;
 use App\Models\Employee\Employee;

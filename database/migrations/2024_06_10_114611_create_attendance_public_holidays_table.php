@@ -15,11 +15,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shifts', function (Blueprint $table) {
+        Schema::create('attendance_public_holidays', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->time('startTime');
-            $table->time('endTime');
+            $table->date('date');
+            $table->boolean('assigned')->default(false);
             $this->getDefaultCreatedBy($table);
             $this->getDefaultTimestamps($table);
         });
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shifts');
+        Schema::dropIfExists('attendance_public_holidays');
     }
 };

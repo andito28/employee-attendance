@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Parser\Shift;
+namespace App\Parser\Attendance;
 
 use GlobalXtreme\Parser\BaseParser;
 
