@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Web\Leave;
+namespace App\Http\Controllers\Web\Attendance;
 
-use App\Models\Leave\Leave;
 use Illuminate\Http\Request;
-use App\Algorithms\Leave\LeaveAlgo;
+use App\Models\Attendance\Leave;
 use App\Http\Controllers\Controller;
+use App\Algorithms\Attendance\LeaveAlgo;
+use App\Http\Requests\Attendance\LeaveRequest;
 
 class LeaveController extends Controller
 {
@@ -15,7 +16,7 @@ class LeaveController extends Controller
         return success($leave);
     }
 
-    public function create(Request $request)
+    public function create(LeaveRequest $request)
     {
         $algo = new LeaveAlgo();
         return $algo->create($request);

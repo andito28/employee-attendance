@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Leave\Traits;
+namespace App\Models\Attendance\Traits;
 
 use App\Models\Activity\Traits\HasActivity;
 use App\Services\Constant\Activity\ActivityType;

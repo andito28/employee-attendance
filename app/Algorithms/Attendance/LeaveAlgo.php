@@ -3,7 +3,7 @@
 namespace App\Algorithms\Attendance;
 
 use Carbon\Carbon;
-use App\Models\Leave\Leave;
+use App\Models\Attendance\Leave;
 use Illuminate\Http\Request;
 use App\Models\Employee\Employee;
 use App\Models\Attendance\Schedule;
@@ -215,8 +215,8 @@ class LeaveAlgo
         foreach($datesInRange as $date){
             $dataSchedule = [
                 'employeeId' => $leave->employeeId,
-                'scheduleableId' => $leave->id,
-                'scheduleableType' => Leave::class,
+                'reference' => $leave->id,
+                'referenceType' => Leave::class,
                 'typeId' => ScheduleType::LEAVE_ID,
                 'date' => $date
             ];
