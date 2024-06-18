@@ -3,7 +3,6 @@
 namespace App\Algorithms\Employee;
 
 use Illuminate\Http\Request;
-use App\Models\Employee\User;
 use Illuminate\Support\Carbon;
 use App\Models\Employee\Employee;
 use Illuminate\Http\JsonResponse;
@@ -136,9 +135,6 @@ class ResignationAlgo
         Employee::where('id', $this->employee->id)->update([
             'statusId' => StatusEmployee::ACTIVE_ID
         ]);
-
-        $user = User::where('employeeId', $this->employee->id)->onlyTrashed()->first();
-        $user->restore();
     }
 
 }

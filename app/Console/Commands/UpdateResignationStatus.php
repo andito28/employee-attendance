@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
-use App\Models\Employee\User;
 use Illuminate\Console\Command;
 use App\Models\Employee\Employee;
 use Illuminate\Support\Facades\DB;
@@ -40,9 +39,6 @@ class UpdateResignationStatus extends Command
                 if ($employee) {
                     $employee->statusId = StatusEmployee::RESIGNED_ID;
                     $employee->save();
-
-                    $user = User::where('employeeId', $employee->id)->first();
-                    $user->delete();
                 }
             }
         });

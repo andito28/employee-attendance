@@ -24,15 +24,12 @@ class EmployeeParser extends BaseParser
             return null;
         }
 
-        $roleTrash = $data->user()->withTrashed()->first()->roleId;
-        $emailTrash =  $data->user()->withTrashed()->first()->email;
-
         return  [
             'id' => $data->id,
-            'role' => $data->user ? RoleUser::display($data->user->roleId) : RoleUser::display($roleTrash),
+            'role' => RoleUser::display($data->user->roleId),
             'name' => $data->name,
             'number' => $data->number,
-            'email' => $data->user ? $data->user->email: $emailTrash,
+            'email' => $data->user->email,
             'status' => StatusEmployee::display($data->statusId),
             'photo' => Storage::url($data->photo),
             'phone' => $data->phone,

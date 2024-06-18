@@ -165,7 +165,7 @@ class EmployeeAlgo
 
         $existingEmployeeResigned = Employee::where('statusId',StatusEmployee::RESIGNED_ID)
         ->whereHas('user', function($query) use ($request) {
-            $query->where('email', $request->email)->withTrashed();;
+            $query->where('email', $request->email);
         })->first();
 
         if ($existingEmployeeResigned) {

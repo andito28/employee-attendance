@@ -9,6 +9,7 @@ use App\Services\Constant\RoleUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\Constant\StatusEmployee;
 use App\Services\Constant\Activity\ActivityAction;
 
 class AuthAlgo
@@ -33,6 +34,11 @@ class AuthAlgo
                 }
 
                 $user = auth()->user();
+
+                if ($user->employee->statusId !== StatusEmployee::ACTIVE_ID) {
+                    errAuthentication("Akun karyawan tidak aktif");
+                }
+
                 $dataUser = [
                     'id' => $user->employee->id,
                     "name" => $user->employee->name,

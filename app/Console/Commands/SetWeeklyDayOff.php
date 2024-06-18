@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\Models\Employee\Employee;
-use App\Models\Schedule\Schedule;
+use App\Models\Attendance\Schedule;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\ScheduleType;
 
