@@ -2,11 +2,12 @@
 
 namespace App\Algorithms\Attendance;
 
+use App\Jobs\AssignSchedule;
 use Illuminate\Http\Request;
 use App\Models\Employee\Employee;
-use App\Models\Attendance\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\Attendance\Schedule;
 use App\Services\Constant\ScheduleType;
 use App\Models\Attendance\PublicHoliday;
 use App\Services\Constant\Activity\ActivityAction;
@@ -133,8 +134,11 @@ class PublicHolidayAlgo
                     'typeId' => ScheduleType::PUBLIC_HOLIDAY_ID,
                     'date' => $this->publicHoliday->date,
                 ];
-                Schedule::create($data + $createdBy);
+
+                $dataSchedule = array_merge($data,$createdBy);
+                AssignSchedule::dispatch($dataSchedule);
                 $this->publicHoliday->update(['assigned' => true]);
+
             }
         }
     }

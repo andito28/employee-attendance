@@ -3,6 +3,7 @@
 namespace App\Parser\Attendance;
 
 use GlobalXtreme\Parser\BaseParser;
+use App\Parser\Employee\EmployeeParser;
 
 class PublicHolidayParser extends BaseParser
 {
@@ -17,7 +18,12 @@ class PublicHolidayParser extends BaseParser
             return null;
         }
 
-        return parent::first($data);
+        return [
+            'name' => $data->name,
+            'date' => $data->date,
+            'createdBy' => $data->createdBy,
+            'createdByName' => $data->createdByName,
+        ];
     }
 
 }

@@ -3,8 +3,8 @@
 namespace App\Models\Employee;
 
 use App\Models\BaseModel;
-use App\Models\Leave\Leave;
 use App\Models\Employee\User;
+use App\Models\Attendance\Leave;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Parental;
 use App\Services\Constant\RoleUser;

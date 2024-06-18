@@ -17,7 +17,13 @@ class LeaveParser extends BaseParser
             return null;
         }
 
-        return parent::first($data);
+        return [
+            'id' => $data->id,
+            'fromDate' => $data->fromDate,
+            'toDate' => $data->toDate,
+            'notes' => $data->notes,
+            'employeeName' => $data->employee->name
+        ];
     }
 
 }
