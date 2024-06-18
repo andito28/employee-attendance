@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Web\PublicHoliday;
+namespace App\Http\Controllers\Web\Attendance;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\PublicHoliday\PublicHoliday;
-use App\Algorithms\PublicHoliday\PublicHolidayAlgo;
-use App\Http\Requests\PublicHoliday\PublicHolidayRequest;
+use App\Models\Attendance\PublicHoliday;
+use App\Algorithms\Attendance\PublicHolidayAlgo;
+use App\Http\Requests\Attendance\PublicHolidayRequest;
 
 class PublicHolidayController extends Controller
 {

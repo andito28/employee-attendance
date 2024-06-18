@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Models\PublicHoliday;
+namespace App\Models\Attendance;
 
 use App\Models\BaseModel;
-use App\Models\Schedule\Schedule;
 use App\Services\Constant\ScheduleType;
-use App\Parser\PublicHoliday\PublicHolidayParser;
-use App\Models\PublicHoliday\Traits\HasActivityPublicHolidayActivityProperty;
+use App\Parser\Attendance\PublicHolidayParser;
+use App\Models\Attendance\Traits\HasActivityPublicHolidayActivityProperty;
 
 class PublicHoliday extends BaseModel
 {
     use HasActivityPublicHolidayActivityProperty;
 
-    protected $table = 'public_holidays';
+    protected $table = 'attendance_public_holidays';
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -28,7 +27,7 @@ class PublicHoliday extends BaseModel
 
     public function schedules()
     {
-        return $this->morphMany(Schedule::class,'scheduleable','scheduleableType', 'scheduleableId', 'id');
+        return $this->morphMany(Schedule::class, 'scheduleable','referenceType', 'reference', 'id');
     }
 
 
@@ -49,7 +48,7 @@ class PublicHoliday extends BaseModel
 
     public function delete()
     {
-        $publicHolidaySchedule = Schedule::where('scheduleableId',$this->id)
+        $publicHolidaySchedule = Schedule::where('reference',$this->id)
         ->where('typeId',ScheduleType::PUBLIC_HOLIDAY_ID)
         ->exists();
 

@@ -35,7 +35,7 @@ class Shift extends BaseModel
 
     public function schedules()
     {
-        return $this->morphMany(Schedule::class, 'scheduleable','scheduleableType', 'scheduleableId', 'id');
+        return $this->morphMany(Schedule::class, 'scheduleable','referenceType', 'reference', 'id');
     }
 
 }

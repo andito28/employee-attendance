@@ -2,7 +2,7 @@
 
 use App\Services\Constant\RoleUser;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\PublicHoliday\PublicHolidayController;
+use App\Http\Controllers\Web\Attendance\PublicHolidayController;
 
 $administrator = RoleUser::ADMINISTRATOR_ID;
 

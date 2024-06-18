@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models\Schedule\Traits;
+namespace App\Models\Attendance\Traits;
 
 use App\Models\Activity\Traits\HasActivity;
 use App\Services\Constant\Activity\ActivityType;
+use App\Parser\Attendance\PublicHolidayParser;
 
-trait HasActivityScheduleProperty
+trait HasActivityPublicHolidayActivityProperty
 {
     use HasActivity;
 
@@ -15,7 +16,7 @@ trait HasActivityScheduleProperty
      */
     public function getActivityType(): string
     {
-        return ActivityType::SCHEDULE;
+        return ActivityType::PUBLIC_HOLIDAY;
     }
 
     /**
@@ -63,7 +64,7 @@ trait HasActivityScheduleProperty
     {
         $this->refresh();
 
-        return [];
+        return PublicHolidayParser::first($this);
     }
 
 }

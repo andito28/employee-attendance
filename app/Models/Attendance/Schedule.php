@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Models\Schedule;
+namespace App\Models\Attendance;
 
 use App\Models\BaseModel;
 use App\Models\Employee\Employee;
-use App\Parser\Schedule\ScheduleParser;
-use App\Models\Schedule\Traits\HasActivityScheduleProperty;
+use App\Parser\Attendance\ScheduleParser;
+use App\Models\Attendance\Traits\HasActivityScheduleProperty;
+
 
 class Schedule extends BaseModel
 {
     use HasActivityScheduleProperty;
-    // protected $table = '';
+
+    protected $table = 'attendance_schedules';
     protected $guarded = ['id'];
 
     protected $casts = [

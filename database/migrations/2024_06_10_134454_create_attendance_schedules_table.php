@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreignId('employeeId');
             $table->date('date');
             $table->integer('typeId');
-            $table->foreignId('scheduleableId')->nullable();
-            $table->string('scheduleableType')->nullable();
+            $table->foreignId('reference')->nullable();
+            $table->string('referenceType')->nullable();
             $this->getDefaultCreatedBy($table);
             $this->getDefaultTimestamps($table);
         });

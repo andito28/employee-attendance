@@ -4,11 +4,11 @@ namespace App\Algorithms\Attendance;
 
 use Illuminate\Http\Request;
 use App\Models\Employee\Employee;
-use App\Models\Schedule\Schedule;
+use App\Models\Attendance\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\ScheduleType;
-use App\Models\PublicHoliday\PublicHoliday;
+use App\Models\Attendance\PublicHoliday;
 use App\Services\Constant\Activity\ActivityAction;
 
 class PublicHolidayAlgo
@@ -24,7 +24,6 @@ class PublicHolidayAlgo
             DB::transaction(function () use ($request) {
 
                 $user = auth()->user();
-
                 $createdBy = [
                     'createdBy' =>  $user->employee->id,
                     'createdByName' =>  $user->employee->name
@@ -129,8 +128,8 @@ class PublicHolidayAlgo
             if (!$existingSchedule) {
                 $data = [
                     'employeeId' => $employee->id,
-                    'scheduleableId' => $this->publicHoliday->id,
-                    'scheduleableType' => PublicHoliday::class,
+                    'reference' => $this->publicHoliday->id,
+                    'referenceType' => PublicHoliday::class,
                     'typeId' => ScheduleType::PUBLIC_HOLIDAY_ID,
                     'date' => $this->publicHoliday->date,
                 ];

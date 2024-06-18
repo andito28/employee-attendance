@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Parser\Schedule;
+namespace App\Parser\Attendance;
 
-use App\Models\Leave\Leave;
-use App\Models\Shift\Shift;
+use App\Models\Attendance\Leave;
+use App\Models\Attendance\Shift;
 use GlobalXtreme\Parser\BaseParser;
 use App\Services\Constant\ScheduleType;
-use App\Models\PublicHoliday\PublicHoliday;
+use App\Models\Attendance\PublicHoliday;
 
 class ScheduleParser extends BaseParser
 {

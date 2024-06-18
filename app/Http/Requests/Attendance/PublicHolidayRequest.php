@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\PublicHoliday;
+namespace App\Http\Requests\Attendance;
 
 use GlobalXtreme\Validation\Support\FormRequest;
 
@@ -23,7 +23,7 @@ class PublicHolidayRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'date' => 'required|date|unique:public_holidays,date',
+            'date' => 'required|date|unique:attendance_public_holidays,date',
         ];
     }
 }
