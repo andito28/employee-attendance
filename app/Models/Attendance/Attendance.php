@@ -3,7 +3,7 @@
 namespace App\Models\Attendance;
 
 use App\Models\BaseModel;
-use App\Models\Shift\Shift;
+use App\Models\Attendance\Shift;
 use App\Models\Employee\Employee;
 use App\Models\Attendance\Traits\HasActivityAttendanceProperty;
 
@@ -11,7 +11,7 @@ class Attendance extends BaseModel
 {
     use HasActivityAttendanceProperty;
 
-    // protected $table = '';
+    protected $table = 'attendance_timesheets';
     protected $guarded = ['id'];
 
     protected $casts = [

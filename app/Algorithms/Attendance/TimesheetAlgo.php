@@ -3,8 +3,8 @@
 namespace App\Algorithms\Attendance;
 
 use Carbon\Carbon;
-use App\Models\Shift\Shift;
-use App\Models\Schedule\Schedule;
+use App\Models\Attendance\Shift;
+use App\Models\Attendance\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
