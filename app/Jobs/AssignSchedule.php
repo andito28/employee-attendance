@@ -3,8 +3,11 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use App\Models\Employee\Employee;
 use App\Models\Attendance\Schedule;
 use Illuminate\Queue\SerializesModels;
+use App\Services\Constant\ScheduleType;
+use App\Models\Attendance\PublicHoliday;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,13 +16,15 @@ class AssignSchedule implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $schedule;
+    protected $publicHoliday;
+    protected $createdBy;
     /**
      * Create a new job instance.
      */
-    public function __construct($schedule)
+    public function __construct($publicHoliday,$createdBy)
     {
-        $this->schedule = $schedule;
+        $this->publicHoliday = $publicHoliday;
+        $this->createdBy = $createdBy;
     }
 
     /**
@@ -27,6 +32,22 @@ class AssignSchedule implements ShouldQueue
      */
     public function handle(): void
     {
-        Schedule::create($this->schedule);
+        $existingSchedule = Schedule::where('employeeId',$this->publicHoliday->employeeId)
+        ->where('date', $this->publicHoliday->date)
+        ->exists();
+
+        $employees = Employee::all();
+        foreach ($employees as $employee) {
+            if (!$existingSchedule) {
+                $data = [
+                    'employeeId' => $employee->id,
+                    'reference' => $this->publicHoliday->id,
+                    'referenceType' => PublicHoliday::class,
+                    'typeId' => ScheduleType::PUBLIC_HOLIDAY_ID,
+                    'date' => $this->publicHoliday->date,
+                ];
+                Schedule::create($data + $this->createdBy);
+            }
+        }
     }
 }

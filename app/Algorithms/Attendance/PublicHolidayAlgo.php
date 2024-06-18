@@ -4,11 +4,9 @@ namespace App\Algorithms\Attendance;
 
 use App\Jobs\AssignSchedule;
 use Illuminate\Http\Request;
-use App\Models\Employee\Employee;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\Attendance\Schedule;
-use App\Services\Constant\ScheduleType;
 use App\Models\Attendance\PublicHoliday;
 use App\Services\Constant\Activity\ActivityAction;
 
@@ -122,33 +120,8 @@ class PublicHolidayAlgo
             errPublicHolidayIsAssign();
         }
 
-        $employees = Employee::all();
-        foreach ($employees as $employee) {
-
-            $existingSchedule = $this->checkEmployeeSchedule($employee->id);
-            if (!$existingSchedule) {
-                $data = [
-                    'employeeId' => $employee->id,
-                    'reference' => $this->publicHoliday->id,
-                    'referenceType' => PublicHoliday::class,
-                    'typeId' => ScheduleType::PUBLIC_HOLIDAY_ID,
-                    'date' => $this->publicHoliday->date,
-                ];
-
-                $dataSchedule = array_merge($data,$createdBy);
-                AssignSchedule::dispatch($dataSchedule);
-                $this->publicHoliday->update(['assigned' => true]);
-
-            }
-        }
-    }
-
-    private function checkEmployeeSchedule($employeeId)
-    {
-        $existingSchedule = Schedule::where('employeeId', $employeeId)
-        ->where('date', $this->publicHoliday->date)
-        ->exists();
-        return $existingSchedule;
+        AssignSchedule::dispatch($this->publicHoliday,$createdBy);
+        $this->publicHoliday->update(['assigned' => true]);
     }
 
 }
