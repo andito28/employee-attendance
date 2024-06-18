@@ -11,6 +11,7 @@ use App\Services\Constant\RoleUser;
 use App\Models\Component\Department;
 use App\Models\Employee\Resignation;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Attendance\Attendance;
 use App\Models\Component\CompanyOffice;
 use App\Parser\Employee\EmployeeParser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -72,7 +73,7 @@ class Employee extends BaseModel
 
     public function attendances()
     {
-        // return $this->hasMany(Attendance::class, 'employeeId');
+        return $this->hasMany(Attendance::class, 'employeeId');
     }
 
 

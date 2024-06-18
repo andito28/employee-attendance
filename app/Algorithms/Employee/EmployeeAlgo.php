@@ -86,7 +86,7 @@ class EmployeeAlgo
 
                 $this->employee->setOldActivityPropertyAttributes(ActivityAction::DELETE);
 
-                // DeleteAttendances::dispatch($this->employee);
+                DeleteAttendances::dispatch($this->employee);
 
                 $this->employee->delete();
 

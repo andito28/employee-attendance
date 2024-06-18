@@ -19,7 +19,7 @@ class DeleteAttendances implements ShouldQueue
      */
     public function __construct($employee)
     {
-        $this->employee = $employe;
+        $this->employee = $employee;
     }
 
     /**

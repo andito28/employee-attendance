@@ -20,5 +20,12 @@ Route::prefix("employees")
         Route::patch('{id}/resignation/reverse-status', [EmployeeController::class, 'reverseResignationStatus']);
 });
 
-Route::patch('employees/reset-password', [EmployeeController::class, 'resetPassword'])
-->middleware(['auth.api', "role:$administrator,$employee"]);
+
+Route::prefix("employees")
+    ->middleware(["auth.api","role:$administrator,$employee"])
+    ->group(function () {
+
+        Route::get('attendances', [EmployeeController::class, 'getAttendances']);
+        Route::patch('reset-password', [EmployeeController::class, 'resetPassword']);
+});
+
