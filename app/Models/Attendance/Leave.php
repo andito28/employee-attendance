@@ -4,8 +4,8 @@ namespace App\Models\Attendance;
 
 use App\Models\BaseModel;
 use App\Models\Employee\Employee;
-use App\Parser\Leave\LeaveParser;
 use App\Models\Attendance\Schedule;
+use App\Parser\Attendance\LeaveParser;
 use App\Services\Constant\ScheduleType;
 use App\Models\Attendance\Traits\HasActivityLeaveProperty;
 

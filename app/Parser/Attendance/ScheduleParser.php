@@ -46,7 +46,7 @@ class ScheduleParser extends BaseParser
 
             $result[$employeeIndexMap[$employeeId]]['mapping'][] = [
                 'date' => $schedule->date,
-                'schedule' => self::getSchedule($schedule->typeId,$schedule->scheduleableId)
+                'schedule' => self::getSchedule($schedule->typeId,$schedule->reference)
             ];
         }
         return $result;

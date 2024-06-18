@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Parser\Leave;
+namespace App\Parser\Attendance;
 
 use GlobalXtreme\Parser\BaseParser;
 

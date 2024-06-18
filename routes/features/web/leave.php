@@ -3,7 +3,6 @@
 use App\Services\Constant\RoleUser;
 use App\Http\Controllers\Web\Attendance\LeaveController;
 
-
 $administrator = RoleUser::ADMINISTRATOR_ID;
 $employee = RoleUser::EMPLOYEE_ID;
 

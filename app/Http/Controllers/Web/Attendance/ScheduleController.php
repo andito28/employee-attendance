@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Web\Schedule;
+namespace App\Http\Controllers\Web\Attendance;
 
 use Illuminate\Http\Request;
-use App\Models\Schedule\Schedule;
+use App\Models\Attendance\Schedule;
 use App\Http\Controllers\Controller;
-use App\Parser\Schedule\ScheduleParser;
-use App\Algorithms\Schedule\ScheduleAlgo;
+use App\Parser\Attendance\ScheduleParser;
+use App\Algorithms\Attendance\ScheduleAlgo;
 
 class ScheduleController extends Controller
 {

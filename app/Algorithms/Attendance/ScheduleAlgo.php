@@ -2,15 +2,15 @@
 
 namespace App\Algorithms\Attendance;
 
-use App\Models\Leave\Leave;
-use App\Models\Shift\Shift;
+use App\Models\Attendance\Leave;
+use App\Models\Attendance\Shift;
 use Illuminate\Http\Request;
-use App\Models\Schedule\Schedule;
+use App\Models\Attendance\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Constant\ScheduleType;
-use App\Models\PublicHoliday\PublicHoliday;
+use App\Models\Attendance\PublicHoliday;
 use App\Services\Constant\Activity\ActivityAction;
 
 class ScheduleAlgo
@@ -62,8 +62,8 @@ class ScheduleAlgo
 
         $dataInput = [
             'typeId' => $request->type,
-            'scheduleableType' =>  $scheduleType['model'],
-            'scheduleableId' => $request->reference,
+            'referenceType' =>  $scheduleType['model'],
+            'reference' => $request->reference,
         ];
 
         $existingSchedule = Schedule::where($attribute)

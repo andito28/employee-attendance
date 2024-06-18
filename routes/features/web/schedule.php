@@ -2,8 +2,7 @@
 
 use App\Services\Constant\RoleUser;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\Schedule\ScheduleController;
-
+use App\Http\Controllers\Web\Attendance\ScheduleController;
 
 $administrator = RoleUser::ADMINISTRATOR_ID;
 
