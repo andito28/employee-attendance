@@ -3,6 +3,7 @@
 namespace App\Parser\Attendance;
 
 use GlobalXtreme\Parser\BaseParser;
+use App\Services\Constant\LeaveStatus;
 
 class LeaveParser extends BaseParser
 {
@@ -22,6 +23,7 @@ class LeaveParser extends BaseParser
             'fromDate' => $data->fromDate,
             'toDate' => $data->toDate,
             'notes' => $data->notes,
+            'status' => LeaveStatus::display($data->statusId),
             'employeeName' => $data->employee->name
         ];
     }
