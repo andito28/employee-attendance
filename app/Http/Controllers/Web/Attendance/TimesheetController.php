@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Web\Attendance;
 
 use Illuminate\Http\Request;
+use App\Mail\TimesheetExportMail;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Jobs\SendEmailTimesheetExcelJob;
 use App\Algorithms\Attendance\TimesheetAlgo;
 
 
@@ -19,9 +22,11 @@ class TimesheetController extends Controller
         return $algo->clockOut();
     }
 
-    public function generateAttendanceExcel()
+    public function generateAttendanceExcel(Request $request)
     {
-
+        $email = $request->user()->email;
+        SendEmailTimesheetExcelJob::dispatch($email);
+        return success();
     }
 
     public function generateAttendancePdf()

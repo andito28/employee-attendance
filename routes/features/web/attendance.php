@@ -14,5 +14,6 @@ Route::prefix("timesheets")
 
         Route::post('clock-in', [TimesheetController::class, 'clockIn']);
         Route::post('clock-out', [TimesheetController::class, 'clockout']);
+        Route::get('generate-excel', [TimesheetController::class, 'generateAttendanceExcel']);
 
 });
