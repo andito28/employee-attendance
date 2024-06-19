@@ -12,7 +12,7 @@ Route::prefix("timesheets")
     ->middleware(["auth.api","role:$administrator,$employee"])
     ->group(function () {
 
-    Route::post('clock-in', [TimesheetController::class, 'clockIn']);
-    Route::post('clock-out', [TimesheetController::class, 'clockout']);
+        Route::post('clock-in', [TimesheetController::class, 'clockIn']);
+        Route::post('clock-out', [TimesheetController::class, 'clockout']);
 
 });

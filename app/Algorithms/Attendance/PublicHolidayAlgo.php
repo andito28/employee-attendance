@@ -2,8 +2,8 @@
 
 namespace App\Algorithms\Attendance;
 
-use App\Jobs\AssignSchedule;
 use Illuminate\Http\Request;
+use App\Jobs\AssignScheduleJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\Attendance\Schedule;
@@ -120,7 +120,7 @@ class PublicHolidayAlgo
             errPublicHolidayIsAssign();
         }
 
-        AssignSchedule::dispatch($this->publicHoliday,$createdBy);
+        AssignScheduleJob::dispatch($this->publicHoliday,$createdBy);
         $this->publicHoliday->update(['assigned' => true]);
     }
 

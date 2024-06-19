@@ -8,18 +8,16 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class DeleteAttendances implements ShouldQueue
+class SendEmailExcelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    protected $employee;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($employee)
+    public function __construct()
     {
-        $this->employee = $employee;
+        //
     }
 
     /**
@@ -27,6 +25,6 @@ class DeleteAttendances implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->employee->attendances()->delete();
+        //
     }
 }

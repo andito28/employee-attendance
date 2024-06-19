@@ -5,10 +5,10 @@ namespace App\Algorithms\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Employee\User;
-use App\Jobs\DeleteAttendances;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Employee;
 use Illuminate\Http\JsonResponse;
+use App\Jobs\DeleteAttendancesJob;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\RoleUser;
 use App\Models\Employee\Resignation;
@@ -86,7 +86,7 @@ class EmployeeAlgo
 
                 $this->employee->setOldActivityPropertyAttributes(ActivityAction::DELETE);
 
-                DeleteAttendances::dispatch($this->employee);
+                DeleteAttendancesJob::dispatch($this->employee);
 
                 $this->employee->delete();
 
