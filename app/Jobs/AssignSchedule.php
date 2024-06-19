@@ -32,12 +32,13 @@ class AssignSchedule implements ShouldQueue
      */
     public function handle(): void
     {
-        $existingSchedule = Schedule::where('employeeId',$this->publicHoliday->employeeId)
-        ->where('date', $this->publicHoliday->date)
-        ->exists();
-
         $employees = Employee::all();
         foreach ($employees as $employee) {
+
+            $existingSchedule = Schedule::where('employeeId', $employee->id)
+            ->where('date', $this->publicHoliday->date)
+            ->exists();
+
             if (!$existingSchedule) {
                 $data = [
                     'employeeId' => $employee->id,
@@ -49,5 +50,6 @@ class AssignSchedule implements ShouldQueue
                 Schedule::create($data + $this->createdBy);
             }
         }
+
     }
 }
