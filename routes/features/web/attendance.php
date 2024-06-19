@@ -9,11 +9,18 @@ $administrator = RoleUser::ADMINISTRATOR_ID;
 $employee = RoleUser::EMPLOYEE_ID;
 
 Route::prefix("timesheets")
-    ->middleware(["auth.api","role:$administrator,$employee"])
-    ->group(function () {
+    ->middleware(["auth.api"])
+    ->group(function () use ($administrator, $employee) {
 
-        Route::post('clock-in', [TimesheetController::class, 'clockIn']);
-        Route::post('clock-out', [TimesheetController::class, 'clockout']);
-        Route::get('generate-excel', [TimesheetController::class, 'generateAttendanceExcel']);
+        // Routes accessible only by administrators
+        Route::middleware("role:$administrator")->group(function () {
+            Route::get('generate-excel', [TimesheetController::class, 'generateAttendanceExcel']);
+        });
 
-});
+        // Routes accessible only by administrators and employee
+        Route::middleware("role:$administrator,$employee")->group(function () {
+            Route::post('clock-in', [TimesheetController::class, 'clockIn']);
+            Route::post('clock-out', [TimesheetController::class, 'clockout']);
+        });
+
+    });

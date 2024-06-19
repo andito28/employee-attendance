@@ -9,9 +9,7 @@ $administrator = RoleUser::ADMINISTRATOR_ID;
 Route::prefix("schedules")
     ->middleware(["auth.api","role:$administrator"])
     ->group(function () {
-
         Route::get('', [ScheduleController::class, 'get']);
         Route::post('', [ScheduleController::class, 'create']);
-
-});
+    });
 
