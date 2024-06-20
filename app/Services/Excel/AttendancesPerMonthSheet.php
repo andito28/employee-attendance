@@ -42,9 +42,9 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
 
         return [
             $employeeName,
+            $attendance->shift->name,
             $attendance->clockIn,
             $attendance->clockOut,
-            $attendance->shift->name,
             AttendanceStatus::display($attendance->statusId),
         ];
     }
@@ -56,9 +56,9 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
     {
         return [
             'EMPLOYEE',
+            'SHIFT',
             'CLOCK IN',
             'CLOCK OUT',
-            'SHIFT',
             'STATUS',
         ];
     }
