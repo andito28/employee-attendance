@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Jobs\SendEmailTimesheetExcelJob;
 use App\Algorithms\Attendance\TimesheetAlgo;
+use App\Services\Excel\GenerateTimesheetExcel;
 
 
 class TimesheetController extends Controller
@@ -25,8 +26,10 @@ class TimesheetController extends Controller
     public function generateAttendanceExcel(Request $request)
     {
         $email = $request->user()->email;
-        SendEmailTimesheetExcelJob::dispatch($email);
-        return success();
+        $year = $request->year;
+        // SendEmailTimesheetExcelJob::dispatch($email);
+        return (new GenerateTimesheetExcel($year))->download('invoices.xlsx');
+        // return success();
     }
 
     public function generateAttendancePdf()
