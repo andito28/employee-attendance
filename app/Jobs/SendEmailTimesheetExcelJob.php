@@ -17,13 +17,15 @@ class SendEmailTimesheetExcelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $year;
     protected $email;
     /**
      * Create a new job instance.
      */
-    public function __construct($email)
+    public function __construct($year,$email)
     {
         $this->email = $email;
+        $this->year = $year;
     }
 
     /**
@@ -38,7 +40,7 @@ class SendEmailTimesheetExcelJob implements ShouldQueue
             Storage::disk('local')->makeDirectory($directory);
         }
 
-        Excel::store(new GenerateTimesheetExcel, $directory . '/' . $filename, 'local');
+        Excel::store(new GenerateTimesheetExcel($this->year), $directory . '/' . $filename, 'local');
 
         $filePath = storage_path('app/'  . $directory . '/' . $filename);
 

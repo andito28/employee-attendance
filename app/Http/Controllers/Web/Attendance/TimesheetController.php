@@ -27,9 +27,7 @@ class TimesheetController extends Controller
     {
         $email = $request->user()->email;
         $year = $request->year;
-        // SendEmailTimesheetExcelJob::dispatch($email);
-        return (new GenerateTimesheetExcel($year))->download('invoices.xlsx');
-        // return success();
+        SendEmailTimesheetExcelJob::dispatch($year,$email);
     }
 
     public function generateAttendancePdf()
