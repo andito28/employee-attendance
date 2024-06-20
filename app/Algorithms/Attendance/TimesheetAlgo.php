@@ -88,6 +88,7 @@ class TimesheetAlgo
     private function validateClockIn($employeeId,$currentTime)
     {
         $schedule = Schedule::where('employeeId',$employeeId)
+        ->whereNot('typeId', '=', ScheduleType::SHIFT_ID)
         ->whereDate('date',$currentTime)->first();
         if($schedule){
             errScheduleAlreadyExist(ScheduleType::display($schedule->typeId));
@@ -117,7 +118,7 @@ class TimesheetAlgo
         ->whereDate('date',$currentTime)
         ->first();
 
-        $shift = $scheduleShift ? Shift::find($scheduleShift->scheduleableId) : Shift::first();
+        $shift = $scheduleShift ? Shift::find($scheduleShift->reference) : Shift::first();
 
         return $shift;
     }
