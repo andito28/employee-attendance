@@ -603,15 +603,6 @@
                     <th>Clock Out</th>
                     <th>Status</th>
                 </tr>
-                {{-- @foreach ($attendances as $value)
-                    <tr>
-                        <td>{{ $value['name'] }}</td>
-                        <td>{{ $value['clockIn'] }}</td>
-                        <td>{{ $value['clockOut'] }}</td>
-                        <td>{{ $value['shift'] }}</td>
-                        <td>{{ $value['status'] }}</td>
-                    </tr>
-                @endforeach --}}
                 @foreach ($attendances as $employeeId => $records)
                     @foreach ($records as $index => $record)
                         <tr>
