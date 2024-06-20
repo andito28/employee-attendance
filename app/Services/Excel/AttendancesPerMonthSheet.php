@@ -13,6 +13,7 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
 {
     private $month;
     private $year;
+    private $processedEmployees = [];
 
     public function __construct(int $year, int $month)
     {
@@ -32,8 +33,15 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
 
     public function map($attendance): array
     {
+        if (in_array($attendance->employee->id, $this->processedEmployees)) {
+            $employeeName = '';
+        } else {
+            $employeeName = $attendance->employee->name;
+            $this->processedEmployees[] = $attendance->employee->id;
+        }
+
         return [
-            $attendance->employee->name,
+            $employeeName,
             $attendance->clockIn,
             $attendance->clockOut,
             $attendance->shift->name,
