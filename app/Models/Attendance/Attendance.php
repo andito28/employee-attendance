@@ -29,4 +29,16 @@ class Attendance extends BaseModel
         return $this->belongsTo(Shift::class,'shiftId');
     }
 
+    /** --- SCOPES --- */
+
+    public function scopeFilterYearMonth($query, $request)
+    {
+        return $query->where(function ($query) use ($request) {
+
+            return  $query->whereYear('createdAt', $request->year)
+                    ->whereMonth('createdAt', $request->month);
+
+        });
+    }
+
 }

@@ -15,6 +15,7 @@ Route::prefix("timesheets")
         // Routes accessible only by administrators
         Route::middleware("role:$administrator")->group(function () {
             Route::get('generate-excel', [TimesheetController::class, 'generateAttendanceExcel']);
+            Route::get('generate-pdf', [TimesheetController::class, 'generateAttendancePdf']);
         });
 
         // Routes accessible only by administrators and employee

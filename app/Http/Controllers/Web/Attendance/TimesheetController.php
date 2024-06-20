@@ -7,6 +7,7 @@ use App\Mail\TimesheetExportMail;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Jobs\SendEmailTimesheetExcelJob;
+use App\Services\PDF\GenerateTimesheetPdf;
 use App\Algorithms\Attendance\TimesheetAlgo;
 use App\Services\Excel\GenerateTimesheetExcel;
 
@@ -31,8 +32,9 @@ class TimesheetController extends Controller
         return success();
     }
 
-    public function generateAttendancePdf()
+    public function generateAttendancePdf(Request $request)
     {
-
+        $pdf = new GenerateTimesheetPdf();
+        return $pdf->generate($request);
     }
 }
