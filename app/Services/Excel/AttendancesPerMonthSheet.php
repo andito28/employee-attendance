@@ -28,7 +28,8 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
     {
         return Attendance::query()->with('employee', 'shift')
                 ->whereYear('createdAt', $this->year)
-                ->whereMonth('createdAt', $this->month);
+                ->whereMonth('createdAt', $this->month)
+                ->orderBy('employeeId');
     }
 
     public function map($attendance): array
@@ -41,6 +42,7 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
             AttendanceStatus::display($attendance->statusId),
         ];
     }
+
 
     /**
      * @return array
