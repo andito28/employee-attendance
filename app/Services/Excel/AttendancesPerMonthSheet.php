@@ -33,15 +33,8 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
 
     public function map($attendance): array
     {
-        if (in_array($attendance->employee->id, $this->processedEmployees)) {
-            $employeeName = '';
-        } else {
-            $employeeName = $attendance->employee->name;
-            $this->processedEmployees[] = $attendance->employee->id;
-        }
-
         return [
-            $employeeName,
+            $attendance->employee->name,
             $attendance->shift->name,
             $attendance->clockIn,
             $attendance->clockOut,
