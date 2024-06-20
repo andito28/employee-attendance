@@ -9,11 +9,10 @@ class GenerateTimesheetPdf
 {
     public function generate($request)
     {
-        $attendanceRecords = Attendance::FilterYearMonth($request)->get();
+        $attendanceRecords = Attendance::FilterYearMonth($request)->orderBy('employeeId')->get();
 
         $mappedAttendances = $attendanceRecords->map(function($attendance) {
             return [
-                'employeeId' => $attendance->employeeId,
                 'name' => $attendance->employee->name,
                 'shift' => $attendance->shift->name,
                 'clockIn' => $attendance->clockIn,
@@ -22,12 +21,11 @@ class GenerateTimesheetPdf
             ];
         });
 
-        $groupedAttendances = $mappedAttendances->groupBy('employeeId');
 
         $data = [
             'title' => 'Report Timesheet',
             'date' => "Bulan ".$request->month.", Tahun ".$request->year,
-            'attendances' =>  $groupedAttendances
+            'attendances' =>  $mappedAttendances
         ];
 
         $pdf = PDF::loadView('pdf.reportTimesheet', $data);

@@ -603,18 +603,14 @@
                     <th>Clock Out</th>
                     <th>Status</th>
                 </tr>
-                @foreach ($attendances as $employeeId => $records)
-                    @foreach ($records as $index => $record)
-                        <tr>
-                            @if ($index == 0)
-                                <td rowspan="{{ $records->count() }}">{{ $record['name'] }}</td>
-                            @endif
-                            <td>{{ $record['shift'] }}</td>
-                            <td>{{ $record['clockIn'] }}</td>
-                            <td>{{ $record['clockOut'] }}</td>
-                            <td>{{ $record['status'] }}</td>
-                        </tr>
-                    @endforeach
+                @foreach ($attendances as $attendance)
+                    <tr>
+                        <td>{{ $attendance['name'] }}</td>
+                        <td>{{ $attendance['shift'] }}</td>
+                        <td>{{ $attendance['clockIn'] }}</td>
+                        <td>{{ $attendance['clockOut'] }}</td>
+                        <td>{{ $attendance['status'] }}</td>
+                    </tr>
                 @endforeach
             </table>
             <br>
