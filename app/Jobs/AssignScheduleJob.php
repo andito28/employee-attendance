@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use App\Models\Employee\Employee;
 use App\Models\Attendance\Schedule;
 use Illuminate\Queue\SerializesModels;
-use App\Services\Constant\ScheduleType;
+use App\Services\Constant\Attendance\ScheduleType;
 use App\Models\Attendance\PublicHoliday;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -2,14 +2,14 @@
 namespace App\Services\PDF;
 
 use PDF;
-use App\Models\Attendance\Attendance;
-use App\Services\Constant\AttendanceStatus;
+use App\Models\Attendance\Timesheet;
+use App\Services\Constant\Attendance\TimesheetStatus;
 
 class GenerateTimesheetPdf
 {
     public function generate($request)
     {
-        $attendanceRecords = Attendance::FilterYearMonth($request)->orderBy('employeeId')->get();
+        $attendanceRecords = Timesheet::FilterYearMonth($request)->orderBy('employeeId')->get();
 
         $mappedAttendances = $attendanceRecords->map(function($attendance) {
             return [
@@ -17,7 +17,7 @@ class GenerateTimesheetPdf
                 'shift' => $attendance->shift->name,
                 'clockIn' => $attendance->clockIn,
                 'clockOut' => $attendance->clockOut,
-                'status' => AttendanceStatus::display($attendance->statusId)
+                'status' => TimesheetStatus::display($attendance->statusId)
             ];
         });
 

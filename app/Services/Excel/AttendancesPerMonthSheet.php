@@ -2,10 +2,10 @@
 
 namespace App\Services\Excel;
 
-use App\Models\Attendance\Attendance;
+use App\Models\Attendance\Timesheet;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use App\Services\Constant\AttendanceStatus;
+use App\Services\Constant\Attendance\TimesheetStatus;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -26,7 +26,7 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
      */
     public function query()
     {
-        return Attendance::query()->with('employee', 'shift')
+        return Timesheet::query()->with('employee', 'shift')
                 ->whereYear('createdAt', $this->year)
                 ->whereMonth('createdAt', $this->month)
                 ->orderBy('employeeId');
@@ -39,7 +39,7 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
             $attendance->shift->name,
             $attendance->clockIn,
             $attendance->clockOut,
-            AttendanceStatus::display($attendance->statusId),
+            TimesheetStatus::display($attendance->statusId),
         ];
     }
 
