@@ -132,9 +132,9 @@ class TimesheetAlgo
     private function saveAttendanceClockOut($employeeId, $currentTime, $shift){
 
         $now = Carbon::now();
-        $yesterday = $now->subDay();
+        $oneDayAgo = $now->subDay();
         $attendance = Timesheet::where('employeeId', $employeeId)
-        ->where('clockIn', '>=', $yesterday)
+        ->where('clockIn', '>=', $oneDayAgo)
         ->where('shiftId',$shift->id)
         ->latest('clockIn')
         ->first();
