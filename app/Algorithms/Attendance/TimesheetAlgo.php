@@ -180,19 +180,28 @@ class TimesheetAlgo
         return $attendance;
     }
 
-    private function availableAttendance($shift,$currentTime,$timesheet)
+    private function availableAttendance($shift, $currentTime, $timesheet)
     {
         $currentDateTime = Carbon::parse($currentTime);
         $startTime = Carbon::parse($shift->startTime);
         $endTime = Carbon::parse($shift->endTime);
 
-        $clockInStart = $startTime->copy()->subHours(2);
+        if ($endTime < $startTime) {
+            $endTime->addDay();
+        }
+
+        // dd($endTime);
+
         $midPoint = $startTime->copy()->addHours($startTime->diffInHours($endTime) / 2);
 
-        $availableClockIn = $currentDateTime->between($clockInStart, $midPoint);
-        $availableClockOut = $currentDateTime->greaterThanOrEqualTo($midPoint);
+        if ($timesheet == 'clockin') {
+            $available = $currentDateTime->between($startTime->copy()->subHours(2), $midPoint);
+        } else {
+            $available = $midPoint->greaterThan($currentDateTime);
+        }
 
-        return ($timesheet == 'clockin') ? $availableClockIn : $availableClockOut;
+        return $available;
     }
+
 
 }
