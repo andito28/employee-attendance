@@ -27,8 +27,11 @@ class TimesheetAlgo
 
                 $user = auth()->user();
                 $currentTime = Carbon::now();
-
                 $shift = $this->validateClockIn($user->employee->id,$currentTime);
+
+                if(!$this->availableAttendance($shift,$currentTime,'clockin')){
+                    errAttendanceCannotAbsent();
+                }
 
                 $dataInput = [
                     'employeeId' => $user->employee->id,
@@ -59,18 +62,21 @@ class TimesheetAlgo
 
                 $user = auth()->user();
                 $currentTime = Carbon::now();
-
-                $isAttendance = Attendance::where('employeeId',$user->employee->id)
-                ->whereDate('clockOut',$currentTime)->exists();
-
-                if($isAttendance){
-                    errAttendanceAlreadyExist();
-                }
-
                 $shift = $this->getScheduleShift($user->employee->id, $currentTime);
 
-                $this->attendance = $this->saveAttendanceClockOut($user->employee->id,
-                $currentTime, $shift);
+                if(!$this->availableAttendance($shift,$currentTime,'clockout')){
+                    errAttendanceCannotAbsent();
+                }
+
+                $isAttendance = Attendance::where('employeeId',$user->employee->id)
+                    ->whereDate('clockOut',$currentTime)->exists();
+
+                    if($isAttendance){
+                        errAttendanceAlreadyExist();
+                    }
+
+                    $this->attendance = $this->saveAttendanceClockOut($user->employee->id,
+                    $currentTime, $shift);
 
             });
 
@@ -79,8 +85,6 @@ class TimesheetAlgo
             return exception($exception);
         }
     }
-
-
 
 
     /** --- SUB FUNCTIONS --- */
@@ -176,5 +180,19 @@ class TimesheetAlgo
         return $attendance;
     }
 
+    private function availableAttendance($shift,$currentTime,$timesheet)
+    {
+        $currentDateTime = Carbon::parse($currentTime);
+        $startTime = Carbon::parse($shift->startTime);
+        $endTime = Carbon::parse($shift->endTime);
+
+        $clockInStart = $startTime->copy()->subHours(2);
+        $midPoint = $startTime->copy()->addHours($startTime->diffInHours($endTime) / 2);
+
+        $availableClockIn = $currentDateTime->between($clockInStart, $midPoint);
+        $availableClockOut = $currentDateTime->greaterThanOrEqualTo($midPoint);
+
+        return ($timesheet == 'clockin') ? $availableClockIn : $availableClockOut;
+    }
 
 }

@@ -7,5 +7,12 @@ if (!function_exists("errAttendanceAlreadyExist")) {
     }
 }
 
+if (!function_exists("errAttendanceCannotAbsent():")) {
+    function errAttendanceCannotAbsent($internalMsg = "")
+    {
+        error(409, "cannot be absent!", $internalMsg);
+    }
+}
+
 
 
