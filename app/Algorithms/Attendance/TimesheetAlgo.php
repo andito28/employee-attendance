@@ -190,8 +190,6 @@ class TimesheetAlgo
             $endTime->addDay();
         }
 
-        // dd($endTime);
-
         $midPoint = $startTime->copy()->addHours($startTime->diffInHours($endTime) / 2);
 
         if ($timesheet == 'clockin') {
