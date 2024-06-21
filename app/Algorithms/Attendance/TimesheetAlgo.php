@@ -69,7 +69,9 @@ class TimesheetAlgo
                 }
 
                 $isAttendance = Attendance::where('employeeId',$user->employee->id)
-                    ->whereDate('clockOut',$currentTime)->exists();
+                    ->whereDate('clockOut',$currentTime)
+                    ->where('shiftId',$shift->id)
+                    ->exists();
 
                     if($isAttendance){
                         errAttendanceAlreadyExist();
@@ -195,7 +197,7 @@ class TimesheetAlgo
         if ($timesheet == 'clockin') {
             $available = $currentDateTime->between($startTime->copy()->subHours(2), $midPoint);
         } else {
-            $available = $midPoint->greaterThan($currentDateTime);
+            $available = ($currentDateTime > $midPoint);
         }
 
         return $available;
