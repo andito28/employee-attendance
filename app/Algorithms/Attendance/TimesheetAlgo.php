@@ -8,14 +8,14 @@ use App\Models\Attendance\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Attendance\Attendance;
-use App\Services\Constant\ScheduleType;
-use App\Services\Constant\AttendanceStatus;
+use App\Models\Attendance\Timesheet;
+use App\Services\Constant\Attendance\ScheduleType;
+use App\Services\Constant\Attendance\TimesheetStatus;
 use App\Services\Constant\Activity\ActivityAction;
 
 class TimesheetAlgo
 {
-    public function __construct(public ? Attendance $attendance = null )
+    public function __construct(public ? Timesheet $attendance = null )
     {
     }
 
@@ -37,10 +37,10 @@ class TimesheetAlgo
                     'employeeId' => $user->employee->id,
                     'shiftId' => $shift->id,
                     'clockIn' => $currentTime,
-                    'statusId' => AttendanceStatus::NO_CLOCK_OUT_ID
+                    'statusId' => TimesheetStatus::NO_CLOCK_OUT_ID
                 ];
 
-                $this->attendance = Attendance::create($dataInput);
+                $this->attendance = Timesheet::create($dataInput);
 
                 $this->attendance->setActivityPropertyAttributes(ActivityAction::CREATE)
                         ->saveActivity("Enter new " . $this->attendance->getTable() . ":  [$this->attendance->id]");
@@ -68,7 +68,7 @@ class TimesheetAlgo
                     errAttendanceCannotAbsent();
                 }
 
-                $isAttendance = Attendance::where('employeeId',$user->employee->id)
+                $isAttendance = Timesheet::where('employeeId',$user->employee->id)
                     ->whereDate('clockOut',$currentTime)
                     ->where('shiftId',$shift->id)
                     ->exists();
@@ -100,7 +100,7 @@ class TimesheetAlgo
             errScheduleAlreadyExist(ScheduleType::display($schedule->typeId));
         }
 
-        $isAttendanceExist = Attendance::where('employeeId', $employeeId)
+        $isAttendanceExist = Timesheet::where('employeeId', $employeeId)
         ->where(function ($query) use ($currentTime) {
             $query->whereDate('clockIn', $currentTime)
         ->orWhere(function ($query) use ($currentTime) {
@@ -133,7 +133,7 @@ class TimesheetAlgo
 
         $now = Carbon::now();
         $yesterday = $now->subDay();
-        $attendance = Attendance::where('employeeId', $employeeId)
+        $attendance = Timesheet::where('employeeId', $employeeId)
         ->where('clockIn', '>=', $yesterday)
         ->where('shiftId',$shift->id)
         ->latest('clockIn')
@@ -147,11 +147,11 @@ class TimesheetAlgo
 
     private function createNoClockInAttendance($employeeId,$currentTime,$shift){
 
-        $attendance = Attendance::create([
+        $attendance = Timesheet::create([
             'employeeId' => $employeeId,
             'shiftId' => $shift->id,
             'clockOut' => $currentTime,
-            'statusId' => AttendanceStatus::NO_CLOCK_IN_ID,
+            'statusId' => TimesheetStatus::NO_CLOCK_IN_ID,
         ]);
 
         $attendance->setActivityPropertyAttributes(ActivityAction::CREATE)
@@ -165,9 +165,9 @@ class TimesheetAlgo
         $timeClockIn = Carbon::parse($attendance->clockIn)->toTimeString();
 
         if($attendance->clockIn == null){
-            $attendanceStatus = AttendanceStatus::NO_CLOCK_IN_ID;
+            $attendanceStatus = TimesheetStatus::NO_CLOCK_IN_ID;
         }else{
-            $attendanceStatus = $timeClockIn <= $startTimeShift ? AttendanceStatus::VALID_ID : AttendanceStatus::LATE_ID;
+            $attendanceStatus = $timeClockIn <= $startTimeShift ? TimesheetStatus::VALID_ID : TimesheetStatus::LATE_ID;
         }
 
         $attendance->setOldActivityPropertyAttributes(ActivityAction::UPDATE);

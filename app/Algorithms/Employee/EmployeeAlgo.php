@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use App\Services\Constant\StatusEmployee;
+use App\Services\Constant\Employee\StatusEmployee;
 use App\Services\Number\Generator\EmployeeNumber;
 use App\Services\Constant\Activity\ActivityAction;
 use App\Http\Requests\Employee\CreateEmployeeRequest;

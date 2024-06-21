@@ -8,10 +8,10 @@ use App\Models\Attendance\Leave;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Parental;
 use App\Services\Constant\RoleUser;
+use App\Models\Attendance\Timesheet;
 use App\Models\Component\Department;
 use App\Models\Employee\Resignation;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Attendance\Attendance;
 use App\Models\Component\CompanyOffice;
 use App\Parser\Employee\EmployeeParser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -71,9 +71,9 @@ class Employee extends BaseModel
         return $this->hasMany(Leave::class, 'employeeId');
     }
 
-    public function attendances()
+    public function timesheet()
     {
-        return $this->hasMany(Attendance::class, 'employeeId');
+        return $this->hasMany(Timesheet::class, 'employeeId');
     }
 
 

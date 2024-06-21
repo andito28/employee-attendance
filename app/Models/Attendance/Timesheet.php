@@ -7,7 +7,7 @@ use App\Models\Attendance\Shift;
 use App\Models\Employee\Employee;
 use App\Models\Attendance\Traits\HasActivityAttendanceProperty;
 
-class Attendance extends BaseModel
+class Timesheet extends BaseModel
 {
     use HasActivityAttendanceProperty;
 

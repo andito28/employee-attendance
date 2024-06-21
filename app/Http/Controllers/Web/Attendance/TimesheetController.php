@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Mail\TimesheetExportMail;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\Attendance\Attendance;
+use App\Models\Attendance\Timesheet;
 use App\Jobs\SendEmailTimesheetExcelJob;
 use App\Services\PDF\GenerateTimesheetPdf;
 use App\Algorithms\Attendance\TimesheetAlgo;
@@ -17,7 +17,7 @@ class TimesheetController extends Controller
 {
     public function get(Request $request)
     {
-        $attendance = Attendance::Filter($request)
+        $attendance = Timesheet::Filter($request)
         ->OfDate('clockIn',$request->fromDate,$request->toDate)
         ->getOrPaginate($request);
 

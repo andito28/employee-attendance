@@ -2,12 +2,12 @@
 
 namespace App\Parser\Employee;
 
-use App\Services\Constant\RoleUser;
+use App\Services\Constant\Employee\RoleUser;
 use GlobalXtreme\Parser\BaseParser;
 use App\Parser\Employee\SiblingParser;
 use App\Parser\Employee\ParentalParser;
 use Illuminate\Support\Facades\Storage;
-use App\Services\Constant\StatusEmployee;
+use App\Services\Constant\Employee\StatusEmployee;
 use App\Parser\Component\DepartmentParser;
 use App\Parser\Component\CompanyOfficeParser;
 

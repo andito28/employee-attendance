@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Employee\Resignation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
-use App\Services\Constant\StatusEmployee;
+use App\Services\Constant\Employee\StatusEmployee;
 use App\Services\Constant\Activity\ActivityAction;
 
 class ResignationAlgo

@@ -5,7 +5,7 @@ namespace App\Parser\Attendance;
 use App\Models\Attendance\Leave;
 use App\Models\Attendance\Shift;
 use GlobalXtreme\Parser\BaseParser;
-use App\Services\Constant\ScheduleType;
+use App\Services\Constant\Attendance\ScheduleType;
 use App\Models\Attendance\PublicHoliday;
 
 class ScheduleParser extends BaseParser

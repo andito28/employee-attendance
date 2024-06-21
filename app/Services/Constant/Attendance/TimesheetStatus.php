@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services\Constant;
+namespace App\Services\Constant\Attendance;
 
 use App\Services\Constant\BaseIDName;
 
-class AttendanceStatus extends BaseIDName
+class TimesheetStatus extends BaseIDName
 {
     const NO_CLOCK_IN_ID = 1;
     const NO_CLOCK_IN = 'No Clock-In';

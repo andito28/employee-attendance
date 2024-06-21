@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web\Employee;
 use Illuminate\Http\Request;
 use App\Models\Employee\Employee;
 use App\Http\Controllers\Controller;
-use App\Models\Attendance\Attendance;
+use App\Models\Attendance\Timesheet;
 use App\Parser\Employee\EmployeeParser;
 use App\Algorithms\Employee\EmployeeAlgo;
 use App\Algorithms\Employee\ResignationAlgo;
@@ -94,7 +94,7 @@ class EmployeeController extends Controller
     public function getAttendances(Request $request)
     {
         $user = auth()->user();
-        $attendance = Attendance::where('employeeId',$user->employee->id)
+        $attendance = Timesheet::where('employeeId',$user->employee->id)
         ->getOrPaginate($request);
 
         return success($attendance);

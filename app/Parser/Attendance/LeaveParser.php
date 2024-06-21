@@ -3,7 +3,7 @@
 namespace App\Parser\Attendance;
 
 use GlobalXtreme\Parser\BaseParser;
-use App\Services\Constant\LeaveStatus;
+use App\Services\Constant\Attendance\LeaveStatus;
 
 class LeaveParser extends BaseParser
 {

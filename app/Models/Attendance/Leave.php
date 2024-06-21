@@ -6,7 +6,7 @@ use App\Models\BaseModel;
 use App\Models\Employee\Employee;
 use App\Models\Attendance\Schedule;
 use App\Parser\Attendance\LeaveParser;
-use App\Services\Constant\ScheduleType;
+use App\Services\Constant\Attendance\ScheduleType;
 use App\Models\Attendance\Traits\HasActivityLeaveProperty;
 
 class Leave extends BaseModel

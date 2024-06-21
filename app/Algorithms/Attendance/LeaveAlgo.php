@@ -3,16 +3,17 @@
 namespace App\Algorithms\Attendance;
 
 use Carbon\Carbon;
-use App\Models\Attendance\Leave;
 use Illuminate\Http\Request;
+use App\Models\Attendance\Leave;
 use App\Models\Employee\Employee;
-use App\Models\Attendance\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use App\Services\Constant\RoleUser;
-use App\Services\Constant\LeaveStatus;
-use App\Services\Constant\ScheduleType;
+use App\Models\Attendance\Schedule;
+use App\Services\Constant\Employee\RoleUser;
+use App\Services\Constant\Attendance\LeaveStatus;
 use App\Services\Constant\Activity\ActivityAction;
+use App\Services\Constant\Attendance\ScheduleType;
+use App\Services\Constant\Attendance\LeaveConstant;
 
 class LeaveAlgo
 {
@@ -71,6 +72,7 @@ class LeaveAlgo
                     errLeaveDelete();
                 }
 
+                //Users other than administrators cannot delete other users' leave
                 $user = auth()->user();
                 if($user->roleId == RoleUser::EMPLOYEE_ID){
                     $leaveEmployee = Leave::where('id',$this->leave->id)
@@ -174,7 +176,7 @@ class LeaveAlgo
         }
 
         $daysDifference = $fromDate->diffInDays($toDate) + 1;
-        if ($daysDifference > 7) {
+        if ($daysDifference > LeaveConstant::LEAVE_DURATION_MAX) {
             errLeaveDurationMax("maksimal 7 hari");
         }
 
@@ -197,7 +199,7 @@ class LeaveAlgo
             return $fromDate->diffInDays($toDate) + 1;
         });
 
-        if (($totalDayLeaves + $daysDifference) > 12) {
+        if (($totalDayLeaves + $daysDifference) > LeaveConstant::LEAVE_LIMIT) {
         errLeaveDurationMax("cuti maksimal 12 kali dalam setahun");
         }
     }

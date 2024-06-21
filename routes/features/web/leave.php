@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\Constant\RoleUser;
+use App\Services\Constant\Employee\RoleUser;
 use App\Http\Controllers\Web\Attendance\LeaveController;
 
 $administrator = RoleUser::ADMINISTRATOR_ID;

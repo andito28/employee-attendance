@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Constant;
+namespace App\Services\Constant\Attendance;
 
 use App\Services\Constant\BaseIDName;
 

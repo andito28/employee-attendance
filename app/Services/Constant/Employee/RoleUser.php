@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Constant;
+namespace App\Services\Constant\Employee;
 
 use App\Services\Constant\BaseIDName;
 

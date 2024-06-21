@@ -4,7 +4,7 @@ namespace App\Models\Attendance;
 
 use App\Models\BaseModel;
 
-class AttendanceCorrection extends BaseModel
+class TimesheetCorrection extends BaseModel
 {
     protected $table = 'attendance_timesheet_corrections';
     protected $guarded = ['id'];

@@ -9,7 +9,7 @@ use App\Models\Attendance\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Services\Constant\ScheduleType;
+use App\Services\Constant\Attendance\ScheduleType;
 use App\Models\Attendance\PublicHoliday;
 use App\Services\Constant\Activity\ActivityAction;
 
