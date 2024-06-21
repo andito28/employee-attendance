@@ -60,12 +60,6 @@ class ScheduleAlgo
             'date' => $request->date,
         ];
 
-        $dataInput = [
-            'typeId' => $request->type,
-            'referenceType' =>  $scheduleType['model'],
-            'reference' => $request->reference,
-        ];
-
         $existingSchedule = Schedule::where($attribute)
         ->where('typeId', ScheduleType::LEAVE_ID)
         ->exists();
@@ -73,26 +67,29 @@ class ScheduleAlgo
             errScheduleLeave();
         }
 
-        $schedule = Schedule::updateOrCreate($attribute, $dataInput + $createdBy);
-        return $schedule;
+        return Schedule::updateOrCreate($attribute,  [
+            'typeId' => $request->type,
+            'referenceType' =>  $scheduleType['model'],
+            'reference' => $request->reference,
+        ] + $createdBy);
 
     }
 
     public function scheduleType($type,$reference){
         $data = [];
         switch ($type) {
-            case 1:
+            case ScheduleType::PUBLIC_HOLIDAY_ID:
                 $data['model'] = PublicHoliday::class;
                 if(!$model = PublicHoliday::find($reference)){
                     errPublicHolidayGet();
                 }
                 break;
 
-            case 2:
+            case ScheduleType::WEEKLY_DAY_OFF_ID:
                 $data['model'] = null;
                 break;
 
-            case 4:
+            case ScheduleType::SHIFT_ID:
                 $data['model'] = Shift::class;
                 if(!$model = Shift::find($reference)){
                     errShiftGet();

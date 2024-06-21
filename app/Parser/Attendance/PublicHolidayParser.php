@@ -22,8 +22,7 @@ class PublicHolidayParser extends BaseParser
             'id' => $data->id,
             'name' => $data->name,
             'date' => $data->date,
-            'createdBy' => $data->createdBy,
-            'createdByName' => $data->createdByName,
+            'createdBy' => $data->createdByName
         ];
     }
 

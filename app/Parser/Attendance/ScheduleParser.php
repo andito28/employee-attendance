@@ -46,46 +46,11 @@ class ScheduleParser extends BaseParser
 
             $result[$employeeIndexMap[$employeeId]]['mapping'][] = [
                 'date' => $schedule->date,
-                'schedule' => self::getSchedule($schedule->typeId,$schedule->reference)
+                'schedule' => parent::brief($schedule->scheduleable)
             ];
         }
         return $result;
     }
 
-    public static function getSchedule($type,$reference)
-    {
-        $data = [];
-        switch ($type) {
-            case 1:
-                $publicHoliday = PublicHoliday::find($reference);
-                $data['type'] = ScheduleType::display($type);
-                $data['name'] = $publicHoliday->name;
-                break;
-
-            case 2:
-                $data['type'] = ScheduleType::display($type);
-                break;
-
-            case 3:
-                $leave = Leave::find($reference);
-                $data['type'] = ScheduleType::display($type);
-                $data['notes'] = $leave->notes;
-                break;
-
-            case 4:
-                $shift = Shift::find($reference);
-                $data['type'] = ScheduleType::display($type);
-                $data['name'] = $shift->name;
-                $data['startTime'] = $shift->startTime;
-                $data['endTime'] = $shift->endtime;
-                break;
-
-            default:
-                return null;
-        }
-
-        return $data;
-
-    }
 
 }
