@@ -41,4 +41,20 @@ class Attendance extends BaseModel
         });
     }
 
+    public function scopeFilter($query, $request)
+    {
+        return $query->where(function ($query) use ($request) {
+
+            if ($this->hasSearch($request)) {
+
+                $searchTerm = $request->search;
+                $query->whereHas('employee', function ($query) use ($searchTerm) {
+                    $query->where('name', 'LIKE', "%$searchTerm%")
+                            ->orWhere('number', 'LIKE', "%$searchTerm%");
+                });
+            }
+
+        });
+    }
+
 }
