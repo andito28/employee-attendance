@@ -102,10 +102,10 @@ class TimesheetAlgo
 
         $isAttendanceExist = Attendance::where('employeeId', $employeeId)
         ->where(function ($query) use ($currentTime) {
-        $query->whereDate('clockIn', $currentTime)
+            $query->whereDate('clockIn', $currentTime)
         ->orWhere(function ($query) use ($currentTime) {
-        $query->whereNull('clockIn')
-        ->whereDate('clockOut', $currentTime);
+            $query->whereNull('clockIn')
+            ->whereDate('clockOut', $currentTime);
         });
         })->exists();
 
@@ -135,6 +135,7 @@ class TimesheetAlgo
         $yesterday = $now->subDay();
         $attendance = Attendance::where('employeeId', $employeeId)
         ->where('clockIn', '>=', $yesterday)
+        ->where('shiftId',$shift->id)
         ->latest('clockIn')
         ->first();
 
