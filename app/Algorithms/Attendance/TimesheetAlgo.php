@@ -37,6 +37,7 @@ class TimesheetAlgo
 
                 $dataInput = [
                     'employeeId' => $user->employee->id,
+                    'date' =>  Carbon::today()->toDateString(),
                     'shiftId' => $shift->id,
                     'clockIn' => $currentTime,
                     'statusId' => TimesheetStatus::NO_CLOCK_OUT_ID
@@ -105,13 +106,7 @@ class TimesheetAlgo
         }
 
         $isAttendanceExist = Timesheet::where('employeeId', $employeeId)
-        ->where(function ($query) use ($currentTime) {
-            $query->whereDate('clockIn', $currentTime)
-        ->orWhere(function ($query) use ($currentTime) {
-            $query->whereNull('clockIn')
-            ->whereDate('clockOut', $currentTime);
-        });
-        })->exists();
+        ->whereDate('date',Carbon::today()->toDateString())->exists();
 
         if ($isAttendanceExist) {
             errAttendanceAlreadyExist();
@@ -151,8 +146,15 @@ class TimesheetAlgo
 
     private function createNoClockInAttendance($employeeId,$currentTime,$shift){
 
+        $startTime = Carbon::parse($shift->startTime);
+        $endTime = Carbon::parse($shift->endTime);
+
+        $date = $endTime < $startTime ? Carbon::yesterday()->toDateString()
+                    : Carbon::today()->toDateString();
+
         $attendance = Timesheet::create([
             'employeeId' => $employeeId,
+            'date' => $date,
             'shiftId' => $shift->id,
             'clockOut' => $currentTime,
             'statusId' => TimesheetStatus::NO_CLOCK_IN_ID,
@@ -201,8 +203,8 @@ class TimesheetAlgo
 
         if ($timesheet == 'clockin') {
             $available = $currentDateTime->between($startTime->copy()->subHours(2), $midPointTime);
-        } else {
-            $available = ($currentDateTime > $midPointTime);
+        } else if($timesheet == 'clockout') {
+            $available = $currentDateTime->gt($midPointTime);
         }
 
         return [

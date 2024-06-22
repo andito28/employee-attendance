@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('employeeId');
             $table->foreignId('shiftId');
+            $table->date('date');
             $table->dateTime('clockIn')->nullable();
             $table->dateTime('clockOut')->nullable();
             $table->integer('statusId');
