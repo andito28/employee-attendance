@@ -20,6 +20,7 @@ class TimesheetParser extends BaseParser
 
         return [
             'id' => $data->id,
+            'date' => $data->date,
             'clockIn' => $data->clockIn,
             'clockOut' => $data->clockOut,
             'status' => TimesheetStatus::display($data->statusId),
@@ -32,6 +33,25 @@ class TimesheetParser extends BaseParser
                 'name' => $data->shift->name
             ]
         ];
+    }
+
+    public static function attendanceLog($dataAttendance)
+    {
+        if (!$dataAttendance) {
+            return null;
+        }
+
+        $data = [];
+        foreach($dataAttendance as $value){
+            $data[] = [
+                'date' => $value->date,
+                'clockIn' => $value->clockIn,
+                'clockOut' => $value->clockOut,
+                'status' => TimesheetStatus::display($value->statusId),
+            ];
+        }
+
+        return $data;
     }
 
 }

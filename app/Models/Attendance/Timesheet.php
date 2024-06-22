@@ -2,6 +2,7 @@
 
 namespace App\Models\Attendance;
 
+use Carbon\Carbon;
 use App\Models\BaseModel;
 use App\Models\Attendance\Shift;
 use App\Models\Employee\Employee;
@@ -38,8 +39,14 @@ class Timesheet extends BaseModel
     {
         return $query->where(function ($query) use ($request) {
 
-            return  $query->whereYear('createdAt', $request->year)
-                    ->whereMonth('createdAt', $request->month);
+            $monthYear = $request->input('date', Carbon::now()->format('m/Y'));
+            $date = Carbon::createFromFormat('m/Y', $monthYear);
+
+            $month = $date->month;
+            $year = $date->year;
+
+            return  $query->whereYear('date', $year)
+                    ->whereMonth('date',  $month);
 
         });
     }

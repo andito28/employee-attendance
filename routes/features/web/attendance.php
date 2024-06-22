@@ -39,9 +39,11 @@ Route::prefix("attendances")
         // Leaves
         Route::prefix("leaves")
             ->group(function () use ($administrator, $employee) {
+
                 Route::middleware("role:$administrator")->group(function () {
                     Route::patch('{id}/approve', [LeaveController::class, 'approveLeave']);
                 });
+
                 Route::middleware("role:$administrator,$employee")->group(function () {
                     Route::get('', [LeaveController::class, 'get']);
                     Route::post('', [LeaveController::class, 'create']);
@@ -60,12 +62,15 @@ Route::prefix("attendances")
         // Timesheet
         Route::prefix("timesheets")
             ->group(function () use ($administrator, $employee) {
+
                 Route::middleware("role:$administrator")->group(function () {
                     Route::get('', [TimesheetController::class, 'get']);
                     Route::get('generate-excel', [TimesheetController::class, 'generateAttendanceExcel']);
                     Route::get('generate-pdf', [TimesheetController::class, 'generateAttendancePdf']);
                 });
+
                 Route::middleware("role:$administrator,$employee")->group(function () {
+                    Route::get('log', [TimesheetController::class, 'getAttendanceLog']);
                     Route::post('clock-in', [TimesheetController::class, 'clockIn']);
                     Route::post('clock-out', [TimesheetController::class, 'clockOut']);
                 });
