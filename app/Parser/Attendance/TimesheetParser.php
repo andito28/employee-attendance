@@ -2,6 +2,7 @@
 
 namespace App\Parser\Attendance;
 
+use Carbon\Carbon;
 use GlobalXtreme\Parser\BaseParser;
 use App\Services\Constant\Attendance\TimesheetStatus;
 
@@ -45,8 +46,8 @@ class TimesheetParser extends BaseParser
         foreach($dataAttendance as $value){
             $data[] = [
                 'date' => $value->date,
-                'clockIn' => $value->clockIn,
-                'clockOut' => $value->clockOut,
+                'clockIn' => $value->clockIn ? Carbon::parse($value->clockIn)->format('H:i') : '-',
+                'clockOut' =>$value->clockOut ? Carbon::parse($value->clockOut)->format('H:i') : '-',
             ];
         }
 

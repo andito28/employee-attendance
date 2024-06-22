@@ -19,6 +19,7 @@ Route::prefix("attendances")
         Route::prefix("shifts")
             ->middleware(["role:$administrator"])
             ->group(function () {
+
                 Route::get('', [ShiftController::class, 'get']);
                 Route::post('', [ShiftController::class, 'create']);
                 Route::put('{id}', [ShiftController::class, 'update']);
@@ -29,6 +30,7 @@ Route::prefix("attendances")
         Route::prefix("public-holidays")
             ->middleware(["role:$administrator"])
             ->group(function () {
+
                 Route::get('', [PublicHolidayController::class, 'get']);
                 Route::post('', [PublicHolidayController::class, 'create']);
                 Route::put('{id}', [PublicHolidayController::class, 'update']);
@@ -55,6 +57,7 @@ Route::prefix("attendances")
         Route::prefix("schedules")
             ->middleware(["role:$administrator"])
             ->group(function () {
+
                 Route::get('', [ScheduleController::class, 'get']);
                 Route::post('', [ScheduleController::class, 'create']);
             });
