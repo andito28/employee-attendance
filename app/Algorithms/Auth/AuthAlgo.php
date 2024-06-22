@@ -5,11 +5,11 @@ namespace App\Algorithms\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use App\Services\Constant\RoleUser;
+use App\Services\Constant\Employee\RoleUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
-use App\Services\Constant\StatusEmployee;
+use App\Services\Constant\Employee\StatusEmployee;
 use App\Services\Constant\Activity\ActivityAction;
 
 class AuthAlgo

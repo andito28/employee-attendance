@@ -29,8 +29,10 @@ class TimesheetAlgo
                 $currentTime = Carbon::now();
                 $shift = $this->validateClockIn($user->employee->id,$currentTime);
 
-                if(!$this->availableAttendance($shift,$currentTime,'clockin')){
-                    errAttendanceCannotAbsent();
+                $result = $this->availableAttendance($shift,$currentTime,'clockin');
+
+                if(!$result['available']){
+                    errAttendanceCannotAbsent($shift->name.', Clock-In jam : '.$result['startTime'].' - '.$result['midPointTime']);
                 }
 
                 $dataInput = [
@@ -64,8 +66,10 @@ class TimesheetAlgo
                 $currentTime = Carbon::now();
                 $shift = $this->getScheduleShift($user->employee->id, $currentTime);
 
-                if(!$this->availableAttendance($shift,$currentTime,'clockout')){
-                    errAttendanceCannotAbsent();
+                $result = $this->availableAttendance($shift,$currentTime,'clockout');
+
+                if(!$result['available']){
+                    errAttendanceCannotAbsent($shift->name.', Clock-Out diatas jam : '.$result['midPointTime']);
                 }
 
                 $isAttendance = Timesheet::where('employeeId',$user->employee->id)
@@ -193,15 +197,20 @@ class TimesheetAlgo
             $endTime->addDay();
         }
 
-        $midPoint = $startTime->copy()->addHours($startTime->diffInHours($endTime) / 2);
+        $midPointTime = $startTime->copy()->addHours($startTime->diffInHours($endTime) / 2);
 
         if ($timesheet == 'clockin') {
-            $available = $currentDateTime->between($startTime->copy()->subHours(2), $midPoint);
+            $available = $currentDateTime->between($startTime->copy()->subHours(2), $midPointTime);
         } else {
-            $available = ($currentDateTime > $midPoint);
+            $available = ($currentDateTime > $midPointTime);
         }
 
-        return $available;
+        return [
+            'available' => $available,
+            'startTime' => $startTime->copy()->subHours(2)->format('H:i:s'),
+            'midPointTime' => $midPointTime->format('H:i:s')
+        ];
+
     }
 
 
