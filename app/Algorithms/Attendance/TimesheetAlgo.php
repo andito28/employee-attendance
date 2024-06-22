@@ -27,13 +27,15 @@ class TimesheetAlgo
 
                 $user = auth()->user();
                 $currentTime = Carbon::now();
-                $shift = $this->validateClockIn($user->employee->id,$currentTime);
+                $shift =  $this->getScheduleShift($user->employee->id,$currentTime);
 
                 $result = $this->availableAttendance($shift,$currentTime,'clockin');
 
                 if(!$result['available']){
                     errAttendanceCannotAbsent($shift->name.', Clock-In jam : '.$result['startTime'].' - '.$result['midPointTime']);
                 }
+
+                $this->validateClockIn($user->employee->id,$currentTime);
 
                 $dataInput = [
                     'employeeId' => $user->employee->id,
@@ -82,7 +84,7 @@ class TimesheetAlgo
                         errAttendanceAlreadyExist();
                     }
 
-                    $this->attendance = $this->saveAttendanceClockOut($user->employee->id,
+                    $this->attendance = $this->createClockOutAttendance($user->employee->id,
                     $currentTime, $shift);
 
             });
@@ -107,12 +109,9 @@ class TimesheetAlgo
 
         $isAttendanceExist = Timesheet::where('employeeId', $employeeId)
         ->whereDate('date',Carbon::today()->toDateString())->exists();
-
         if ($isAttendanceExist) {
             errAttendanceAlreadyExist();
         }
-
-        return $this->getScheduleShift($employeeId,$currentTime);
 
     }
 
@@ -128,7 +127,7 @@ class TimesheetAlgo
         return $shift;
     }
 
-    private function saveAttendanceClockOut($employeeId, $currentTime, $shift){
+    private function createClockOutAttendance($employeeId, $currentTime, $shift){
 
         $now = Carbon::now();
         $oneDayAgo = $now->subDay();
@@ -141,7 +140,7 @@ class TimesheetAlgo
         if (!$attendance) {
             return $this->createNoClockInAttendance($employeeId,$currentTime,$shift);
         }
-            return $this->updateAttendance($attendance, $currentTime);
+            return $this->saveClockOutAttendance($attendance, $currentTime);
     }
 
     private function createNoClockInAttendance($employeeId,$currentTime,$shift){
@@ -166,7 +165,7 @@ class TimesheetAlgo
         return $attendance;
     }
 
-    private function updateAttendance($attendance, $currentTime){
+    private function saveClockOutAttendance($attendance, $currentTime){
         $startTimeShift = $attendance->shift->startTime;
         $timeClockIn = Carbon::parse($attendance->clockIn)->toTimeString();
 
