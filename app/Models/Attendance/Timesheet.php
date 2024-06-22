@@ -5,6 +5,7 @@ namespace App\Models\Attendance;
 use App\Models\BaseModel;
 use App\Models\Attendance\Shift;
 use App\Models\Employee\Employee;
+use App\Parser\Attendance\TimesheetParser;
 use App\Models\Attendance\Traits\HasActivityAttendanceProperty;
 
 class Timesheet extends BaseModel
@@ -19,6 +20,8 @@ class Timesheet extends BaseModel
         self::UPDATED_AT => 'datetime',
         self::DELETED_AT => 'datetime'
     ];
+
+    public $parserClass = TimesheetParser::class;
 
     /** --- RELATIONSHIPS --- */
     public function employee(){
