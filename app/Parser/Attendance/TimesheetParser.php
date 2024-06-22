@@ -47,7 +47,6 @@ class TimesheetParser extends BaseParser
                 'date' => $value->date,
                 'clockIn' => $value->clockIn,
                 'clockOut' => $value->clockOut,
-                'status' => TimesheetStatus::display($value->statusId),
             ];
         }
 
