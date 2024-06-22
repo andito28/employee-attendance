@@ -19,7 +19,6 @@ class TimesheetController extends Controller
     {
         $attendance = Timesheet::with('employee','shift')
         ->Filter($request)
-        ->OfDate('clockIn',$request->fromDate,$request->toDate)
         ->getOrPaginate($request);
 
         return success($attendance);

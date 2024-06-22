@@ -21,35 +21,15 @@ class ScheduleParser extends BaseParser
             return null;
         }
 
-        return parent::first($data);
-    }
+        return [
+            'date' => $data->date,
+            'employee' => [
+                'id' => $data->employee->id,
+                'name' => $data->employee->name
+            ],
+            'schduleable' => $data->scheduleable
+        ];
 
-    public static function getMapping($schedules)
-    {
-        $result = [];
-        $employeeIndexMap = [];
-
-        foreach ($schedules as $schedule) {
-            $employeeId = $schedule->employee->id;
-
-            if (!isset($employeeIndexMap[$employeeId])) {
-                $result[] = [
-                    'employee' => [
-                        'id' => $employeeId,
-                        'name' => $schedule->employee->name,
-                    ],
-                    'mapping' => []
-                ];
-
-                $employeeIndexMap[$employeeId] = count($result) - 1;
-            }
-
-            $result[$employeeIndexMap[$employeeId]]['mapping'][] = [
-                'date' => $schedule->date,
-                'schedule' => parent::brief($schedule->scheduleable)
-            ];
-        }
-        return $result;
     }
 
 
