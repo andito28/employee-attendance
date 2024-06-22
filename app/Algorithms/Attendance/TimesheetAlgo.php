@@ -202,7 +202,7 @@ class TimesheetAlgo
 
         if ($timesheet == 'clockin') {
             $available = $currentDateTime->between($startTime->copy()->subHours(2), $midPointTime);
-        } else if($timesheet == 'clockout') {
+        } else {
             $available = $currentDateTime->gt($midPointTime);
         }
 
