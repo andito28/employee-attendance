@@ -32,7 +32,7 @@ class TimesheetController extends Controller
         ->FilterYearMonth($request)
         ->get();
 
-        return success(TimesheetParser::attendanceLog($attendance));
+        return success(TimesheetParser::attendanceLog($attendance,$request));
     }
 
     public function clockIn(){
