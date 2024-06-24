@@ -24,6 +24,9 @@ class TimesheetStatus extends BaseIDName
     const VALID_ID = 6;
     const VALID = 'Valid';
 
+    const NOT_STATUS_ID = 6;
+    const NOT_STATUS = 'Not Status';
+
     const OPTION = [
         self::NO_CLOCK_IN_ID => self::NO_CLOCK_IN,
         self::NO_CLOCK_OUT_ID => self::NO_CLOCK_OUT,
@@ -31,6 +34,7 @@ class TimesheetStatus extends BaseIDName
         self::EARLY_ID => self::EARLY,
         self::LATE_ID => self::LATE,
         self::VALID_ID => self::VALID,
+        self::NOT_STATUS_ID => self::NOT_STATUS,
     ];
 
 }

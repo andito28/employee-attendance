@@ -70,12 +70,14 @@ Route::prefix("attendances")
                     Route::get('', [TimesheetController::class, 'get']);
                     Route::get('generate-excel', [TimesheetController::class, 'generateAttendanceExcel']);
                     Route::get('generate-pdf', [TimesheetController::class, 'generateAttendancePdf']);
+                    Route::patch('approval/{id}', [TimesheetController::class, 'approvalCorrection']);
                 });
 
                 Route::middleware("role:$administrator,$employee")->group(function () {
                     Route::get('log', [TimesheetController::class, 'getAttendanceLog']);
                     Route::post('clock-in', [TimesheetController::class, 'clockIn']);
                     Route::post('clock-out', [TimesheetController::class, 'clockOut']);
+                    Route::post('correction', [TimesheetController::class, 'correction']);
                 });
             });
 

@@ -11,7 +11,9 @@ use App\Jobs\SendEmailTimesheetExcelJob;
 use App\Parser\Attendance\TimesheetParser;
 use App\Services\PDF\GenerateTimesheetPdf;
 use App\Algorithms\Attendance\TimesheetAlgo;
+use App\Models\Attendance\TimesheetCorrection;
 use App\Services\Excel\GenerateTimesheetExcel;
+use App\Http\Requests\Attendance\TimesheetCorrectionRequest;
 
 
 class TimesheetController extends Controller
@@ -55,5 +57,27 @@ class TimesheetController extends Controller
     {
         $pdf = new GenerateTimesheetPdf();
         return $pdf->generate($request);
+    }
+
+    public function getCorrection()
+    {
+
+    }
+
+    public function correction(TimesheetCorrectionRequest $request)
+    {
+        $algo = new TimesheetAlgo();
+        return $algo->correction(TimesheetCorrection::class,$request);
+    }
+
+    public function approvalCorrection(Request $request,$id)
+    {
+        $correction = TimesheetCorrection::find($id);
+        if(!$correction){
+            errCorrectionGet();
+        }
+
+        $algo = new TimesheetAlgo();
+        return $algo->approvalCorrection($correction,$request);
     }
 }

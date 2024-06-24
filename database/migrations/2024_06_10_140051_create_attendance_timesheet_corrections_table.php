@@ -22,6 +22,10 @@ return new class extends Migration
             $table->time('clockIn');
             $table->time('clockOut');
             $table->integer('statusId');
+            $table->integer('approvalId');
+            $table->text('notes')->nullable();
+            $table->char('approveddBy')->nullable();
+            $table->string('approvedByName')->nullable();
             $this->getDefaultTimestamps($table);
         });
     }

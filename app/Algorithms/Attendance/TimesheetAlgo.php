@@ -4,26 +4,23 @@ namespace App\Algorithms\Attendance;
 
 use Carbon\Carbon;
 use App\Models\Attendance\Shift;
-use App\Models\Attendance\Schedule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Attendance\Schedule;
 use App\Models\Attendance\Timesheet;
+use Illuminate\Support\Facades\Auth;
+use App\Services\Constant\Activity\ActivityAction;
 use App\Services\Constant\Attendance\ScheduleType;
 use App\Services\Constant\Attendance\TimesheetStatus;
-use App\Services\Constant\Activity\ActivityAction;
+use App\Services\Constant\Attendance\TimesheetCorrectionApproval;
 
 class TimesheetAlgo
 {
-    public function __construct(public ? Timesheet $attendance = null )
-    {
-    }
-
     public function clockIn()
     {
         try{
 
-            DB::transaction(function () {
+            $attendance = DB::transaction(function () {
 
                 $user = auth()->user();
                 $currentTime = Carbon::now();
@@ -45,14 +42,16 @@ class TimesheetAlgo
                     'statusId' => TimesheetStatus::NO_CLOCK_OUT_ID
                 ];
 
-                $this->attendance = Timesheet::create($dataInput);
+                $timesheet = Timesheet::create($dataInput);
 
-                $this->attendance->setActivityPropertyAttributes(ActivityAction::CREATE)
-                        ->saveActivity("Enter new " . $this->attendance->getTable() . ":  [$this->attendance->id]");
+                $timesheet->setActivityPropertyAttributes(ActivityAction::CREATE)
+                    ->saveActivity("Enter new " . $timesheet->getTable() . ":  [$timesheet->id]");
+
+                return $timesheet;
 
             });
 
-            return success($this->attendance);
+            return success($attendance);
 
         }catch (\Exception $exception) {
             exception($exception);
@@ -63,7 +62,7 @@ class TimesheetAlgo
     {
         try {
 
-            DB::transaction(function (){
+            $attendance = DB::transaction(function (){
 
                 $user = auth()->user();
                 $currentTime = Carbon::now();
@@ -84,17 +83,79 @@ class TimesheetAlgo
                         errAttendanceAlreadyExist();
                     }
 
-                    $this->attendance = $this->createClockOutAttendance($user->employee->id,
+                    $attendance = $this->createClockOutAttendance($user->employee->id,
                     $currentTime, $shift);
+
+                    return $attendance;
 
             });
 
-            return success($this->attendance->fresh());
+            return success($attendance->fresh());
+
         } catch (\Exception $exception) {
             return exception($exception);
         }
     }
 
+    public function correction($correction,$request)
+    {
+        try {
+
+            $correctionAttendance = DB::transaction(function () use ($correction,$request) {
+
+                $user = auth()->user();
+                $conditions = [
+                    'employeeId' => $user->employee->id,
+                    'date' => $request->date,
+                ];
+                $status = [
+                    'approvalId' => TimesheetCorrectionApproval::PENDING_ID,
+                    'statusId' => TimesheetStatus::NOT_STATUS_ID
+                ];
+
+                $correction = $correction::updateOrCreate($conditions,$request->all() + $status);
+
+                $correction->setActivityPropertyAttributes(ActivityAction::CREATE)
+                    ->saveActivity("Enter new " .$correction->getTable() . ":$correction->date [$correction->id]");
+
+                return $correction;
+
+            });
+
+            return success($correctionAttendance);
+
+        } catch (\Exception $exception) {
+            exception($exception);
+        }
+    }
+
+    public function approvalCorrection($correction,$request)
+    {
+        try {
+
+            $correctionAttendance = DB::transaction(function () use ($correction,$request) {
+
+                $correction->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
+
+                $this->validateApprovalCorrection($request);
+
+                dd('ok');
+
+                $correction->update($request->all());
+
+                $correction->setActivityPropertyAttributes(ActivityAction::UPDATE)
+                    ->saveActivity("Update " . $correction->getTable() . ": $correction->date [$correction->id]");
+
+                return $correction;
+
+            });
+
+            return success($correctionAttendance->fresh());
+
+        } catch (\Exception $exception) {
+            exception($exception);
+        }
+    }
 
     /** --- SUB FUNCTIONS --- */
 
@@ -127,8 +188,8 @@ class TimesheetAlgo
         return $shift;
     }
 
-    private function createClockOutAttendance($employeeId, $currentTime, $shift){
-
+    private function createClockOutAttendance($employeeId, $currentTime, $shift)
+    {
         $now = Carbon::now();
         $oneDayAgo = $now->subDay();
         $attendance = Timesheet::where('employeeId', $employeeId)
@@ -143,8 +204,8 @@ class TimesheetAlgo
             return $this->saveClockOutAttendance($attendance, $currentTime);
     }
 
-    private function createNoClockInAttendance($employeeId,$currentTime,$shift){
-
+    private function createNoClockInAttendance($employeeId,$currentTime,$shift)
+    {
         $startTime = Carbon::parse($shift->startTime);
         $endTime = Carbon::parse($shift->endTime);
 
@@ -165,7 +226,8 @@ class TimesheetAlgo
         return $attendance;
     }
 
-    private function saveClockOutAttendance($attendance, $currentTime){
+    private function saveClockOutAttendance($attendance, $currentTime)
+    {
         $startTimeShift = $attendance->shift->startTime;
         $timeClockIn = Carbon::parse($attendance->clockIn)->toTimeString();
 
@@ -212,6 +274,19 @@ class TimesheetAlgo
             'midPointTime' => $midPointTime->format('H:i:s')
         ];
 
+    }
+
+    private function validateApprovalCorrection($request)
+    {
+        if($request->approved != TimesheetCorrectionApproval::APPROVED_ID &&
+            $request->approved != TimesheetCorrectionApproval::DISAPPROVED_ID ){
+                    errCorrectionApproved();
+            }
+
+        if($request->approved == TimesheetCorrectionApproval::DISAPPROVED_ID
+            && $request->approved == null){
+                errCorrectionDisapprove();
+        }
     }
 
 
