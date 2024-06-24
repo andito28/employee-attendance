@@ -24,7 +24,6 @@ Route::prefix("employees")
 
         // Routes accessible by both administrators and employees
         Route::middleware("role:$administrator,$employee")->group(function () {
-            Route::get('attendances', [EmployeeController::class, 'getAttendances']);
             Route::patch('reset-password', [EmployeeController::class, 'resetPassword']);
         });
 

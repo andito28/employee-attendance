@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web\Employee;
 use Illuminate\Http\Request;
 use App\Models\Employee\Employee;
 use App\Http\Controllers\Controller;
-use App\Models\Attendance\Timesheet;
 use App\Parser\Employee\EmployeeParser;
 use App\Algorithms\Employee\EmployeeAlgo;
 use App\Algorithms\Employee\ResignationAlgo;
@@ -89,15 +88,6 @@ class EmployeeController extends Controller
     {
         $algo = new EmployeeAlgo();
         return $algo->resetPassword($request);
-    }
-
-    public function getAttendances(Request $request)
-    {
-        $user = auth()->user();
-        $attendance = Timesheet::where('employeeId',$user->employee->id)
-        ->getOrPaginate($request);
-
-        return success($attendance);
     }
 
 }
