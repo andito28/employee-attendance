@@ -52,7 +52,7 @@ class TimesheetParser extends BaseParser
 
         $daysInMonth = Carbon::now()->setYear($year)->setMonth($month)->daysInMonth;
         for ($day = 1; $day <= $daysInMonth; $day++) {
-            $date = Carbon::create($year, $month, $day)->format('Y-m-d');
+            $date = Carbon::create($year, $month, $day)->format('D, d F');
             $datesInMonth[$date] = [
                 'date' => $date,
                 'clockIn' => '-',
@@ -61,9 +61,9 @@ class TimesheetParser extends BaseParser
         }
 
         foreach ($dataAttendance as $value) {
-            $date = Carbon::parse($value->date)->format('Y-m-d');
-            $datesInMonth[$date] = [
-                'date' => $date,
+            $attendanceDate = Carbon::parse($value->date)->format('D, d F');
+            $datesInMonth[$attendanceDate] = [
+                'date' =>  $attendanceDate,
                 'clockIn' => $value->clockIn ? Carbon::parse($value->clockIn)->format('H:i') : '-',
                 'clockOut' => $value->clockOut ? Carbon::parse($value->clockOut)->format('H:i') : '-',
             ];
