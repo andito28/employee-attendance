@@ -599,6 +599,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Shift</th>
+                    <th>Date</th>
                     <th>Clock In</th>
                     <th>Clock Out</th>
                     <th>Status</th>
@@ -607,6 +608,7 @@
                     <tr>
                         <td>{{ $attendance['name'] }}</td>
                         <td>{{ $attendance['shift'] }}</td>
+                        <td>{{ $attendance['date'] }}</td>
                         <td>{{ $attendance['clockIn'] }}</td>
                         <td>{{ $attendance['clockOut'] }}</td>
                         <td>{{ $attendance['status'] }}</td>
