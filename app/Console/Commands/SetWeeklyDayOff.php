@@ -5,9 +5,10 @@ namespace App\Console\Commands;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\Models\Employee\Employee;
-use App\Models\Attendance\Schedule;
 use Illuminate\Support\Facades\DB;
-use App\Services\Constant\ScheduleType;
+use App\Models\Attendance\Schedule;
+use App\Services\Constant\Attendance\ScheduleType;
+
 
 class SetWeeklyDayOff extends Command
 {

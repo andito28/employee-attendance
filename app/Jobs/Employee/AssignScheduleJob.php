@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Employee;
 
 use Illuminate\Bus\Queueable;
 use App\Models\Employee\Employee;

@@ -41,12 +41,7 @@
             "app/Services/Helpers/Status/globals.php",
             "app/Services/Helpers/Status/component.php",
             "app/Services/Helpers/Status/employee.php",
-            "app/Services/Helpers/Status/shift.php",
-            "app/Services/Helpers/Status/publicHoliday.php",
-            "app/Services/Helpers/Status/leave.php",
-            "app/Services/Helpers/Status/schedule.php",
-            "app/Services/Helpers/Status/attendance.php",
-            "app/Services/Helpers/Status/correction.php"
+            "app/Services/Helpers/Status/attendance.php"
         ]
     },
     "autoload-dev": {

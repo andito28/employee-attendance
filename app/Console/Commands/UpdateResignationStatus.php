@@ -7,7 +7,8 @@ use Illuminate\Console\Command;
 use App\Models\Employee\Employee;
 use Illuminate\Support\Facades\DB;
 use App\Models\Employee\Resignation;
-use App\Services\Constant\StatusEmployee;
+use App\Services\Constant\Employee\StatusEmployee;
+
 
 class UpdateResignationStatus extends Command
 {
