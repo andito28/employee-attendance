@@ -44,7 +44,7 @@ class EmployeeAlgo
                 $this->employee = $this->createEmployee($request,$createdBy);
 
                 $this->employee->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " .$this->employee->getTable() . ":$this->employee->name [$this->employee->id]");
+                    ->saveActivity("Enter new employee : {$this->employee->name},[{$this->employee->id}]");
 
             });
 
@@ -68,7 +68,7 @@ class EmployeeAlgo
                 $this->updateEmployee($request);
 
                 $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                ->saveActivity("Update employee : {$this->employee->name} [{$this->employee->id}]");
+                ->saveActivity("Update employee : {$this->employee->name},[{$this->employee->id}]");
             });
 
             return success($this->employee->fresh());
@@ -91,7 +91,7 @@ class EmployeeAlgo
                 $this->employee->delete();
 
                 $this->employee->setActivityPropertyAttributes(ActivityAction::DELETE)
-                ->saveActivity("Delete employee : {$this->employee->name} [{$this->employee->id}]");
+                ->saveActivity("Delete employee : {$this->employee->name},[{$this->employee->id}]");
 
             });
 
@@ -113,7 +113,7 @@ class EmployeeAlgo
                 $this->savePromoteAdmin($this->employee->id);
 
                 $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                ->saveActivity("Update employee : {$this->employee->name} [{$this->employee->id}]");
+                ->saveActivity("Update employee : {$this->employee->name},[{$this->employee->id}]");
 
             });
 
@@ -283,7 +283,7 @@ class EmployeeAlgo
             $employee->save();
 
             $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
-            ->saveActivity("Reset Password employee : {$this->employee->name} [{$this->employee->id}]");
+            ->saveActivity("Reset Password employee : {$this->employee->name},[{$this->employee->id}]");
 
             return $this->employee;
         }
@@ -306,7 +306,7 @@ class EmployeeAlgo
         $user->save();
 
         $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
-        ->saveActivity("Reset Password employee : {$this->employee->name} [{$this->employee->id}]");
+        ->saveActivity("Reset Password employee : {$this->employee->name},[{$this->employee->id}]");
 
         return $this->employee;
     }

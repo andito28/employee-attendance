@@ -45,7 +45,7 @@ class LeaveAlgo
                 }
 
                 $this->leave->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " .$this->leave->getTable() . ":[$this->leave->id]");
+                    ->saveActivity("Enter new leave : [{$this->leave->id}]");
 
             });
 

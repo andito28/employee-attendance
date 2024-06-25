@@ -50,7 +50,7 @@ class ComponentAlgo
                 $model->update($request->all());
 
                 $model->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                    ->saveActivity("Update " . $model->getTable() . ": $model->name [$model->id]");
+                    ->saveActivity("Update " . $model->getTable() . ": $model->name,[$model->id]");
 
             });
 
@@ -72,7 +72,7 @@ class ComponentAlgo
                 $model->delete();
 
                 $model->setActivityPropertyAttributes(ActivityAction::DELETE)
-                    ->saveActivity("Delete " . $model->getTable() . ": $model->name [$model->id]");
+                    ->saveActivity("Delete " . $model->getTable() . ": $model->name,[$model->id]");
 
             });
 

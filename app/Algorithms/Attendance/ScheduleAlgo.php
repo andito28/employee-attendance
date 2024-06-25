@@ -34,8 +34,7 @@ class ScheduleAlgo
                 $this->schedule = $this->assignSchedule($request,$createdBy);
 
                 $this->schedule->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " .$this->schedule->getTable() .
-                    ":[$this->schedule->id]");
+                    ->saveActivity("Enter new  schedule: {$this->schedule->date},[{$this->schedule->id}]");
 
             });
 

@@ -33,7 +33,7 @@ class ResignationAlgo
                 $resignation = $this->createResignation($request,$createdBy);
 
                 $resignation->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " . $resignation->getTable() . ": [ $resignation->id]");
+                    ->saveActivity("Enter new resignation : [{$resignation->id}]");
 
                 return $resignation;
 
@@ -58,7 +58,7 @@ class ResignationAlgo
                 $this->updateResignation();
 
                 $this->employee->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                ->saveActivity("Update employee : {$this->employee->name} [{$this->employee->id}]");
+                ->saveActivity("Update status resignation : {$this->employee->name} [{$this->employee->id}]");
 
             });
 

@@ -23,7 +23,7 @@ class PublicHolidayRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'date' => 'required|date|unique:attendance_public_holidays,date',
+            'date' => 'required|date',
         ];
     }
 }

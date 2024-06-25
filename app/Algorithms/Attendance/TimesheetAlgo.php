@@ -16,11 +16,16 @@ use App\Services\Constant\Attendance\TimesheetCorrectionApproval;
 
 class TimesheetAlgo
 {
+
+    public function __construct(public ? Timesheet $timesheet = null )
+    {
+    }
+
     public function clockIn()
     {
         try{
 
-            $attendance = DB::transaction(function () {
+            DB::transaction(function () {
 
                 $user = auth()->user();
                 $currentTime = Carbon::now();
@@ -34,24 +39,20 @@ class TimesheetAlgo
 
                 $this->validateClockIn($user->employee->id,$currentTime);
 
-                $dataInput = [
+                $this->timesheet = Timesheet::create([
                     'employeeId' => $user->employee->id,
                     'date' =>  Carbon::today()->toDateString(),
                     'shiftId' => $shift->id,
                     'clockIn' => $currentTime,
                     'statusId' => TimesheetStatus::NO_CLOCK_OUT_ID
-                ];
+                ]);
 
-                $timesheet = Timesheet::create($dataInput);
-
-                $timesheet->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " . $timesheet->getTable() . ":  [$timesheet->id]");
-
-                return $timesheet;
+                $this->timesheet->setActivityPropertyAttributes(ActivityAction::CREATE)
+                    ->saveActivity("Enter new timesheet : {$this->timesheet->date}, [{$this->timesheet->id}]");
 
             });
 
-            return success($attendance);
+            return success($this->timesheet);
 
         }catch (\Exception $exception) {
             exception($exception);
@@ -62,7 +63,7 @@ class TimesheetAlgo
     {
         try {
 
-            $attendance = DB::transaction(function (){
+            DB::transaction(function (){
 
                 $user = auth()->user();
                 $currentTime = Carbon::now();
@@ -79,29 +80,26 @@ class TimesheetAlgo
                     ->where('shiftId',$shift->id)
                     ->exists();
 
-                    if($isAttendance){
-                        errAttendanceAlreadyExist();
-                    }
+                if($isAttendance){
+                    errAttendanceAlreadyExist();
+                }
 
-                    $attendance = $this->createClockOutAttendance($user->employee->id,
-                    $currentTime, $shift);
-
-                    return $attendance;
+                $this->timesheet = $this->createClockOutAttendance($user->employee->id,$currentTime, $shift);
 
             });
 
-            return success($attendance->fresh());
+            return success($this->timesheet->fresh());
 
         } catch (\Exception $exception) {
             return exception($exception);
         }
     }
 
-    public function correction($correction,$request)
+    public function correction($timesheetCorrection,$request)
     {
         try {
 
-            $correctionAttendance = DB::transaction(function () use ($correction,$request) {
+            $correction = DB::transaction(function () use ($timesheetCorrection,$request) {
 
                 $user = auth()->user();
                 $conditions = [
@@ -113,16 +111,16 @@ class TimesheetAlgo
                     'statusId' => TimesheetStatus::NOT_STATUS_ID
                 ];
 
-                $correction = $correction::updateOrCreate($conditions,$request->all() + $status);
+                $correction = $timesheetCorrection::updateOrCreate($conditions,$request->all() + $status);
 
                 $correction->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " .$correction->getTable() . ":$correction->date [$correction->id]");
+                    ->saveActivity("Enter new correction : {$correction->date},[{$correction->id}]");
 
                 return $correction;
 
             });
 
-            return success($correctionAttendance);
+            return success($correction);
 
         } catch (\Exception $exception) {
             exception($exception);
@@ -133,7 +131,7 @@ class TimesheetAlgo
     {
         try {
 
-            $correctionAttendance = DB::transaction(function () use ($correction,$request) {
+            $correction = DB::transaction(function () use ($correction,$request) {
 
                 $correction->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
 
@@ -144,13 +142,13 @@ class TimesheetAlgo
                 $correction->update($request->all());
 
                 $correction->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                    ->saveActivity("Update " . $correction->getTable() . ": $correction->date [$correction->id]");
+                    ->saveActivity("Update Approval correction :{$correction->date}, [{$correction->id}]");
 
                 return $correction;
 
             });
 
-            return success($correctionAttendance->fresh());
+            return success($correction->fresh());
 
         } catch (\Exception $exception) {
             exception($exception);
@@ -221,7 +219,7 @@ class TimesheetAlgo
         ]);
 
         $attendance->setActivityPropertyAttributes(ActivityAction::CREATE)
-            ->saveActivity("Enter new " . $attendance->getTable() . ":  [$attendance->id]");
+            ->saveActivity("Enter new timesheet: {$this->timesheet->date}, [{$attendance->id}]");
 
         return $attendance;
     }
@@ -245,7 +243,7 @@ class TimesheetAlgo
         ]);
 
         $attendance->setActivityPropertyAttributes(ActivityAction::UPDATE)
-            ->saveActivity("Update " . $attendance->getTable() . ": [$attendance->id]");
+            ->saveActivity("Update timesheet : {$this->timesheet->date}, [{$attendance->id}]");
 
         return $attendance;
     }
@@ -280,7 +278,7 @@ class TimesheetAlgo
     {
         if($request->approved != TimesheetCorrectionApproval::APPROVED_ID &&
             $request->approved != TimesheetCorrectionApproval::DISAPPROVED_ID ){
-                    errCorrectionApproved();
+                errCorrectionApproved();
             }
 
         if($request->approved == TimesheetCorrectionApproval::DISAPPROVED_ID

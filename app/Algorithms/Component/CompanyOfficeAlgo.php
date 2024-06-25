@@ -69,7 +69,7 @@ class CompanyOfficeAlgo
         $mapping = CompanyOfficeDepartment::updateOrCreate($attributes, $createdBy);
 
         $mapping->setActivityPropertyAttributes(ActivityAction::CREATE)
-                ->saveActivity("Enter new mapping company office department" . ": [$mapping->id]");
+                ->saveActivity("Enter new mapping company office department [{$mapping->id}]");
 
         return $mapping;
     }

@@ -28,10 +28,15 @@ class PublicHolidayAlgo
                     'createdByName' =>  $user->employee->name
                 ];
 
+                $dateExist = PublicHoliday::where('date',$request->date)->exists();
+                if($dateExist){
+                    errPublicHolidayAlreadyExist();
+                }
+
                 $this->publicHoliday = PublicHoliday::create($request->all() + $createdBy);
 
                 $this->publicHoliday->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " .$this->publicHoliday->getTable() . ":$this->publicHoliday->name [$this->publicHoliday->id]");
+                    ->saveActivity("Enter new public holiday : {$this->publicHoliday->name}, [{$this->publicHoliday->id}]");
 
             });
 
@@ -53,7 +58,7 @@ class PublicHolidayAlgo
                 $this->publicHoliday->update($request->all());
 
                 $this->publicHoliday->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                    ->saveActivity("Update " . $this->publicHoliday->getTable() . ": $this->publicHoliday->name [$this->publicHoliday->id]");
+                    ->saveActivity("Update public hoiliday : {$this->publicHoliday->name},[{$this->publicHoliday->id}]");
 
             });
 
@@ -75,7 +80,7 @@ class PublicHolidayAlgo
                 $this->publicHoliday->delete();
 
                 $this->publicHoliday->setActivityPropertyAttributes(ActivityAction::DELETE)
-                    ->saveActivity("Delete " . $this->publicHoliday->getTable() . ": $this->publicHoliday->name [$this->publicHoliday->id]");
+                    ->saveActivity("Delete public holiday : {$this->publicHoliday->name},[{$this->publicHoliday->id}]");
 
             });
 
@@ -101,7 +106,7 @@ class PublicHolidayAlgo
                 $this->createSchedule($createdBy);
 
                 $this->publicHoliday->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Assign Schedule " .$this->publicHoliday->getTable() . ":$this->publicHoliday->name [$this->publicHoliday->id]");
+                    ->saveActivity("Assign Schedule public holiday : {$this->publicHoliday->name},[{$this->publicHoliday->id}]");
 
             });
 

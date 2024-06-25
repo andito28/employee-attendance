@@ -31,7 +31,7 @@ class ShiftAlgo
                 $this->shift = Shift::create($request->all() + $createdBy);
 
                 $this->shift->setActivityPropertyAttributes(ActivityAction::CREATE)
-                    ->saveActivity("Enter new " .$this->shift->getTable() . ":$this->shift->name [$this->shift->id]");
+                    ->saveActivity("Enter new shift : {$this->shift->name},[{$this->shift->id}]");
 
             });
 
@@ -53,7 +53,7 @@ class ShiftAlgo
                 $this->shift->update($request->all());
 
                 $this->shift->setActivityPropertyAttributes(ActivityAction::UPDATE)
-                    ->saveActivity("Update " . $this->shift->getTable() . ": $this->shift->name [$this->shift->id]");
+                    ->saveActivity("Update shift : {$this->shift->name},[{$this->shift->id}]");
 
             });
 
@@ -75,7 +75,7 @@ class ShiftAlgo
                 $this->shift->delete();
 
                 $this->shift->setActivityPropertyAttributes(ActivityAction::DELETE)
-                    ->saveActivity("Delete " . $this->shift->getTable() . ": $this->shift->name [$this->shift->id]");
+                    ->saveActivity("Delete shift : {$this->shift->name},[{$this->shift->id}]");
 
             });
 

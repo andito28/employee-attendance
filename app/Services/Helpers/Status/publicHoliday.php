@@ -13,3 +13,11 @@ if (!function_exists("errPublicHolidayIsAssign")) {
         error(403, "Public Holiday is already assigned!", $internalMsg, $status);
     }
 }
+
+if (!function_exists("errPublicHolidayAlreadyExist")) {
+    function errPublicHolidayAlreadyExist($internalMsg = "")
+    {
+        error(409, "Public Holiday Date Already Exists!", $internalMsg);
+    }
+}
+
