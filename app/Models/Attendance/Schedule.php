@@ -25,6 +25,7 @@ class Schedule extends BaseModel
 
 
     /** --- RELATIONSHIPS --- */
+
     public function scheduleable()
     {
         return $this->morphTo('scheduleable', 'referenceType', 'reference');

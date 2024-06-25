@@ -24,7 +24,7 @@ class TimesheetStatus extends BaseIDName
     const VALID_ID = 6;
     const VALID = 'Valid';
 
-    const NOT_STATUS_ID = 6;
+    const NOT_STATUS_ID = 7;
     const NOT_STATUS = 'Not Status';
 
     const OPTION = [

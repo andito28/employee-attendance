@@ -7,6 +7,7 @@ use App\Models\BaseModel;
 use App\Models\Attendance\Shift;
 use App\Models\Employee\Employee;
 use App\Parser\Attendance\TimesheetParser;
+use App\Models\Attendance\TimesheetCorrection;
 use App\Models\Attendance\Traits\HasActivityAttendanceProperty;
 
 class Timesheet extends BaseModel
@@ -25,6 +26,7 @@ class Timesheet extends BaseModel
     public $parserClass = TimesheetParser::class;
 
     /** --- RELATIONSHIPS --- */
+
     public function employee(){
         return $this->belongsTo(Employee::class,'employeeId');
     }
@@ -65,6 +67,17 @@ class Timesheet extends BaseModel
             }
 
         });
+    }
+
+
+    /** --- FUNCTIONS --- */
+
+    public function correction()
+    {
+        $correction = TimesheetCorrection::where('employeeId',$this->employeeId)
+                    ->where('date',$this->date)->first();
+        return $correction;
+
     }
 
 }
