@@ -30,7 +30,7 @@ class GenerateTimesheetPdf
             'attendances' =>  $mappedAttendances
         ];
 
-        $pdf = PDF::loadView('pdf.reportTimesheet', $data);
+        $pdf = PDF::loadView('pdf.report_timesheet', $data);
         return $pdf->download("timesheet_".$date->format('m').$date->format('Y')."pdf");
     }
 
