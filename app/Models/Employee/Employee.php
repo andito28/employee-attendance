@@ -7,7 +7,7 @@ use App\Models\Employee\User;
 use App\Models\Attendance\Leave;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Parental;
-use App\Services\Constant\RoleUser;
+use App\Services\Constant\Employee\RoleUser;
 use App\Models\Attendance\Timesheet;
 use App\Models\Component\Department;
 use App\Models\Employee\Resignation;

@@ -249,7 +249,7 @@ class TimesheetAlgo
         ]);
 
         $attendance->setActivityPropertyAttributes(ActivityAction::UPDATE)
-            ->saveActivity("Update timesheet : {$this->timesheet->date}, [{$attendance->id}]");
+            ->saveActivity("Update timesheet : {$attendance->date}, [{$attendance->id}]");
 
         return $attendance;
     }

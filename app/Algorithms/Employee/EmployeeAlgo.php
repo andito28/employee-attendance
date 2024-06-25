@@ -8,17 +8,18 @@ use App\Models\Employee\User;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Employee;
 use Illuminate\Http\JsonResponse;
-use App\Jobs\Employee\DeleteAttendancesJob;
 use Illuminate\Support\Facades\DB;
-use App\Services\Constant\RoleUser;
 use App\Models\Employee\Resignation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use App\Services\Constant\Employee\StatusEmployee;
+use App\Jobs\Employee\CreateSchedulesJob;
+use App\Jobs\Employee\DeleteAttendancesJob;
+use App\Services\Constant\Employee\RoleUser;
 use App\Services\Number\Generator\EmployeeNumber;
 use App\Services\Constant\Activity\ActivityAction;
+use App\Services\Constant\Employee\StatusEmployee;
 use App\Http\Requests\Employee\CreateEmployeeRequest;
 
 class EmployeeAlgo
@@ -42,6 +43,8 @@ class EmployeeAlgo
                 $this->checkExistingEmployeeAndResignation($request);
 
                 $this->employee = $this->createEmployee($request,$createdBy);
+
+                CreateSchedulesJob::dispatch($this->employee->id,$createdBy);
 
                 $this->employee->setActivityPropertyAttributes(ActivityAction::CREATE)
                     ->saveActivity("Enter new employee : {$this->employee->name},[{$this->employee->id}]");
