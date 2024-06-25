@@ -8,7 +8,7 @@ use App\Models\Employee\User;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Employee;
 use Illuminate\Http\JsonResponse;
-use App\Jobs\DeleteAttendancesJob;
+use App\Jobs\Employee\DeleteAttendancesJob;
 use Illuminate\Support\Facades\DB;
 use App\Services\Constant\RoleUser;
 use App\Models\Employee\Resignation;

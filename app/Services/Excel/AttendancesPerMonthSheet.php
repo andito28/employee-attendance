@@ -26,10 +26,7 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
      */
     public function query()
     {
-        return Timesheet::query()->with('employee', 'shift')
-                ->whereYear('createdAt', $this->year)
-                ->whereMonth('createdAt', $this->month)
-                ->orderBy('employeeId');
+        return Timesheet::generateExcel($this->year, $this->month);
     }
 
     public function map($attendance): array

@@ -3,7 +3,7 @@
 namespace App\Algorithms\Attendance;
 
 use Illuminate\Http\Request;
-use App\Jobs\AssignScheduleJob;
+use App\Jobs\Attendance\AssignScheduleJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\Attendance\Schedule;

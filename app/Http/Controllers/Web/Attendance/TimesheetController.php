@@ -7,7 +7,7 @@ use App\Mail\TimesheetExportMail;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance\Timesheet;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Jobs\SendEmailTimesheetExcelJob;
+use App\Jobs\Attendance\SendEmailTimesheetExcelJob;
 use App\Parser\Attendance\TimesheetParser;
 use App\Services\PDF\GenerateTimesheetPdf;
 use App\Algorithms\Attendance\TimesheetAlgo;

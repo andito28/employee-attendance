@@ -69,6 +69,13 @@ class Timesheet extends BaseModel
         });
     }
 
+    public function scopeGenerateExcel($query, $year, $month)
+    {
+        return $query->with('employee', 'shift')
+                ->whereYear('createdAt', $year)
+                ->whereMonth('createdAt', $month)
+                ->orderBy('employeeId');
+    }
 
     /** --- FUNCTIONS --- */
 
