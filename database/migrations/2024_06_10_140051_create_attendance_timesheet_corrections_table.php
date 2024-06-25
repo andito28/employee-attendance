@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('statusId');
             $table->integer('approvalId');
             $table->text('notes')->nullable();
-            $table->char('approveddBy')->nullable();
+            $table->char('approvedBy')->nullable();
             $table->string('approvedByName')->nullable();
             $this->getDefaultTimestamps($table);
         });

@@ -133,13 +133,19 @@ class TimesheetAlgo
 
             $correction = DB::transaction(function () use ($correction,$request) {
 
+                $user = auth()->user();
+
                 $correction->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
 
-                $this->validateApprovalCorrection($request);
+                $status = $this->validateApprovalCorrection($request,$correction->employeeId,$correction->date);
 
-                dd('ok');
-
-                $correction->update($request->all());
+                $correction->update([
+                    'approvedBy' => $user->employee->id,
+                    'approvedByName' => $user->employee->name,
+                    'statusId' => $status,
+                    'approvalId' => $request->approved,
+                    'notes' => $request->notes
+                ]);
 
                 $correction->setActivityPropertyAttributes(ActivityAction::UPDATE)
                     ->saveActivity("Update Approval correction :{$correction->date}, [{$correction->id}]");
@@ -274,7 +280,7 @@ class TimesheetAlgo
 
     }
 
-    private function validateApprovalCorrection($request)
+    private function validateApprovalCorrection($request,$employeeId,$date)
     {
         if($request->approved != TimesheetCorrectionApproval::APPROVED_ID &&
             $request->approved != TimesheetCorrectionApproval::DISAPPROVED_ID ){
@@ -282,9 +288,16 @@ class TimesheetAlgo
             }
 
         if($request->approved == TimesheetCorrectionApproval::DISAPPROVED_ID
-            && $request->approved == null){
+            && $request->notes == null){
                 errCorrectionDisapprove();
         }
+
+        $timesheet = Timesheet::where('employeeId',$employeeId)->where('date',$date)->first();
+        $timesheetStatus = $timesheet->statusId ?? TimesheetStatus::NOT_STATUS_ID;
+
+        return $request->approved == TimesheetCorrectionApproval::APPROVED_ID ?
+        TimesheetStatus::VALID_ID : $timesheetStatus;
+
     }
 
 
