@@ -92,8 +92,8 @@ class Timesheet extends BaseModel
     {
         return self::FilterYearMonth($request)->orderBy('employeeId')->get()->map(function($attendance) {
             $correction = $attendance->correction();
-            $clockIn = Carbon::parse($attendance->clockIn)->format('H:i:s');
-            $clockOut = Carbon::parse($attendance->clockOut)->format('H:i:s');
+            $clockIn = $attendance->clockIn ? Carbon::parse($attendance->clockIn)->format('H:i:s') : '-' ;
+            $clockOut = $attendance->clockOut ? Carbon::parse($attendance->clockOut)->format('H:i:s') : '-';
             $status = $attendance->statusId;
 
             if ($correction && $correction->approvalId == TimesheetCorrectionApproval::APPROVED_ID) {
