@@ -2,12 +2,14 @@
 
 namespace App\Services\Excel;
 
+use Carbon\Carbon;
 use App\Models\Attendance\Timesheet;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use App\Services\Constant\Attendance\TimesheetStatus;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use App\Services\Constant\Attendance\TimesheetStatus;
+use App\Services\Constant\Attendance\TimesheetCorrectionApproval;
 
 class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, WithMapping
 {
@@ -31,12 +33,24 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
 
     public function map($attendance): array
     {
+        $correction = $attendance->correction();
+        $clockIn = Carbon::parse($attendance->clockIn)->format('H:i:s');
+        $clockOut = Carbon::parse($attendance->clockOut)->format('H:i:s');
+        $status = $attendance->statusId;
+
+        if ($correction && $correction->approvalId == TimesheetCorrectionApproval::APPROVED_ID) {
+            $clockIn = $correction->clockIn;
+            $clockOut = $correction->clockOut;
+            $status = $correction->statusId;
+        }
+
         return [
             $attendance->employee->name,
             $attendance->shift->name,
-            $attendance->clockIn,
-            $attendance->clockOut,
-            TimesheetStatus::display($attendance->statusId),
+            $attendance->date,
+            $clockIn,
+            $clockOut,
+            TimesheetStatus::display($status)
         ];
     }
 
@@ -49,6 +63,7 @@ class AttendancesPerMonthSheet implements FromQuery, WithTitle, WithHeadings, Wi
         return [
             'EMPLOYEE',
             'SHIFT',
+            'DATE',
             'CLOCK IN',
             'CLOCK OUT',
             'STATUS',
