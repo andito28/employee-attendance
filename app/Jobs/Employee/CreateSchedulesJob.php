@@ -46,25 +46,20 @@ class CreateSchedulesJob implements ShouldQueue
      */
     protected function createWeeklyDayOffSchedules(): void
     {
-        $startDate = Carbon::today();
-        $weeklyDayOffDate = Carbon::create(Carbon::now()->year, 6, 17, 1, 0, 0);
-        $endDate = $startDate->copy()->addYear();
+        $dateNow = Carbon::today();
+        $weeklyDayOffDate = Carbon::create(Carbon::now()->year, 6, 17);
 
-        if ($startDate->greaterThanOrEqualTo($weeklyDayOffDate) && $startDate->hour > 1) {
-            while ($startDate->lessThanOrEqualTo($endDate)) {
-                $weeklyDayOff = $startDate->copy()->next(Carbon::SUNDAY);
-                if ($weeklyDayOff->greaterThan($endDate)) {
-                    break;
-                }
-                $this->createSchedule($weeklyDayOff);
-                $startDate->addWeek();
-            }
-        } else {
-            $currentDate = Carbon::now();
-            $firstSundayAfterToday = $currentDate->copy()->next(Carbon::SUNDAY);
-            $endDateeeklyDayOffDate = $weeklyDayOffDate->copy()->addYear();
-            for ($date = $firstSundayAfterToday; $date->lessThanOrEqualTo($endDateeeklyDayOffDate); $date->addWeek()) {
+        if ($dateNow->greaterThanOrEqualTo($weeklyDayOffDate)) {
+            $firstSundayAfterToday = $dateNow->copy()->next(Carbon::SUNDAY);
+            $endDateWeeklyDayOff = $weeklyDayOffDate->copy()->addYear();
+            for ($date = $firstSundayAfterToday; $date->lessThanOrEqualTo($endDateWeeklyDayOff); $date->addWeek()) {
                 $this->createSchedule($date);
+            }
+        }else{
+            $date = $dateNow->copy()->next(Carbon::SUNDAY);
+            while ($date->lessThanOrEqualTo($weeklyDayOffDate)) {
+                $this->createSchedule($date);
+                $date->addWeek();
             }
         }
     }

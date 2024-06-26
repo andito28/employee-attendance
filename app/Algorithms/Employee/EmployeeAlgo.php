@@ -199,8 +199,8 @@ class EmployeeAlgo
         $employee = Employee::create($dataInput + $createdBy);
 
         $employee->saveUser($request->only(['email', 'password']));
-        // $employee->saveParent($request);
-        // $employee->saveSiblings($request,$createdBy);
+        $employee->saveParent($request);
+        $employee->saveSiblings($request,$createdBy);
 
         return $employee;
     }
