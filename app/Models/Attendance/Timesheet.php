@@ -8,7 +8,9 @@ use App\Models\Attendance\Shift;
 use App\Models\Employee\Employee;
 use App\Parser\Attendance\TimesheetParser;
 use App\Models\Attendance\TimesheetCorrection;
+use App\Services\Constant\Attendance\TimesheetStatus;
 use App\Models\Attendance\Traits\HasActivityAttendanceProperty;
+use App\Services\Constant\Attendance\TimesheetCorrectionApproval;
 
 class Timesheet extends BaseModel
 {
@@ -84,7 +86,31 @@ class Timesheet extends BaseModel
         $correction = TimesheetCorrection::where('employeeId',$this->employeeId)
                     ->where('date',$this->date)->first();
         return $correction;
+    }
 
+    public static function getFilteredAttendances($request)
+    {
+        return self::FilterYearMonth($request)->orderBy('employeeId')->get()->map(function($attendance) {
+            $correction = $attendance->correction();
+            $clockIn = Carbon::parse($attendance->clockIn)->format('H:i:s');
+            $clockOut = Carbon::parse($attendance->clockOut)->format('H:i:s');
+            $status = $attendance->statusId;
+
+            if ($correction && $correction->approvalId == TimesheetCorrectionApproval::APPROVED_ID) {
+                $clockIn = $correction->clockIn;
+                $clockOut = $correction->clockOut;
+                $status = $correction->statusId;
+            }
+
+            return [
+                'name' => $attendance->employee->name,
+                'shift' => $attendance->shift->name,
+                'date' => $attendance->date,
+                'clockIn' => $clockIn,
+                'clockOut' => $clockOut,
+                'status' => TimesheetStatus::display($status)
+            ];
+        });
     }
 
 }
