@@ -2,16 +2,17 @@
 
 namespace App\Jobs\Employee;
 
+use DB;
+use Log;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use App\Models\Attendance\Schedule;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Attendance\PublicHoliday;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Services\Constant\Attendance\ScheduleType;
-use DB;
-use App\Models\Schedule;
 
 class CreateSchedulesJob implements ShouldQueue
 {
@@ -60,11 +61,9 @@ class CreateSchedulesJob implements ShouldQueue
             }
         } else {
             $currentDate = Carbon::now();
-            $firstSundayAfterToday = $currentDate->next(Carbon::SUNDAY);
-            for ($date = $firstSundayAfterToday; $date->year == $currentDate->year; $date->addWeek()) {
-                if ($date->greaterThan($endDate)) {
-                    break;
-                }
+            $firstSundayAfterToday = $currentDate->copy()->next(Carbon::SUNDAY);
+            $endDateeeklyDayOffDate = $weeklyDayOffDate->copy()->addYear();
+            for ($date = $firstSundayAfterToday; $date->lessThanOrEqualTo($endDateeeklyDayOffDate); $date->addWeek()) {
                 $this->createSchedule($date);
             }
         }
@@ -77,25 +76,23 @@ class CreateSchedulesJob implements ShouldQueue
     {
         $publicHolidays = PublicHoliday::whereYear('date', Carbon::now()->year)->get();
         foreach ($publicHolidays as $holiday) {
-            Schedule::create([
-                'employeeId' => $this->employeeId,
-                'date' => $holiday->date,
-                'typeId' => ScheduleType::PUBLIC_HOLIDAY_ID,
-                'createdBy' => $this->createdBy['createdBy'],
-                'createdByName' => $this->createdBy['createdByName'],
-            ]);
+            $holidayDate = Carbon::parse($holiday->date);
+            $this->createSchedule($holidayDate, ScheduleType::PUBLIC_HOLIDAY_ID,$holiday->id,PublicHoliday::class);
         }
     }
 
     /**
      * Helper function to create a schedule.
      */
-    protected function createSchedule($date): void
+    protected function createSchedule($date, $typeId = ScheduleType::WEEKLY_DAY_OFF_ID,$reference = NULL,$referenceType = NULL): void
     {
+        $date = Carbon::parse($date); // Ensure $date is a Carbon instance
         Schedule::create([
             'employeeId' => $this->employeeId,
             'date' => $date->format('Y-m-d'),
-            'typeId' => ScheduleType::WEEKLY_DAY_OFF_ID,
+            'typeId' => $typeId,
+            'reference' => $reference,
+            'referenceType' => $referenceType,
             'createdBy' => $this->createdBy['createdBy'],
             'createdByName' => $this->createdBy['createdByName'],
         ]);
