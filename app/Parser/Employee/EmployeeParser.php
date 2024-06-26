@@ -24,21 +24,27 @@ class EmployeeParser extends BaseParser
             return null;
         }
 
-        return  [
+        $result =  [
             'id' => $data->id,
             'role' => RoleUser::display($data->user->roleId),
             'name' => $data->name,
             'number' => $data->number,
             'email' => $data->user->email,
-            'status' => StatusEmployee::display($data->statusId),
             'photo' => Storage::url($data->photo),
             'phone' => $data->phone,
             'address' => $data->address,
             'companyOffice' => CompanyOfficeParser::brief($data->companyOffice),
             'department' => DepartmentParser::brief($data->department),
             'parent' => self::parent($data->parental),
-            'siblings' => self::siblings($data->siblings)
+            'siblings' => self::siblings($data->siblings),
+            'status' => StatusEmployee::display($data->statusId),
         ];
+
+        if ($data->statusId == StatusEmployee::RESIGNED_ID) {
+            $result['resignation'] = ResignationParser::briefs($data->resignations);
+        }
+
+        return $result;
     }
 
     public static function parent($data)
