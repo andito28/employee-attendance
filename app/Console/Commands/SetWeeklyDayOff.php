@@ -8,6 +8,7 @@ use App\Models\Employee\Employee;
 use Illuminate\Support\Facades\DB;
 use App\Models\Attendance\Schedule;
 use App\Services\Constant\Attendance\ScheduleType;
+use App\Services\Constant\Attendance\WeeklyDayOffConstant;
 
 
 class SetWeeklyDayOff extends Command
@@ -34,7 +35,8 @@ class SetWeeklyDayOff extends Command
         DB::transaction(function (){
             $employees = Employee::all();
             $startDate = Carbon::today();
-            $weeklyDayOffDate = Carbon::create(null, 6, 17);
+            $weeklyDayOffDate = Carbon::create(null,WeeklyDayOffConstant::MONTH,
+            WeeklyDayOffConstant::DAY);
             $endDate = $startDate->copy()->addYear();
 
             if ($startDate->isSameDay($weeklyDayOffDate )) {

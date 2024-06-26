@@ -13,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Services\Constant\Attendance\ScheduleType;
+use App\Services\Constant\Attendance\WeeklyDayOffConstant;
 
 class CreateSchedulesJob implements ShouldQueue
 {
@@ -47,7 +48,8 @@ class CreateSchedulesJob implements ShouldQueue
     protected function createWeeklyDayOffSchedules(): void
     {
         $dateNow = Carbon::today();
-        $weeklyDayOffDate = Carbon::create(Carbon::now()->year, 6, 17);
+        $weeklyDayOffDate = Carbon::create(Carbon::now()->year,
+        WeeklyDayOffConstant::MONTH, WeeklyDayOffConstant::DAY);
 
         if ($dateNow->greaterThanOrEqualTo($weeklyDayOffDate)) {
             $firstSundayAfterToday = $dateNow->copy()->next(Carbon::SUNDAY);
@@ -57,9 +59,11 @@ class CreateSchedulesJob implements ShouldQueue
             }
         }else{
             $date = $dateNow->copy()->next(Carbon::SUNDAY);
-            while ($date->lessThanOrEqualTo($weeklyDayOffDate)) {
-                $this->createSchedule($date);
-                $date->addWeek();
+            if (!$date->equalTo($weeklyDayOffDate)) {
+                while ($date->lessThanOrEqualTo($weeklyDayOffDate)) {
+                    $this->createSchedule($date);
+                    $date->addWeek();
+                }
             }
         }
     }

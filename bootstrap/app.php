@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Middleware\EnsureApiTokenIsValid;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Services\Constant\Attendance\WeeklyDayOffConstant;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(using: function () {
@@ -44,5 +45,6 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })->withSchedule(function () {
         Schedule::command('app:update-resignation-status')->daily();
-        Schedule::command('app:set-weekly-day-off')->yearlyOn(6, 17, '01:00');;
+        Schedule::command('app:set-weekly-day-off')->yearlyOn(
+        WeeklyDayOffConstant::MONTH,WeeklyDayOffConstant::DAY, '01:00');;
     })->create();
