@@ -172,8 +172,11 @@ class TimesheetAlgo
             errScheduleAlreadyExist(ScheduleType::display($schedule->typeId));
         }
 
+        $shift = $this->getScheduleShift($employeeId, $currentTime);
+
         $isAttendanceExist = Timesheet::where('employeeId', $employeeId)
-        ->whereDate('date',Carbon::today()->toDateString())->exists();
+        ->whereDate('date',Carbon::today()->toDateString())
+        ->where('shiftId',$shift->id)->exists();
         if ($isAttendanceExist) {
             errAttendanceAlreadyExist();
         }
