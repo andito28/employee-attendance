@@ -134,7 +134,9 @@ class TimesheetAlgo
             $correction = DB::transaction(function () use ($correction,$request) {
 
                 $user = auth()->user();
-
+                if($user->employee->id == $correction->employeeId){
+                    errAccessPemission();
+                }
                 $correction->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
 
                 $status = $this->validateApprovalCorrection($request,$correction->employeeId,$correction->date);
