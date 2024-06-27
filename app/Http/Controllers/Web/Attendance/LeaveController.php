@@ -12,7 +12,7 @@ class LeaveController extends Controller
 {
     public function get(Request $request)
     {
-        $leave = Leave::with('employee')->filter($request)->getOrPaginate($request);
+        $leave = Leave::with('employee')->filter($request)->getOrPaginate($request,true);
         return success($leave);
     }
 

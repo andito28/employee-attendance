@@ -23,7 +23,7 @@ class TimesheetController extends Controller
         $attendance = Timesheet::with('employee','shift')
         ->Filter($request)
         ->ofDate('date',$request->fromDate,$request->toDate)
-        ->getOrPaginate($request);
+        ->getOrPaginate($request,true);
 
         return success($attendance);
     }
