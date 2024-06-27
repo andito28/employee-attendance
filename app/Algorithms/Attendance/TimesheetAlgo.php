@@ -191,6 +191,9 @@ class TimesheetAlgo
         ->first();
 
         $shift = $scheduleShift ? Shift::find($scheduleShift->reference) : Shift::first();
+        if(!$shift){
+            errShiftGet();
+        }
 
         return $shift;
     }
@@ -228,7 +231,7 @@ class TimesheetAlgo
         ]);
 
         $attendance->setActivityPropertyAttributes(ActivityAction::CREATE)
-            ->saveActivity("Enter new timesheet: {$this->timesheet->date}, [{$attendance->id}]");
+            ->saveActivity("Enter new timesheet: {$attendance->date}, [{$attendance->id}]");
 
         return $attendance;
     }
