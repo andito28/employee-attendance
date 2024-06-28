@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\web\auth\AuthController;
+use App\Http\Controllers\web\Auth\AuthController;
 
 //AUTH
 Route::prefix("login")
