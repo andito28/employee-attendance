@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Component\Department;
 use App\Algorithms\Component\ComponentAlgo;
+use App\Http\Requests\Component\ComponentRequest;
 use App\Models\Component\CompanyOfficeDepartment;
-use App\Http\Requests\component\ComponentRequest;
 
 class DepartmentController extends Controller
 {
