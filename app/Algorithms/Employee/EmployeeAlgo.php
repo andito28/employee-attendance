@@ -185,7 +185,7 @@ class EmployeeAlgo
     {
         $filePath = $this->savePhoto($request);
 
-        $dataInput = [
+        $employee = Employee::create([
             "name" => $request ->name,
             "number" => EmployeeNumber::generate(),
             "companyOfficeId" => $request->companyOfficeId,
@@ -194,9 +194,7 @@ class EmployeeAlgo
             "phone" => $request->phone,
             "address" => $request->address,
             "statusId" => StatusEmployee::ACTIVE_ID
-        ];
-
-        $employee = Employee::create($dataInput + $createdBy);
+        ] + $createdBy);
 
         $employee->saveUser($request->only(['email', 'password']));
         $employee->saveParent($request);
