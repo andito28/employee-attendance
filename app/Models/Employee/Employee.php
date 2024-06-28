@@ -121,15 +121,17 @@ class Employee extends BaseModel
     {
         $parental = $this->parental;
 
+        $dataInput = [
+            'fatherName' => $data['fatherName'],
+            'fatherPhone' => $data['fatherPhone'],
+            'fatherEmail' => $data['fatherEmail'],
+            'motherName' => $data['motherName'],
+            'motherPhone' => $data['motherPhone'],
+            'motherEmail' => $data['motherEmail']
+        ];
+
         if($parental){
-            $parental->update([
-                'fatherName' => $data['fatherName'],
-                'fatherPhone' => $data['fatherPhone'],
-                'fatherEmail' => $data['fatherEmail'],
-                'motherName' => $data['motherName'],
-                'motherPhone' => $data['motherPhone'],
-                'motherEmail' => $data['motherEmail']
-            ]);
+            $parental->update($dataInput);
         }else{
             $employeeId = ['employeeId' => $this->id];
             Parental::create($dataInput + $employeeId);
