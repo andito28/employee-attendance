@@ -1,8 +1,8 @@
 <?php
 
-use App\Services\Constant\Employee\RoleUser;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\web\component\DepartmentController;
+use App\Services\Constant\Employee\RoleUser;
+use App\Http\Controllers\Web\Component\DepartmentController;
 use App\Http\Controllers\Web\Component\CompanyOfficeController;
 
 $administrator = RoleUser::ADMINISTRATOR_ID;
