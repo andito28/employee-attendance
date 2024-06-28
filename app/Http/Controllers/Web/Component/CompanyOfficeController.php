@@ -11,7 +11,8 @@ use App\Parser\Component\CompanyOfficeParser;
 use App\Algorithms\Component\CompanyOfficeAlgo;
 use App\Models\Component\CompanyOfficeDepartment;
 use App\Http\Requests\Component\CompanyOfficeRequest;
-use App\Http\Requests\component\OfficeDepartmentRequest;
+use App\Http\Requests\Component\OfficeDepartmentRequest;
+
 
 class CompanyOfficeController extends Controller
 {
