@@ -140,15 +140,13 @@ class LeaveAlgo
 
         $this->validateLeaveDates($request,$employeeId);
 
-        $dataLeave = [
+        $leave = Leave::create([
             'employeeId' => $employeeId,
             'fromDate' => $request->fromDate,
             'toDate' => $request->toDate,
             'notes' => $request->notes,
             'statusId' => $statusId
-        ];
-
-        $leave = Leave::create($dataLeave + $createdBy);
+        ] + $createdBy);
         if($statusId == LeaveStatus::APPROVE_ID){
             $this->assignSchedule($leave,$createdBy);
         }

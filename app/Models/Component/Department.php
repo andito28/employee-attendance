@@ -22,14 +22,12 @@ class Department extends BaseModel
 
     public $parserClass = DepartmentParser::class;
 
-
      /** --- RELATIONSHIPS --- */
 
     public function companyOfficeDepartments()
     {
         return $this->hasMany(CompanyOfficeDepartment::class, 'departmentId');
     }
-
 
      /** --- FUNCTIONS --- */
 
@@ -41,8 +39,6 @@ class Department extends BaseModel
         }
 
         return parent::delete();
-
     }
-
 
 }

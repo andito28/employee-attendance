@@ -22,14 +22,12 @@ class PublicHoliday extends BaseModel
 
     public $parserClass = PublicHolidayParser::class;
 
-
     /** --- RELATIONSHIPS --- */
 
     public function schedules()
     {
         return $this->morphMany(Schedule::class, 'scheduleable','referenceType', 'reference', 'id');
     }
-
 
     /** --- SCOPES --- */
 

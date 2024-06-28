@@ -235,16 +235,14 @@ class EmployeeAlgo
             $filePath = $this->employee->photo;
         }
 
-        $dataInput = [
+        $this->employee->update( [
             "name" => $request ->name,
             "companyOfficeId" => $request->companyOfficeId,
             "departmentId" => $request->departmentId,
             "photo" => $filePath,
             "phone" => $request->phone,
             "address" => $request->address,
-        ];
-
-        $this->employee->update($dataInput);
+        ]);
         $this->employee->saveUser($request->only(['email']));
         $this->employee->saveParent($request);
         $this->employee->saveSiblings($request);

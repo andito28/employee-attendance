@@ -23,7 +23,6 @@ class Schedule extends BaseModel
 
     public $parserClass = ScheduleParser::class;
 
-
     /** --- RELATIONSHIPS --- */
 
     public function scheduleable()

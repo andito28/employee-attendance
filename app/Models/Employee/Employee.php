@@ -33,7 +33,6 @@ class Employee extends BaseModel
 
     public $parserClass = EmployeeParser::class;
 
-
     /** --- RELATIONSHIPS --- */
 
     public function user()
@@ -76,7 +75,6 @@ class Employee extends BaseModel
         return $this->hasMany(Timesheet::class, 'employeeId');
     }
 
-
     /** --- SCOPES --- */
 
     public function scopeFilter($query, $request)
@@ -90,7 +88,6 @@ class Employee extends BaseModel
 
         });
     }
-
 
      /** --- FUNCTIONS --- */
 
@@ -124,17 +121,15 @@ class Employee extends BaseModel
     {
         $parental = $this->parental;
 
-        $dataInput = [
-            'fatherName' => $data['fatherName'],
-            'fatherPhone' => $data['fatherPhone'],
-            'fatherEmail' => $data['fatherEmail'],
-            'motherName' => $data['motherName'],
-            'motherPhone' => $data['motherPhone'],
-            'motherEmail' => $data['motherEmail']
-        ];
-
         if($parental){
-            $parental->update($dataInput);
+            $parental->update([
+                'fatherName' => $data['fatherName'],
+                'fatherPhone' => $data['fatherPhone'],
+                'fatherEmail' => $data['fatherEmail'],
+                'motherName' => $data['motherName'],
+                'motherPhone' => $data['motherPhone'],
+                'motherEmail' => $data['motherEmail']
+            ]);
         }else{
             $employeeId = ['employeeId' => $this->id];
             Parental::create($dataInput + $employeeId);

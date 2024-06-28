@@ -36,7 +36,6 @@ class Leave extends BaseModel
         return $this->morphMany(Schedule::class,'scheduleable','referenceType', 'reference', 'id');
     }
 
-
     /** --- SCOPES --- */
 
     public function scopeFilter($query, $request)
@@ -58,7 +57,5 @@ class Leave extends BaseModel
 
         return parent::delete();
     }
-
-
 
 }

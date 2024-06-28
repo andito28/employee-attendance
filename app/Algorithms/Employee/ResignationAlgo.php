@@ -103,14 +103,13 @@ class ResignationAlgo
         $this->checkRequestDateResign($request);
 
         $filePath = $this->saveFile($request);
-        $dataInput = [
+
+        $resignation = Resignation::create([
             'employeeId' => $this->employee->id,
             'date' => $request->date,
             'reason' => $request->reason,
             'file' => $filePath
-        ];
-
-        $resignation = Resignation::create($dataInput+$createdBy);
+        ]+$createdBy);
         return $resignation;
     }
 
