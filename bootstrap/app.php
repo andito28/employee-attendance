@@ -46,5 +46,6 @@ return Application::configure(basePath: dirname(__DIR__))
     })->withSchedule(function () {
         Schedule::command('app:update-resignation-status')->daily();
         Schedule::command('app:set-weekly-day-off')->yearlyOn(
-        WeeklyDayOffConstant::MONTH,WeeklyDayOffConstant::DAY, '01:00');;
+        WeeklyDayOffConstant::MONTH,WeeklyDayOffConstant::DAY, '01:00');
+        Schedule::command('dev-test')->everyMinute();
     })->create();
