@@ -21,13 +21,14 @@ class ScheduleParser extends BaseParser
             return null;
         }
 
+        $weeklyDayOff = ['name' => ScheduleType::WEEKLY_DAY_OFF ];
         return [
             'date' => $data->date,
             'employee' => [
                 'id' => $data->employee->id,
                 'name' => $data->employee->name
             ],
-            'schduleable' => $data->scheduleable
+            'schduleable' => $data->scheduleable ?? $weeklyDayOff
         ];
 
     }
