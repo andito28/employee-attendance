@@ -12,6 +12,7 @@ class ScheduleController extends Controller
     public function get(Request $request)
     {
         $schedule = Schedule::with('employee','scheduleable')
+        ->ofDate('date',$request->fromDate,$request->toDate)
         ->getOrPaginate($request,true);
         return success($schedule);
     }
