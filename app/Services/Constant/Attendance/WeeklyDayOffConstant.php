@@ -6,6 +6,6 @@ use App\Services\Constant\BaseIDName;
 
 class WeeklyDayOffConstant extends BaseIDName
 {
-    CONST DAY = 1;
-    CONST MONTH = 1;
+    CONST DAY = 17;
+    CONST MONTH = 6;
 }
