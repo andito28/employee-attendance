@@ -90,8 +90,9 @@ class ResignationAlgo
         }
 
         $resignation = Resignation::where('employeeId',  $this->employee->id)
-                ->where('date', '>=', Carbon::now()->subYear())
-                ->first();
+        ->where('date', '>=', Carbon::now()->subYear())
+        ->latest()
+        ->first();
 
         if($resignation){
             errEmployeeResignExists();
