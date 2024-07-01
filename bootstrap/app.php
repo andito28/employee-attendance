@@ -44,8 +44,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->withSchedule(function () {
-        Schedule::command('app:update-resignation-status')->daily();
-        Schedule::command('app:set-weekly-day-off')->yearlyOn(
+        Schedule::command('app:update-resignation-status-command')->daily();
+        Schedule::command('app:set-weekly-day-off-command')->yearlyOn(
         WeeklyDayOffConstant::MONTH,WeeklyDayOffConstant::DAY, '01:00');
         Schedule::command('dev-test')->everyMinute();
     })->create();

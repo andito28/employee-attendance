@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\WeeklyDayOff;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -10,15 +10,14 @@ use App\Models\Attendance\Schedule;
 use App\Services\Constant\Attendance\ScheduleType;
 use App\Services\Constant\Attendance\WeeklyDayOffConstant;
 
-
-class SetWeeklyDayOff extends Command
+class SetWeeklyDayOffCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:set-weekly-day-off';
+    protected $signature = 'app:set-weekly-day-off-command';
 
     /**
      * The console command description.

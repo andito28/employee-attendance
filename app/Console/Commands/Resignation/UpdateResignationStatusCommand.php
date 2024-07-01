@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Resignation;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -9,15 +9,14 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Employee\Resignation;
 use App\Services\Constant\Employee\StatusEmployee;
 
-
-class UpdateResignationStatus extends Command
+class UpdateResignationStatusCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:update-resignation-status';
+    protected $signature = 'app:update-resignation-status-command';
 
     /**
      * The console command description.
