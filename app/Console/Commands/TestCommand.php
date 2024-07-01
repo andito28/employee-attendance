@@ -38,36 +38,36 @@ class TestCommand extends Command
 
 
         //TEST SET WEEKLY DAY OFF
-        DB::transaction(function (){
-            $employees = Employee::all();
-            $startDate = Carbon::today();
-            $weeklyDayOffDate = Carbon::create(null,WeeklyDayOffConstant::MONTH,
-            WeeklyDayOffConstant::DAY);
-            $endDate = $startDate->copy()->addYear();
+        // DB::transaction(function (){
+        //     $employees = Employee::all();
+        //     $startDate = Carbon::today();
+        //     $weeklyDayOffDate = Carbon::create(null,WeeklyDayOffConstant::MONTH,
+        //     WeeklyDayOffConstant::DAY);
+        //     $endDate = $startDate->copy()->addYear();
 
-            if ($startDate->isSameDay($weeklyDayOffDate )) {
+        //     if ($startDate->isSameDay($weeklyDayOffDate )) {
 
-                while ($startDate->lessThanOrEqualTo($endDate)) {
+        //         while ($startDate->lessThanOrEqualTo($endDate)) {
 
-                    $weeklyDayOff = $startDate->copy()->next(Carbon::SUNDAY);
+        //             $weeklyDayOff = $startDate->copy()->next(Carbon::SUNDAY);
 
-                    if ($weeklyDayOff->greaterThan($endDate)) {
-                        break;
-                    }
+        //             if ($weeklyDayOff->greaterThan($endDate)) {
+        //                 break;
+        //             }
 
-                    foreach ($employees as $employee) {
-                        Schedule::create([
-                            'employeeId' => $employee->id,
-                            'date' => $weeklyDayOff,
-                            'typeId' => ScheduleType::WEEKLY_DAY_OFF_ID,
-                            'createdBy' => 'system',
-                            'createdByName' => 'system'
-                        ]);
-                    }
-                    $startDate->addWeek();
-                }
-                return 0;
-            }
-        });
+        //             foreach ($employees as $employee) {
+        //                 Schedule::create([
+        //                     'employeeId' => $employee->id,
+        //                     'date' => $weeklyDayOff,
+        //                     'typeId' => ScheduleType::WEEKLY_DAY_OFF_ID,
+        //                     'createdBy' => 'system',
+        //                     'createdByName' => 'system'
+        //                 ]);
+        //             }
+        //             $startDate->addWeek();
+        //         }
+        //         return 0;
+        //     }
+        // });
     }
 }
