@@ -7,13 +7,14 @@ use App\Models\Employee\User;
 use App\Models\Attendance\Leave;
 use App\Models\Employee\Sibling;
 use App\Models\Employee\Parental;
-use App\Services\Constant\Employee\RoleUser;
+use App\Models\Attendance\Schedule;
 use App\Models\Attendance\Timesheet;
 use App\Models\Component\Department;
 use App\Models\Employee\Resignation;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Component\CompanyOffice;
 use App\Parser\Employee\EmployeeParser;
+use App\Services\Constant\Employee\RoleUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Employee\Traits\HasActivityEmployeeProperty;
 
@@ -70,6 +71,11 @@ class Employee extends BaseModel
         return $this->hasMany(Leave::class, 'employeeId');
     }
 
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'employeeId');
+    }
+
     public function timesheet()
     {
         return $this->hasMany(Timesheet::class, 'employeeId');
@@ -97,6 +103,8 @@ class Employee extends BaseModel
         $this->parental()->delete();
         $this->siblings()->delete();
         $this->resignations()->delete();
+        $this->leave()->delete();
+        $this->schedules()->delete();
 
         return parent::delete();
     }
