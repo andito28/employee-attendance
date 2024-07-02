@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Component\CompanyOffice;
 use App\Parser\Employee\EmployeeParser;
 use App\Services\Constant\Employee\RoleUser;
+use App\Models\Attendance\TimesheetCorrection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Employee\Traits\HasActivityEmployeeProperty;
 
@@ -81,6 +82,11 @@ class Employee extends BaseModel
         return $this->hasMany(Timesheet::class, 'employeeId');
     }
 
+    public function timesheetCorrections()
+    {
+        return $this->hasMany(TimesheetCorrection::class, 'employeeId');
+    }
+
     /** --- SCOPES --- */
 
     public function scopeFilter($query, $request)
@@ -105,6 +111,7 @@ class Employee extends BaseModel
         $this->resignations()->delete();
         $this->leave()->delete();
         $this->schedules()->delete();
+        $this->timesheetCorrections()->delete();
 
         return parent::delete();
     }

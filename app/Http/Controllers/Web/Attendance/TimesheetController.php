@@ -59,9 +59,12 @@ class TimesheetController extends Controller
         return $pdf->generate($request);
     }
 
-    public function getCorrection()
+    public function getCorrection(Request $request)
     {
-
+        $correction = TimesheetCorrection::with('employee')
+        ->ofDate('date',$request->fromDate,$request->toDate)
+        ->getOrPaginate($request,true);
+        return success($correction);
     }
 
     public function correction(TimesheetCorrectionRequest $request)

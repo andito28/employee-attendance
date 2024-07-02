@@ -78,6 +78,7 @@ Route::prefix("attendances")
                     Route::post('clock-in', [TimesheetController::class, 'clockIn']);
                     Route::post('clock-out', [TimesheetController::class, 'clockOut']);
                     Route::post('correction', [TimesheetController::class, 'correction']);
+                    Route::get('correction', [TimesheetController::class, 'getCorrection']);
                 });
             });
 
