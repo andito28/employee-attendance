@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\Attendance\Schedule;
-use App\Jobs\Employee\AssignScheduleJob;
 use App\Models\Attendance\PublicHoliday;
+use App\Jobs\Attendance\AssignScheduleJob;
 use App\Services\Constant\Activity\ActivityAction;
 
 class PublicHolidayAlgo
