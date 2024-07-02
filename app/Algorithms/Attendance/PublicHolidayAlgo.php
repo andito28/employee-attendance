@@ -55,6 +55,11 @@ class PublicHolidayAlgo
 
                 $this->publicHoliday->setOldActivityPropertyAttributes(ActivityAction::UPDATE);
 
+                if($this->publicHoliday->assigned == 1)
+                {
+                    errPublicHolidayIsAssign("Cannot Updated Public Holiday !");
+                }
+
                 $this->publicHoliday->update($request->all());
 
                 $this->publicHoliday->setActivityPropertyAttributes(ActivityAction::UPDATE)
