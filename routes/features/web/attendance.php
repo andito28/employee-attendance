@@ -70,7 +70,7 @@ Route::prefix("attendances")
                     Route::get('', [TimesheetController::class, 'get']);
                     Route::get('generate-excel', [TimesheetController::class, 'generateAttendanceExcel']);
                     Route::get('generate-pdf', [TimesheetController::class, 'generateAttendancePdf']);
-                    Route::patch('approval/{id}', [TimesheetController::class, 'approvalCorrection']);
+                    Route::patch('correction/{id}/approval', [TimesheetController::class, 'approvalCorrection']);
                 });
 
                 Route::middleware("role:$administrator,$employee")->group(function () {
