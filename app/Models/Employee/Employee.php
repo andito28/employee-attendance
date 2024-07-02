@@ -109,10 +109,6 @@ class Employee extends BaseModel
         $this->parental()->delete();
         $this->siblings()->delete();
         $this->resignations()->delete();
-        $this->leave()->delete();
-        $this->schedules()->delete();
-        $this->timesheetCorrections()->delete();
-
         return parent::delete();
     }
 
