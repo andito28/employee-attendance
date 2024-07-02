@@ -88,6 +88,15 @@ class ResignationAlgo
         if ($requestedDate->lt($today) || $requestedDate->lt($oneMonthFromNow)){
             errEmployeeDateResign("Cek tanggal resign, minimal 1 bulan sebelumnya");
         }
+
+        $month = Carbon::parse($request->date)->month;
+        $resignation = Resignation::where('employeeId', $this->employee->id)
+            ->whereMonth('date', $month)
+            ->first();
+
+        if ($resignation) {
+            return errEmployeeResignMonthExists();
+        }
     }
 
     private function createResignation($request,$createdBy)

@@ -29,6 +29,13 @@ if (!function_exists("errEmployeeResignExists")) {
     }
 }
 
+if (!function_exists("errEmployeeResignMonthExists")) {
+    function errEmployeeResignMonthExists($internalMsg = "", $status = null)
+    {
+        error(400, "Employee has resigned within the last month!", $internalMsg, $status);
+    }
+}
+
 if (!function_exists("errEmployeeNotResign")) {
     function errEmployeeNotResign($internalMsg = "", $status = null)
     {
