@@ -22,18 +22,11 @@ class CreateSchedulesJob implements ShouldQueue
     protected $employeeId;
     protected $createdBy;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct($employeeId, $createdBy)
     {
         $this->employeeId = $employeeId;
         $this->createdBy = $createdBy;
     }
-
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         DB::transaction(function () {
@@ -42,9 +35,6 @@ class CreateSchedulesJob implements ShouldQueue
         });
     }
 
-    /**
-     * Create weekly day off schedules.
-     */
     protected function createWeeklyDayOffSchedules(): void
     {
         $dateNow = Carbon::today();
@@ -68,9 +58,6 @@ class CreateSchedulesJob implements ShouldQueue
         }
     }
 
-    /**
-     * Create public holiday schedules.
-     */
     protected function createPublicHolidaySchedules(): void
     {
         $publicHolidays = PublicHoliday::whereYear('date', Carbon::now()->year)->get();
@@ -80,12 +67,9 @@ class CreateSchedulesJob implements ShouldQueue
         }
     }
 
-    /**
-     * Helper function to create a schedule.
-     */
     protected function createSchedule($date, $typeId = ScheduleType::WEEKLY_DAY_OFF_ID,$reference = NULL,$referenceType = NULL): void
     {
-        $date = Carbon::parse($date); // Ensure $date is a Carbon instance
+        $date = Carbon::parse($date);
         Schedule::create([
             'employeeId' => $this->employeeId,
             'date' => $date->format('Y-m-d'),
