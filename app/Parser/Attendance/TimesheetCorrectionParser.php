@@ -31,6 +31,7 @@ class TimesheetCorrectionParser extends BaseParser
             'status' => TimesheetStatus::display($data->statusId),
             'approval' => TimesheetCorrectionApproval::display($data->approvalId),
             'notes' => $data->notes,
+            'approvedBy' => $data->approvedByName
         ];
     }
 

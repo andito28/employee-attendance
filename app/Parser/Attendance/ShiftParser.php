@@ -17,7 +17,13 @@ class ShiftParser extends BaseParser
             return null;
         }
 
-        return parent::first($data);
+        return [
+            'id' => $data->id,
+            'name' => $data->name,
+            'startTime' => $data->startTime,
+            'endTime' => $data->endTime,
+            'createdBy' => $data->createdByName
+        ];
     }
 
 }

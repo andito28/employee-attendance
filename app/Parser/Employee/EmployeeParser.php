@@ -38,6 +38,7 @@ class EmployeeParser extends BaseParser
             'parent' => self::parent($data->parental),
             'siblings' => self::siblings($data->siblings),
             'status' => StatusEmployee::display($data->statusId),
+            'createdBy' => $data->createdByName
         ];
 
         if ($data->statusId == StatusEmployee::RESIGNED_ID) {

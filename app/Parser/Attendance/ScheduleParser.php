@@ -28,7 +28,8 @@ class ScheduleParser extends BaseParser
                 'id' => $data->employee->id,
                 'name' => $data->employee->name
             ],
-            'schduleable' =>$data->scheduleable
+            'schduleable' =>$data->scheduleable,
+            'createdBy' => $data->createdByName
         ];
 
     }

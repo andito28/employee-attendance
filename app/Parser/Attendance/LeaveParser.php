@@ -20,11 +20,11 @@ class LeaveParser extends BaseParser
 
         return [
             'id' => $data->id,
+            'employeeName' => $data->employee->name,
             'fromDate' => $data->fromDate,
             'toDate' => $data->toDate,
             'notes' => $data->notes,
             'status' => LeaveStatus::display($data->statusId),
-            'employeeName' => $data->employee->name
         ];
     }
 
