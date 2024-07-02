@@ -3,8 +3,8 @@
 namespace App\Models\Attendance;
 
 use App\Models\BaseModel;
-use App\Services\Constant\ScheduleType;
 use App\Parser\Attendance\PublicHolidayParser;
+use App\Services\Constant\Attendance\ScheduleType;
 use App\Models\Attendance\Traits\HasActivityPublicHolidayActivityProperty;
 
 class PublicHoliday extends BaseModel
