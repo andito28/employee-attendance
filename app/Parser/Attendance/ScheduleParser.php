@@ -21,6 +21,17 @@ class ScheduleParser extends BaseParser
             return null;
         }
 
+        $schedule = $data->scheduleable
+            ? collect($data->scheduleable)->except([
+                'assigned',
+                'createdAt',
+                'updatedAt',
+                'deletedAt',
+                'createdBy',
+                'createdByName'
+            ])->toArray()
+            : null;
+
         return [
             'type' => ScheduleType::display($data->typeId),
             'date' => $data->date,
@@ -28,7 +39,7 @@ class ScheduleParser extends BaseParser
                 'id' => $data->employee->id,
                 'name' => $data->employee->name
             ],
-            'schduleable' =>$data->scheduleable,
+            'scheduleable' => $schedule,
             'createdBy' => $data->createdByName
         ];
 
