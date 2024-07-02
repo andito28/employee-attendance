@@ -24,6 +24,7 @@ class ScheduleParser extends BaseParser
         $schedule = $data->scheduleable
             ? collect($data->scheduleable)->except([
                 'assigned',
+                'statusId',
                 'createdAt',
                 'updatedAt',
                 'deletedAt',
