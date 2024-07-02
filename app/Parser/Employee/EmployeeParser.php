@@ -26,10 +26,10 @@ class EmployeeParser extends BaseParser
 
         $result =  [
             'id' => $data->id,
-            'role' => RoleUser::display($data->user->roleId),
+            'role' => $data->user ? RoleUser::display($data->user->roleId) : null,
             'name' => $data->name,
             'number' => $data->number,
-            'email' => $data->user->email,
+            'email' => $data->user ? $data->user->email : null,
             'photo' => Storage::url($data->photo),
             'phone' => $data->phone,
             'address' => $data->address,
