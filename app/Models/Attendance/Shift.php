@@ -47,7 +47,7 @@ class Shift extends BaseModel
         ->exists();
 
         if($schedule){
-            errScheduleAlreadyExist("cannot delete shift");
+            errScheduleAlreadyExist("Cannot delete shift");
         }
 
         return parent::delete();
