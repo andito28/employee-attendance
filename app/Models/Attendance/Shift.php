@@ -7,6 +7,7 @@ use App\Models\Employee\Employee;
 use App\Models\Attendance\Schedule;
 use App\Models\Attendance\Attendance;
 use App\Parser\Attendance\ShiftParser;
+use App\Services\Constant\Attendance\ScheduleType;
 use App\Models\Attendance\Traits\HasActivityShiftProperty;
 
 class Shift extends BaseModel
@@ -36,6 +37,16 @@ class Shift extends BaseModel
     public function schedules()
     {
         return $this->morphMany(Schedule::class, 'scheduleable','referenceType', 'reference', 'id');
+    }
+
+
+    public function delete()
+    {
+        $publicHolidaySchedule = Schedule::where('reference',$this->id)
+        ->where('typeId',ScheduleType::LEAVE_ID)
+        ->delete();
+
+        return parent::delete();
     }
 
 }
