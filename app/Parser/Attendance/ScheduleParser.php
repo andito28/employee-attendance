@@ -34,6 +34,7 @@ class ScheduleParser extends BaseParser
             : null;
 
         return [
+            'id' => $data->id,
             'type' => ScheduleType::display($data->typeId),
             'date' => $data->date,
             'employee' => [
