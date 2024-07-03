@@ -38,6 +38,8 @@ class TimesheetParser extends BaseParser
         if ($data->correction()) {
             $result['correction'] = [
                 'id' => $data->correction()->id,
+                'clockIn' => $data->correction()->clockIn,
+                'clockOut' => $data->correction()->clockOut,
                 'statusApproved' => TimesheetCorrectionApproval::display($data->correction()->approvalId),
                 'statusTimesheet' => TimesheetStatus::display($data->correction()->statusId)
             ];
