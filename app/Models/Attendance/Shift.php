@@ -43,7 +43,7 @@ class Shift extends BaseModel
     public function delete()
     {
         $publicHolidaySchedule = Schedule::where('reference',$this->id)
-        ->where('typeId',ScheduleType::LEAVE_ID)
+        ->where('typeId',ScheduleType::SHIFT_ID)
         ->delete();
 
         return parent::delete();
