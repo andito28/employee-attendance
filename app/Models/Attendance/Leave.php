@@ -56,9 +56,13 @@ class Leave extends BaseModel
 
     public function delete()
     {
-        $publicHolidaySchedule = Schedule::where('reference',$this->id)
+        $leaveSchedule = Schedule::where('reference',$this->id)
         ->where('typeId',ScheduleType::LEAVE_ID)
-        ->delete();
+        ->exists();
+
+        if($leaveSchedule){
+            errScheduleAlreadyExist("Cannot delete leave");
+        }
 
         return parent::delete();
     }
