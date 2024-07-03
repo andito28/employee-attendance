@@ -43,7 +43,12 @@ class Leave extends BaseModel
         return $query->where(function ($query) use ($request) {
 
             if ($this->hasSearch($request)) {
-                $query->where('date', 'LIKE', "%$request->search%");
+
+                $searchTerm = $request->search;
+                $query->whereHas('employee', function ($query) use ($searchTerm) {
+                    $query->where('name', 'LIKE', "%$searchTerm%")
+                            ->orWhere('number', 'LIKE', "%$searchTerm%");
+                });
             }
 
         });
