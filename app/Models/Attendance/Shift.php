@@ -42,9 +42,13 @@ class Shift extends BaseModel
 
     public function delete()
     {
-        $publicHolidaySchedule = Schedule::where('reference',$this->id)
+        $schedule = Schedule::where('reference',$this->id)
         ->where('typeId',ScheduleType::SHIFT_ID)
-        ->delete();
+        ->exists();
+
+        if($schedule){
+            errScheduleAlreadyExist("cannot delete shift");
+        }
 
         return parent::delete();
     }
