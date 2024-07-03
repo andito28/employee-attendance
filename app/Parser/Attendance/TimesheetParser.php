@@ -40,7 +40,7 @@ class TimesheetParser extends BaseParser
                 'id' => $data->correction()->id,
                 'clockIn' => $data->correction()->clockIn,
                 'clockOut' => $data->correction()->clockOut,
-                'statusApproved' => TimesheetCorrectionApproval::display($data->correction()->approvalId),
+                'statusApproval' => TimesheetCorrectionApproval::display($data->correction()->approvalId),
                 'statusTimesheet' => TimesheetStatus::display($data->correction()->statusId)
             ];
         }
